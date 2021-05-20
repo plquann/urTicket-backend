@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: urTicket-api
+    image: urTicket-api
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      # target: development
+    command: npm run start:debug
+    ports:
+      - 5000:5000
+    networks:
+      - my-urTicket-backend-network
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    volumes:
+      - /data/postgres:/data/postgres
+    env_file:
+      - docker.env
+    networks:
+      - postgres
+
+  pgadmin:
+    links:
+      - postgres:postgres
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    ports:
+      - '8080:80'
+    volumes:
+      - /data/pgadmin:/root/.pgadmin
+    env_file:
+      - docker.env
+    networks:
+      - postgres
+
+networks:
+  my-urTicket-backend-network:
+    driver: bridge
+
+    # prod:
+  #   container_name: nestjs_api_prod
+  #   image: nestjs-api-prod:1.0.0
+  #   build:
+  #     context: .
+  #     target: production
+  #     dockerfile: ./Dockerfile
+  #   command: npm run start:prod
+  #   ports:
+  #     - 3000:3000
+  #     - 9229:9229
+  #   networks:
+  #     - nesjs-network
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   restart: unless-stopped
