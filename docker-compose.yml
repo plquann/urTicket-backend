@@ -1,73 +1,72 @@
 version: '3.8'
 
 services:
-  app:
-    container_name: urTicket-api
-    image: urTicket-api
-    env_file:
-      - .env
+  dev:
+    container_name: urticket-backend-dev
+    image: urticket-backend-dev:1.0.0
     build:
       context: .
+      target: development
       dockerfile: ./Dockerfile
-      # target: development
     command: npm run start:debug
     ports:
       - 5000:5000
+      - 9229:9229
+    # depends_on: 
+    #   - postgres
     networks:
-      - my-urTicket-backend-network
-    depends_on:
-      - postgres
+      - nesjs-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+  prod:
+    container_name: urticket-backend-prod
+    image: urticket-backend-prod:1.0.0
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
+    # depends_on: 
+    #   - postgres
+    ports:
+      - 5000:5000
+      - 9229:9229
+    networks:
+      - nesjs-network
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     restart: unless-stopped
 
   postgres:
-    container_name: postgres
+    container_name: postgresql_db
     image: postgres:latest
+    restart: always
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - /data/postgres:/data/postgres
-    env_file:
-      - docker.env
-    networks:
-      - postgres
-
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: urtcket-db
+    ports:
+      - '5432:5432'
   pgadmin:
     links:
       - postgres:postgres
     container_name: pgadmin
     image: dpage/pgadmin4
-    depends_on:
-      - postgres
+    restart: always
     ports:
-      - '8080:80'
+      - "8080:80"
     volumes:
       - /data/pgadmin:/root/.pgadmin
-    env_file:
-      - docker.env
-    networks:
-      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
 
 networks:
-  my-urTicket-backend-network:
-    driver: bridge
-
-    # prod:
-  #   container_name: nestjs_api_prod
-  #   image: nestjs-api-prod:1.0.0
-  #   build:
-  #     context: .
-  #     target: production
-  #     dockerfile: ./Dockerfile
-  #   command: npm run start:prod
-  #   ports:
-  #     - 3000:3000
-  #     - 9229:9229
-  #   networks:
-  #     - nesjs-network
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   restart: unless-stopped
+  nesjs-network:
