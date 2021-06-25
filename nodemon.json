@@ -4,6 +4,6 @@
   "ignore": ["src/**/*.spec.ts"],
   "exec": "ts-node -r tsconfig-paths/register src/main.ts",
   "events": {
-    "restart": "osascript -e 'display notification \"urTicket-backend restarted\" with title \"nodemon\"'"
+    "restart": "'display notification \"urTicket-backend restarted\" with title \"nodemon\"'"
   }
 }
