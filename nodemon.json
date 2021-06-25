@@ -2,8 +2,5 @@
   "watch": ["src"],
   "ext": "ts",
   "ignore": ["src/**/*.spec.ts"],
-  "exec": "ts-node -r tsconfig-paths/register src/main.ts",
-  "events": {
-    "restart": "'display notification \"urTicket-backend restarted\" with title \"nodemon\"'"
-  }
+  "exec": "ts-node -r tsconfig-paths/register src/main.ts"
 }
