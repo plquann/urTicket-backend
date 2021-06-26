@@ -6,6 +6,7 @@ import {
   NestFastifyApplication,
   FastifyAdapter,
 } from '@nestjs/platform-fastify';
+import { fastifyHelmet } from 'fastify-helmet';
 
 async function bootstrap() {
   const logger = new Logger('main');
@@ -16,6 +17,7 @@ async function bootstrap() {
   );
   setupSwagger(app);
   app.enableCors();
+  await app.register(fastifyHelmet);
   await app.listen(5000);
 
   logger.log(`Application is running on: ${await app.getUrl()}`);
