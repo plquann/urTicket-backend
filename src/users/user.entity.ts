@@ -4,10 +4,10 @@ import { Entity, Column } from 'typeorm';
 @Entity()
 export class User extends BaseEntity {
   @Column()
-  firstName: string;
+  email: string;
 
   @Column()
-  lastName: string;
+  userName: string;
 
   @Column({ default: true })
   isActive: boolean;

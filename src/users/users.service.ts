@@ -21,4 +21,12 @@ export class UsersService {
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
+
+  create() {
+    const newUser = new User();
+    newUser.email = 'quanphamluong@gmail.com';
+    newUser.userName = 'quankhs';
+    newUser.isActive = true;
+    return this.usersRepository.save(newUser);
+  }
 }
