@@ -1,27 +1,14 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { BaseEntity } from 'src/base/base.entity';
+import { Entity, Column } from 'typeorm';
 
-@Table
-export class User extends Model {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  name: string;
-  @Column({
-    type: DataType.STRING,
-    unique: true,
-    allowNull: false,
-  })
-  email: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  password: string;
-  @Column({
-    type: DataType.ENUM,
-    values: ['male', 'female'],
-    allowNull: false,
-  })
-  gender: string;
+@Entity()
+export class User extends BaseEntity {
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 }

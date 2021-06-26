@@ -41,7 +41,7 @@ services:
     restart: unless-stopped
 
   postgres:
-    container_name: postgresql_db
+    container_name: postgres
     image: postgres:latest
     restart: always
     ports:
