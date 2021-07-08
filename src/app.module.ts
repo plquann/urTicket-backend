@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { Connection } from 'typeorm';
 import { DatabaseModule } from './database/database.module';
+import { MovieModule } from './movie/movie.module';
+import { UserModule } from './user/users.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { DatabaseModule } from './database/database.module';
     }),
     DatabaseModule,
     UsersModule,
+    MovieModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
