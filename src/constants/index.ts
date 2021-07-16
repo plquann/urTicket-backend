@@ -9,3 +9,15 @@ export const TEST = 'test';
 export const PRODUCTION = 'production';
 
 export const USER_REPOSITORY = 'USER_REPOSITORY';
+
+export enum UserGender {
+  MALE = 'male',
+  FEMALE = 'female',
+  ANOTHER = 'another',
+}
+
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  GHOST = 'ghost',
+}

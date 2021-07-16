@@ -3,11 +3,9 @@ import * as Joi from 'joi';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { Connection } from 'typeorm';
 import { DatabaseModule } from './database/database.module';
 import { MovieModule } from './movie/movie.module';
-import { UserModule } from './user/users.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -24,7 +22,6 @@ import { UserModule } from './user/users.module';
     DatabaseModule,
     UsersModule,
     MovieModule,
-    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
