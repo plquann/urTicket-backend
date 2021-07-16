@@ -19,7 +19,7 @@ export class UsersService {
     return newUser;
   }
 
-  async getUserByEmail(email: string) {
+  async getUserByEmail(email: string): Promise<User | undefined> {
     const user = await this.userRepository.findOne({ email });
 
     if (user) {
@@ -31,7 +31,7 @@ export class UsersService {
     );
   }
 
-  async getUserById(id: string) {
+  async getUserById(id: string): Promise<User | undefined> {
     const user = await this.userRepository.findOne({ id });
 
     if (user) {
