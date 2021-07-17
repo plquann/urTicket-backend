@@ -7,6 +7,7 @@ import {
   FastifyAdapter,
 } from '@nestjs/platform-fastify';
 import { fastifyHelmet } from 'fastify-helmet';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const logger = new Logger('main');
@@ -16,6 +17,7 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
   setupSwagger(app);
+  app.use(cookieParser);
   app.enableCors();
   await app.register(fastifyHelmet);
   await app.listen(5000);
