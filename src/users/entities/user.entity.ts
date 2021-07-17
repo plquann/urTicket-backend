@@ -1,8 +1,9 @@
 import { BaseEntity } from 'src/base/base.entity';
 import { UserGender, UserRole } from 'src/constants';
 import { Entity, Column } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
-@Entity()
+@Entity('Users')
 export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
@@ -11,15 +12,16 @@ export class User extends BaseEntity {
   userName: string;
 
   @Column()
+  @Exclude()
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   address?: string;
 
-  @Column()
-  birthDate?: string;
+  @Column({ nullable: true })
+  birthDate?: Date;
 
-  @Column()
+  @Column({ nullable: true })
   phoneNumber?: string;
 
   @Column({
@@ -27,7 +29,7 @@ export class User extends BaseEntity {
     enum: UserGender,
     default: UserGender.MALE,
   })
-  gender: UserGender;
+  gender?: UserGender;
 
   @Column({
     default:

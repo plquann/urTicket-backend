@@ -11,13 +11,13 @@ export const PRODUCTION = 'production';
 export const USER_REPOSITORY = 'USER_REPOSITORY';
 
 export enum UserGender {
-  MALE = 'male',
-  FEMALE = 'female',
-  ANOTHER = 'another',
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  ANOTHER = 'ANOTHER',
 }
 
 export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-  GHOST = 'ghost',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  GHOST = 'GHOST',
 }
