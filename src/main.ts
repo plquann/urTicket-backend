@@ -6,11 +6,7 @@ import {
   Logger,
   ValidationPipe,
 } from '@nestjs/common';
-import {
-  NestFastifyApplication,
-  FastifyAdapter,
-} from '@nestjs/platform-fastify';
-import { fastifyHelmet } from 'fastify-helmet';
+import * as helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { AllExceptionsFilter } from './filters/http-exception.filter';
 
@@ -31,7 +27,7 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.enableCors();
-  // await app.register(fastifyHelmet);
+  app.use(helmet());
   await app.listen(5000);
 
   logger.log(`Application is running on: ${await app.getUrl()}`);

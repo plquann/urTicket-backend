@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import PostgresErrorCode from 'src/database/postgresErrorCode.enum';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import TokenPayLoad from './tokenPayload.interface';
+import TokenPayLoad from './interfaces/tokenPayload.interface';
 
 @Injectable()
 export class AuthService {
@@ -71,15 +71,40 @@ export class AuthService {
     }
   }
 
-  public getCookieWithJwtToken(userId: string) {
+  public getCookieWithJwtAccessToken(userId: string) {
     const payload: TokenPayLoad = { userId };
-    const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_EXPIRATION_TIME',
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      )}s`,
+    });
+    return `ACCESS_TOKEN=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
     )}`;
   }
 
-  public getCookieForLogOut() {
-    return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+  public getCookieWithJwtRefreshToken(userId: string) {
+    const payload: TokenPayLoad = { userId };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+      )}s`,
+    });
+    const cookie = `REFRESH_TOKEN=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+    )}`;
+    return {
+      cookie,
+      token,
+    };
+  }
+
+  public getCookiesForLogOut() {
+    return [
+      'ACCESS_TOKEN=; HttpOnly; Path=/; Max-Age=0',
+      'REFRESH_TOKEN=; HttpOnly; Path=/; Max-Age=0',
+    ];
   }
 }

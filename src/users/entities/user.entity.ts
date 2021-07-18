@@ -1,10 +1,18 @@
-import { BaseEntity } from 'src/base/base.entity';
 import { UserGender, UserRole } from 'src/constants';
-import { Entity, Column } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 @Entity('Users')
-export class User extends BaseEntity {
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
   @Column({ unique: true })
   email: string;
 
@@ -46,4 +54,15 @@ export class User extends BaseEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  //refresh token
+  @Column({ nullable: true })
+  @Exclude()
+  currentHashedRefreshToken?: string;
+
+  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  createdDate: Date;
+
+  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  updatedDate: Date;
 }
