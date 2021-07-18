@@ -20,6 +20,12 @@ export class UsersService {
     return newUser;
   }
 
+  async getAllUsers() {
+    const allUsers = await this.usersRepository.find();
+
+    return allUsers;
+  }
+
   async getUserByEmail(email: string): Promise<User | undefined> {
     const user = await this.usersRepository.findOne({ email });
 

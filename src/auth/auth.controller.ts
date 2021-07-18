@@ -57,8 +57,8 @@ export class AuthController {
 
   @UseGuards(JwtAuthenticationGuard)
   @Get()
-  authenticate(@Req() request: RequestWithUser) {
-    return request.user;
+  authenticate() {
+    return this.usersService.getAllUsers();
   }
 
   @UseGuards(JwtRefreshGuard)
