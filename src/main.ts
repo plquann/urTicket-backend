@@ -18,7 +18,7 @@ async function bootstrap() {
   setupSwagger(app);
 
   // app.useGlobalFilters(new HttpExceptionFilter());
-  // //app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
+  // app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 

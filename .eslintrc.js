@@ -1,24 +1,38 @@
 module.exports = {
+  root: true,
   parser: '@typescript-eslint/parser',
+  extends: [
+    'standard',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:promise/recommended',
+    'prettier',
+  ],
   parserOptions: {
-    project: 'tsconfig.json',
+    ecmaVersion: 2015,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-  ],
-  root: true,
-  env: {
-    node: true,
-    jest: true,
-  },
-  ignorePatterns: ['.eslintrc.js'],
+  plugins: ['prettier', '@typescript-eslint'],
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    'comma-dangle': ['error', 'always-multiline'],
+    'no-empty-pattern': ['off'],
+    'no-undef': ['error'],
+    'no-var': ['error'],
+    'object-curly-spacing': ['error', 'always'],
+    indent: ['off'],
+    'prettier/prettier': [
+      'error',
+      {
+        singleQuote: true,
+        semi: true,
+      },
+    ],
+  },
+  env: {
+    // change as necessary
+    node: true,
   },
 };

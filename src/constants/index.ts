@@ -17,7 +17,7 @@ export enum UserGender {
 }
 
 export enum UserRole {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-  GHOST = 'GHOST',
+  ADMIN = 'admin',
+  USER = 'user',
+  GHOST = 'ghost',
 }
