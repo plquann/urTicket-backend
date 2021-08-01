@@ -12,7 +12,7 @@ services:
     ports:
       - 5000:5000
       - 9229:9229
-    # depends_on: 
+    # depends_on:
     #   - postgres
     networks:
       - nesjs-network
@@ -28,7 +28,7 @@ services:
       target: production
       dockerfile: ./Dockerfile
     command: npm run start:prod
-    # depends_on: 
+    # depends_on:
     #   - postgres
     ports:
       - 5000:5000
@@ -45,15 +45,15 @@ services:
     image: postgres:latest
     restart: always
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - /data/postgres:/data/postgres
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: urtcket-db
-    ports:
-      - '5432:5432'
+    networks:
+      - postgres
   pgadmin:
     links:
       - postgres:postgres
@@ -61,12 +61,14 @@ services:
     image: dpage/pgadmin4
     restart: always
     ports:
-      - "8080:80"
+      - '8080:80'
     volumes:
       - /data/pgadmin:/root/.pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - postgres
 
 networks:
   nesjs-network:
