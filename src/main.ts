@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { setupSwagger } from './swagger/index';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -12,6 +13,8 @@ import { AllExceptionsFilter } from './filters/http-exception.filter';
 
 async function bootstrap() {
   const logger = new Logger('main');
+  const configService = new ConfigService();
+  const PORT = configService.get<number>('PORT');
 
   const app = await NestFactory.create(AppModule);
 
@@ -28,8 +31,8 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors();
   app.use(helmet());
-  await app.listen(5000);
+  await app.listen(PORT);
 
-  logger.log(`Application is running on: ${await app.getUrl()}`);
+  logger.log(`Application is running on: http://127.0.0.1:${PORT}/`);
 }
 bootstrap();

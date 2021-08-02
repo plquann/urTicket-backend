@@ -16,6 +16,7 @@ export class AuthService {
   ) {}
 
   public async register(registrationData: RegisterDto) {
+    // console.log('🚀 ~ file: auth.service.ts ~ line 19 ~ AuthService ~ register ~ registrationData', registrationData);
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
     try {
       const createUser = await this.usersService.create({
@@ -26,6 +27,7 @@ export class AuthService {
       createUser.password = undefined;
       return createUser;
     } catch (error) {
+      console.log('🚀 ~ file: auth.service.ts ~ line 31 ~ AuthService ~ register ~ error', error);
       if (error?.code === PostgresErrorCode.UniqueViolation) {
         throw new HttpException(
           'User with that email already exists',

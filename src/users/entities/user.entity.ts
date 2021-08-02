@@ -50,7 +50,7 @@ export class User {
     enum: UserRole,
     default: UserRole.USER,
   })
-  role: UserRole;
+  roles: UserRole[];
 
   @Column({ default: true })
   isActive: boolean;

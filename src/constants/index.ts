@@ -17,7 +17,9 @@ export enum UserGender {
 }
 
 export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-  GHOST = 'ghost',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  GHOST = 'GHOST',
 }
+
+export const ROLES_KEY = 'roles';

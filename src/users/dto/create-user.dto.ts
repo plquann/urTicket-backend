@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDateString,
   IsEmail,
   IsIn,
@@ -8,7 +9,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { UserGender } from 'src/constants';
+import { UserGender, UserRole } from 'src/constants';
 
 export class CreateUserDto {
   @IsString()
@@ -42,6 +43,9 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   address?: string;
+
+  @IsOptional()
+  roles?: UserRole[];
 
   @IsOptional()
   @IsDateString()

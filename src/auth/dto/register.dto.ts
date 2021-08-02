@@ -1,4 +1,12 @@
-import { IsEmail, IsString, IsNotEmpty, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  IsNotEmpty,
+  MinLength,
+  IsOptional,
+  IsArray,
+} from 'class-validator';
+import { UserRole } from 'src/constants';
 
 export class RegisterDto {
   @IsString()
@@ -14,6 +22,9 @@ export class RegisterDto {
   @IsNotEmpty()
   @MinLength(8)
   password: string;
+
+  @IsOptional()
+  roles: UserRole[];
 }
 
 export default RegisterDto;
