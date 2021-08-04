@@ -60,6 +60,9 @@ export class User {
   @Exclude()
   currentHashedRefreshToken?: string;
 
+  @Column({ default: false })
+  isEmailConfirmed: boolean;
+
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdDate: Date;
 
