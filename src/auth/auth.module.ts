@@ -1,3 +1,4 @@
+import { MailConfirmationModule } from './../mailConfirmation/mailConfirmation.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -18,6 +19,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     UsersModule,
     PassportModule,
     ConfigModule,
+    MailConfirmationModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

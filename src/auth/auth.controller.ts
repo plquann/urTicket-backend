@@ -14,17 +14,22 @@ import JwtAuthenticationGuard from './guards/jwt-auth.guard';
 import JwtRefreshGuard from './guards/jwt-refresh.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import RequestWithUser from './interfaces/requestWithUser.interface';
+import { MailConfirmationService } from './../mailConfirmation/mailConfirmation.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly mailConfirmationService: MailConfirmationService
   ) {}
 
   @Post('register')
   async register(@Body() registerData: RegisterDto) {
-    return await this.authService.register(registerData);
+    const user =  await this.authService.register(registerData);
+    await this.mailConfirmationService.sendVerificationEmail(registerData.email);
+
+    return user;
   }
 
   @HttpCode(200)
