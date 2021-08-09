@@ -33,16 +33,35 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthenticationGuard)
   findOne(@Param('id') id: string) {
     return this.userService.getUserById(id);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthenticationGuard)
   updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUserById(id, updateUserDto);
   }
 
+  @Patch('block/:id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  blockUser(@Param('id') id: string) {
+    return this.userService.blockUserById(id);
+  }
+
+  @Patch('unblock/:id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  unBlockUser(@Param('id') id: string) {
+    return this.userService.unBlockUserById(id);
+  }
+
+
   @Delete(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   deleteUser(@Param('id') id: string) {
     return this.userService.deleteUserById(id);
   }

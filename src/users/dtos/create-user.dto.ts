@@ -44,9 +44,6 @@ export class CreateUserDto {
   address?: string;
 
   @IsOptional()
-  roles?: UserRole[];
-
-  @IsOptional()
   @IsDateString()
   birthday?: Date;
 }

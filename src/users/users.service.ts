@@ -111,4 +111,31 @@ export class UsersService {
     }
     return deleteResponse;
   }
+
+  async blockUserById(userId: string): Promise<User> {
+    await this.usersRepository.update(userId, { isActive: false });
+
+    const blockedUser = await this.usersRepository.findOne(userId);
+    if (blockedUser) {
+      return blockedUser;
+    }
+    throw new HttpException(
+      'User with this id does not exist',
+      HttpStatus.NOT_FOUND,
+    );
+  }
+
+  async unBlockUserById(userId: string): Promise<User> {
+    await this.usersRepository.update(userId, { isActive: true });
+
+    const unBlockedUser = await this.usersRepository.findOne(userId);
+    if (unBlockedUser) {
+      return unBlockedUser;
+    }
+    throw new HttpException(
+      'User with this id does not exist',
+      HttpStatus.NOT_FOUND,
+    );
+  }
+  
 }
