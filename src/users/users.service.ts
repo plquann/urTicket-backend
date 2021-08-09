@@ -5,12 +5,14 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private readonly filesService: FilesService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -137,5 +139,15 @@ export class UsersService {
       HttpStatus.NOT_FOUND,
     );
   }
-  
+
+  async addAvatar(userId: string, imageBuffer: Buffer, fileName: string) {
+    const avatar = await this.filesService.uploadPublicFile(
+      imageBuffer,
+      fileName,
+    );
+    const user = await this.getUserById(userId);
+
+    await this.usersRepository.update(userId, { ...user, avatar });
+    return avatar;
+  }
 }

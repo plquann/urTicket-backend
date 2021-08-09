@@ -7,7 +7,11 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  Req,
+  UploadedFile,
 } from '@nestjs/common';
+import { Express } from 'express';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -15,6 +19,8 @@ import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorators';
 import { UserRole } from 'src/constants';
+import { FileInterceptor } from '@nestjs/platform-express';
+import RequestWithUser from 'src/auth/interfaces/requestWithUser.interface';
 
 @Controller('users')
 export class UsersController {
@@ -23,6 +29,20 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
+  }
+
+  @Post('avatar')
+  @UseGuards(JwtAuthenticationGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async addAvatar(
+    @Req() request: RequestWithUser,
+    @UploadedFile() file:  Express.Multer.File,
+  ) {
+    return this.userService.addAvatar(
+      request.user.id,
+      file.buffer,
+      file.originalname,
+    );
   }
 
   @Get()
@@ -57,7 +77,6 @@ export class UsersController {
   unBlockUser(@Param('id') id: string) {
     return this.userService.unBlockUserById(id);
   }
-
 
   @Delete(':id')
   @Roles(UserRole.ADMIN)
