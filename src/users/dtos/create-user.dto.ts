@@ -37,10 +37,6 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  avatar?: string;
-
-  @IsOptional()
-  @IsString()
   address?: string;
 
   @IsOptional()

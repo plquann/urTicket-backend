@@ -5,8 +5,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import PublicFile from 'src/files/publicFile.entity';
 
 @Entity('Users')
 export class User {
@@ -39,11 +42,12 @@ export class User {
   })
   gender?: UserGender;
 
-  @Column({
-    default:
-      'https://res.cloudinary.com/quankhs/image/upload/v1620351649/avatar_default.jpg',
+  @JoinColumn()
+  @OneToOne(() => PublicFile, {
+    eager: true,
+    nullable: true,
   })
-  avatar: string;
+  public avatar?: PublicFile;
 
   @Column({
     type: 'enum',

@@ -10,15 +10,18 @@ import {
 import * as helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { AllExceptionsFilter } from './filters/http-exception.filter';
+import { config } from 'aws-sdk';
 
 async function bootstrap() {
   const logger = new Logger('main');
-  const configService = new ConfigService();
-  const PORT = configService.get<number>('PORT');
+  
 
   const app = await NestFactory.create(AppModule);
 
   setupSwagger(app);
+
+  const configService = app.get(ConfigService);
+  const PORT = configService.get<number>('PORT');
 
   // app.useGlobalFilters(new HttpExceptionFilter());
   // app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
@@ -31,6 +34,14 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors();
   app.use(helmet());
+
+  //amazon s3
+  config.update({
+    accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
+    secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
+    region: configService.get('AWS_REGION'),
+  });
+
   await app.listen(PORT);
 
   logger.log(`Application is running on: http://127.0.0.1:${PORT}/`);
