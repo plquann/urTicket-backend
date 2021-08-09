@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -13,14 +13,14 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const newUser = await this.usersRepository.create(createUserDto);
     await this.usersRepository.save(newUser);
 
     return newUser;
   }
 
-  async getAllUsers() {
+  async getAllUsers(): Promise<User[]> {
     const allUsers = await this.usersRepository.find();
 
     return allUsers;
@@ -77,8 +77,38 @@ export class UsersService {
   }
 
   async markEmailAsConfirmed(email: string) {
-    return this.usersRepository.update({ email }, {
-      isEmailConfirmed: true
-    });
+    return this.usersRepository.update(
+      { email },
+      {
+        isEmailConfirmed: true,
+      },
+    );
+  }
+
+  async updateUserById(
+    userId: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User> {
+    await this.usersRepository.update(userId, updateUserDto);
+
+    const updatedUser = await this.usersRepository.findOne(userId);
+    if (updatedUser) {
+      return updatedUser;
+    }
+    throw new HttpException(
+      'User with this id does not exist',
+      HttpStatus.NOT_FOUND,
+    );
+  }
+
+  async deleteUserById(userId: string) {
+    const deleteResponse = await this.usersRepository.delete(userId);
+    if (!deleteResponse.affected) {
+      throw new HttpException(
+        'User with this id does not exist',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return deleteResponse;
   }
 }
