@@ -92,7 +92,7 @@ export class UsersController {
     );
   }
 
-  @Post('avatar')
+  @Delete('avatar')
   @UseGuards(JwtAuthenticationGuard)
   async deleteAvatar(@Req() request: RequestWithUser) {
     return this.userService.deleteAvatar(request.user.id);
