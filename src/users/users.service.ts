@@ -140,11 +140,17 @@ export class UsersService {
   }
 
   async addAvatar(userId: string, imageBuffer: Buffer, fileName: string) {
+    const user = await this.getUserById(userId);
+
+    if (user.avatar) {
+      await this.usersRepository.update(userId, { avatar: null });
+      await this.deleteAvatar(userId);
+    }
+
     const avatar = await this.filesService.uploadPublicFile(
       imageBuffer,
       fileName,
     );
-    const user = await this.getUserById(userId);
 
     await this.usersRepository.update(userId, { ...user, avatar });
     return avatar;
@@ -153,6 +159,7 @@ export class UsersService {
   async deleteAvatar(userId: string): Promise<void> {
     const user = await this.getUserById(userId);
     const fileId = user.avatar?.id;
+    
     if (fileId) {
       await this.usersRepository.update(userId, { ...user, avatar: null });
     }

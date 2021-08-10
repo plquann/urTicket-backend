@@ -10,8 +10,10 @@ import {
   UseInterceptors,
   Req,
   UploadedFile,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
-import { Express } from 'express';
+import { Express, Response } from 'express';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -29,6 +31,20 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
+  }
+
+  @Post('avatar')
+  @UseGuards(JwtAuthenticationGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadAvatar(
+    @Req() request: RequestWithUser,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.userService.addAvatar(
+      request.user.id,
+      file.buffer,
+      file.originalname,
+    );
   }
 
   @Get('me')
@@ -71,30 +87,19 @@ export class UsersController {
     return this.userService.unBlockUserById(id);
   }
 
-  @Delete(':id')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  deleteUser(@Param('id') id: string) {
-    return this.userService.deleteUserById(id);
-  }
-
-  @Post('avatar')
-  @UseGuards(JwtAuthenticationGuard)
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadAvatar(
-    @Req() request: RequestWithUser,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.userService.addAvatar(
-      request.user.id,
-      file.buffer,
-      file.originalname,
-    );
-  }
-
   @Delete('avatar')
   @UseGuards(JwtAuthenticationGuard)
   async deleteAvatar(@Req() request: RequestWithUser) {
     return this.userService.deleteAvatar(request.user.id);
+  }
+
+  @Delete(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  async deleteUser(@Param('id') id: string, @Res() res: Response) {
+    await this.userService.deleteUserById(id);
+    return res
+      .status(HttpStatus.OK)
+      .json({ statusCode: HttpStatus.OK, message: 'Delete user successfully' });
   }
 }
