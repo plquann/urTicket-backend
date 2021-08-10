@@ -111,7 +111,6 @@ export class UsersService {
         HttpStatus.NOT_FOUND,
       );
     }
-    return deleteResponse;
   }
 
   async blockUserById(userId: string): Promise<User> {
@@ -149,5 +148,14 @@ export class UsersService {
 
     await this.usersRepository.update(userId, { ...user, avatar });
     return avatar;
+  }
+
+  async deleteAvatar(userId: string): Promise<void> {
+    const user = await this.getUserById(userId);
+    const fileId = user.avatar?.id;
+    if (fileId) {
+      await this.usersRepository.update(userId, { ...user, avatar: null });
+    }
+    await this.filesService.deletePublicFile(fileId);
   }
 }

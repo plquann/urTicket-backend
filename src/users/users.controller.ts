@@ -31,21 +31,6 @@ export class UsersController {
     return this.userService.create(createUserDto);
   }
 
-  @Post('upload-avatar')
-  @UseGuards(JwtAuthenticationGuard)
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadAvatar(
-    @Req() request: RequestWithUser,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    console.log(request);
-    return this.userService.addAvatar(
-      request.user.id,
-      file.buffer,
-      file.originalname,
-    );
-  }
-
   @Get('me')
   @UseGuards(JwtAuthenticationGuard)
   async getMe(@Req() request: RequestWithUser): Promise<any> {
@@ -91,5 +76,25 @@ export class UsersController {
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   deleteUser(@Param('id') id: string) {
     return this.userService.deleteUserById(id);
+  }
+
+  @Post('avatar')
+  @UseGuards(JwtAuthenticationGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadAvatar(
+    @Req() request: RequestWithUser,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.userService.addAvatar(
+      request.user.id,
+      file.buffer,
+      file.originalname,
+    );
+  }
+
+  @Post('avatar')
+  @UseGuards(JwtAuthenticationGuard)
+  async deleteAvatar(@Req() request: RequestWithUser) {
+    return this.userService.deleteAvatar(request.user.id);
   }
 }
