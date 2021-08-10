@@ -47,7 +47,7 @@ export class User {
     eager: true,
     nullable: true,
   })
-  public avatar?: PublicFile;
+  avatar?: PublicFile;
 
   @Column({
     type: 'enum',

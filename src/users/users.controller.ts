@@ -31,18 +31,26 @@ export class UsersController {
     return this.userService.create(createUserDto);
   }
 
-  @Post('avatar')
+  @Post('upload-avatar')
   @UseGuards(JwtAuthenticationGuard)
   @UseInterceptors(FileInterceptor('file'))
-  async addAvatar(
+  async uploadAvatar(
     @Req() request: RequestWithUser,
-    @UploadedFile() file:  Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
   ) {
+    console.log(request);
     return this.userService.addAvatar(
       request.user.id,
       file.buffer,
       file.originalname,
     );
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthenticationGuard)
+  async getMe(@Req() request: RequestWithUser): Promise<any> {
+    const me = request.user.id;
+    return this.userService.getUserById(me);
   }
 
   @Get()
