@@ -17,6 +17,7 @@ import { ProductsModule } from './products/products.module';
 import { ShowtimesModule } from './showtimes/showtimes.module';
 import { GroupTheaterModule } from './group-theater/group-theater.module';
 import { PromotionsModule } from './promotions/promotions.module';
+import { TicketsModule } from './tickets/tickets.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { PromotionsModule } from './promotions/promotions.module';
     ShowtimesModule,
     GroupTheaterModule,
     PromotionsModule,
+    TicketsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
