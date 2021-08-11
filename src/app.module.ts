@@ -4,9 +4,19 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
-import { MovieModule } from './movie/movie.module';
+import { MovieModule } from './movies/movie.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { CategoriesModule } from './categories/categories.module';
+import { PeopleModule } from './people/people.module';
+import { TheatersModule } from './theaters/theaters.module';
+import { SeatsModule } from './seats/seats.module';
+import { ReservationsModule } from './reservations/reservations.module';
+import { ProductsModule } from './products/products.module';
+import { ShowtimesModule } from './showtimes/showtimes.module';
+import { GroupTheaterModule } from './group-theater/group-theater.module';
+import { PromotionsModule } from './promotions/promotions.module';
 
 @Module({
   imports: [
@@ -43,6 +53,16 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     MovieModule,
     AuthModule,
+    ReviewsModule,
+    CategoriesModule,
+    PeopleModule,
+    TheatersModule,
+    SeatsModule,
+    ReservationsModule,
+    ProductsModule,
+    ShowtimesModule,
+    GroupTheaterModule,
+    PromotionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
