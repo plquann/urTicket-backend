@@ -23,3 +23,16 @@ export enum UserRole {
 }
 
 export const ROLES_KEY = 'roles';
+
+export enum MovieClassification{
+  P = 'P',
+  C13 = 'C13',
+  C16 = 'C16',
+  C18 = 'C18',
+}
+
+export enum MovieStatus{
+  PLAYING = 'PLAYING',
+  UPCOMING = 'UPCOMING',
+  OVER = 'OVER',
+}
