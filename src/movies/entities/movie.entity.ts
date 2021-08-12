@@ -28,7 +28,7 @@ export class Movie extends BaseEntity{
   @Column()
   duration: number;
 
-  @Column('varchar', { length: 30 })
+  @Column('varchar', { length: 32 })
   language: string;
 
   @Column({
