@@ -1,5 +1,6 @@
 import { BaseEntity } from "src/base/base.entity";
-import { Column, Entity } from "typeorm";
+import { Movie } from "src/movies/entities/movie.entity";
+import { Column, Entity, ManyToOne } from "typeorm";
 
 @Entity('Reviews')
 export class Review extends BaseEntity{
@@ -8,4 +9,7 @@ export class Review extends BaseEntity{
 
     @Column()
     rating: number;
+
+    @ManyToOne(() => Movie, (movie: Movie)=> movie.reviews)
+    movie: Movie;
 }
