@@ -4,10 +4,12 @@ import {
   Column,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import PublicFile from 'src/files/publicFile.entity';
 import { BaseEntity } from 'src/base/base.entity';
+import { Review } from 'src/reviews/entities/review.entity';
 
 @Entity('Users')
 export class User extends BaseEntity{
@@ -62,4 +64,7 @@ export class User extends BaseEntity{
 
   @Column({ default: false })
   isEmailConfirmed: boolean;
+
+  @OneToMany(()=> Review, (review: Review) => review.author)
+  reviews?: Review[];
 }
