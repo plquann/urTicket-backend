@@ -8,7 +8,6 @@ import { MovieModule } from './movies/movie.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ReviewsModule } from './reviews/reviews.module';
-import { CategoriesModule } from './categories/categories.module';
 import { PeopleModule } from './people/people.module';
 import { TheatersModule } from './theaters/theaters.module';
 import { SeatsModule } from './seats/seats.module';
@@ -17,7 +16,6 @@ import { ProductsModule } from './products/products.module';
 import { ShowtimesModule } from './showtimes/showtimes.module';
 import { GroupTheaterModule } from './group-theater/group-theater.module';
 import { PromotionsModule } from './promotions/promotions.module';
-import { TicketsModule } from './tickets/tickets.module';
 import { GenresModule } from './genres/genres.module';
 
 @Module({
@@ -56,7 +54,6 @@ import { GenresModule } from './genres/genres.module';
     MovieModule,
     AuthModule,
     ReviewsModule,
-    CategoriesModule,
     PeopleModule,
     TheatersModule,
     SeatsModule,
@@ -65,7 +62,6 @@ import { GenresModule } from './genres/genres.module';
     ShowtimesModule,
     GroupTheaterModule,
     PromotionsModule,
-    TicketsModule,
     GenresModule,
   ],
   controllers: [AppController],

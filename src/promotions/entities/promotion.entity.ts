@@ -9,6 +9,9 @@ export class Promotion extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({nullable: true})
+  image: string;
+
   @Column({default: 5})
   discount: number;
 
