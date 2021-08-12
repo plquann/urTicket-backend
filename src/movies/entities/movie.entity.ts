@@ -1,3 +1,4 @@
+import { BaseEntity } from 'src/base/base.entity';
 import { MovieClassification, MovieStatus } from 'src/constants';
 import {
   Column,
@@ -6,12 +7,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
 @Entity('Movies')
-export class Movie {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Movie extends BaseEntity{
+  
   @Column('varchar', { length: 512 })
   title: string;
 
@@ -46,9 +44,4 @@ export class Movie {
   @Column({ default: true })
   isActive: boolean;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  updatedDate: Date;
 }

@@ -2,20 +2,16 @@ import { UserGender, UserRole } from 'src/constants';
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
   JoinColumn,
   OneToOne,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import PublicFile from 'src/files/publicFile.entity';
+import { BaseEntity } from 'src/base/base.entity';
 
 @Entity('Users')
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class User extends BaseEntity{
+  
   @Column({ unique: true })
   email: string;
 
@@ -66,10 +62,4 @@ export class User {
 
   @Column({ default: false })
   isEmailConfirmed: boolean;
-
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  createdDate: Date;
-
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  updatedDate: Date;
 }
