@@ -1,6 +1,8 @@
 import { BaseEntity } from 'src/base/base.entity';
 import { Movie } from 'src/movies/entities/movie.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Seat } from 'src/seats/entities/seat.entity';
+import { Theater } from 'src/theaters/entities/theater.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('ShowTimes')
 export class Showtime extends BaseEntity {
@@ -15,4 +17,10 @@ export class Showtime extends BaseEntity {
 
   @ManyToOne(() => Movie, (movie: Movie) => movie.showtimes)
   movie: Movie;
+
+  @ManyToOne (()=> Theater, (theater: Theater) => theater.showtimes)
+  theater: Theater;
+
+  @OneToMany(()=>Seat, (seat: Seat) => seat.showtime)
+  seats: Seat[];
 }

@@ -1,5 +1,6 @@
+import { Seat } from './../../seats/entities/seat.entity';
 import { BaseEntity } from 'src/base/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity('Reservations')
 export class Reservation extends BaseEntity {
@@ -14,4 +15,7 @@ export class Reservation extends BaseEntity {
 
   @Column()
   totalPrice: number;
+
+  @OneToMany(()=> Seat, (seat: Seat) => seat.reservation)
+  seats: Seat[];
 }

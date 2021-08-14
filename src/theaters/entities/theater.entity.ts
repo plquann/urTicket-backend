@@ -1,3 +1,4 @@
+import { Showtime } from 'src/showtimes/entities/showtime.entity';
 import { BaseEntity } from 'src/base/base.entity';
 import { GroupTheater } from 'src/group-theater/entities/group-theater.entity';
 import { Seat } from 'src/seats/entities/seat.entity';
@@ -34,4 +35,9 @@ export class Theater extends BaseEntity {
 
   @OneToMany(() => Seat, (seat: Seat) => seat.theater)
   seats: Seat[];
+
+  @OneToMany(() => Showtime, (showtime: Showtime) => showtime.theater, {
+    nullable: true,
+  })
+  showtimes: Showtime[];
 }

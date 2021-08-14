@@ -58,6 +58,8 @@ export class User extends BaseEntity {
   @Column({ default: false })
   isEmailConfirmed: boolean;
 
-  @OneToMany(() => Review, (review: Review) => review.author)
+  @OneToMany(() => Review, (review: Review) => review.author, {
+    nullable: true,
+  })
   reviews?: Review[];
 }

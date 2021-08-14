@@ -70,9 +70,11 @@ export class Movie extends BaseEntity {
   crews: Person[];
 
   //relations - one to many
-  @OneToMany(() => Review, (review: Review) => review.movie)
+  @OneToMany(() => Review, (review: Review) => review.movie, { nullable: true })
   reviews: Review[];
 
-  @OneToMany(() => Showtime, (showtime: Showtime) => showtime.movie)
+  @OneToMany(() => Showtime, (showtime: Showtime) => showtime.movie, {
+    nullable: true,
+  })
   showtimes: Showtime[];
 }
