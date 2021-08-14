@@ -8,6 +8,12 @@ export class ProductOrder extends BaseEntity {
     @Column()
     quantity: number;
 
+    @Column()
+    reservationId: string;
+
+    @Column()
+    productId: string;
+
     @ManyToOne(()=> Reservation, (reservation: Reservation) => reservation.productOrders)
     reservation: Reservation;
 
