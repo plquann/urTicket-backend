@@ -1,3 +1,4 @@
+import { Reservation } from 'src/reservations/entities/reservation.entity';
 import { UserGender, UserRole } from 'src/constants';
 import { Entity, Column, JoinColumn, OneToOne, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
@@ -62,4 +63,11 @@ export class User extends BaseEntity {
     nullable: true,
   })
   reviews?: Review[];
+
+  @OneToMany(
+    () => Reservation,
+    (reservation: Reservation) => reservation.user,
+    { nullable: true },
+  )
+  reservations?: Reservation[];
 }

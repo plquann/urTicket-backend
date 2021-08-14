@@ -1,5 +1,7 @@
+import { Reservation } from 'src/reservations/entities/reservation.entity';
 import { BaseEntity } from 'src/base/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { ProductOrder } from './productOrder.entity';
 @Entity('Products')
 export class Product extends BaseEntity {
   @Column()
@@ -16,4 +18,11 @@ export class Product extends BaseEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(
+    () => ProductOrder,
+    (productOrder: ProductOrder) => productOrder.product,
+    { nullable: true },
+  )
+  orders: ProductOrder[];
 }
