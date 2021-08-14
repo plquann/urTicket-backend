@@ -159,7 +159,7 @@ export class UsersService {
   async deleteAvatar(userId: string): Promise<void> {
     const user = await this.getUserById(userId);
     const fileId = user.avatar?.id;
-    
+
     if (fileId) {
       await this.usersRepository.update(userId, { ...user, avatar: null });
     }

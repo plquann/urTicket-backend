@@ -7,6 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [TypeOrmModule.forFeature([Showtime])],
   controllers: [ShowtimesController],
-  providers: [ShowtimesService]
+  providers: [ShowtimesService],
 })
 export class ShowtimesModule {}

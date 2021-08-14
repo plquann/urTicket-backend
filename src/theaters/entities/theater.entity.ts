@@ -26,9 +26,12 @@ export class Theater extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @ManyToOne(()=> GroupTheater, (groupTheater: GroupTheater ) => groupTheater.theaters)
+  @ManyToOne(
+    () => GroupTheater,
+    (groupTheater: GroupTheater) => groupTheater.theaters,
+  )
   groupTheater: GroupTheater;
 
-  @OneToMany(()=> Seat, (seat: Seat) => seat.theater)
+  @OneToMany(() => Seat, (seat: Seat) => seat.theater)
   seats: Seat[];
 }

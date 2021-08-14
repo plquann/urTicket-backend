@@ -7,6 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [TypeOrmModule.forFeature([Promotion])],
   controllers: [PromotionsController],
-  providers: [PromotionsService]
+  providers: [PromotionsService],
 })
 export class PromotionsModule {}

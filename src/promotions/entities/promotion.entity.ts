@@ -9,10 +9,10 @@ export class Promotion extends BaseEntity {
   @Column()
   name: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   image: string;
 
-  @Column({default: 5})
+  @Column({ default: 5 })
   discount: number;
 
   @Column()
@@ -24,6 +24,6 @@ export class Promotion extends BaseEntity {
   @Column()
   sumUsersUsed: number;
 
-  @Column({default: true})
+  @Column({ default: true })
   isActive: boolean;
 }

@@ -12,14 +12,14 @@ export class RolesGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
-   
+
     if (!roles) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-   
+
     if (!user) {
       throw new UnauthorizedException('Permission Denied!');
     }

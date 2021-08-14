@@ -7,7 +7,7 @@ import { User } from './entities/user.entity';
 import { FilesModule } from 'src/files/files.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]),  FilesModule,],
+  imports: [TypeOrmModule.forFeature([User]), FilesModule],
   controllers: [UsersController],
   exports: [UsersService],
   providers: [UsersService],

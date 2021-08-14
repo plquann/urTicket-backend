@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { GroupTheaterService } from './group-theater.service';
 import { CreateGroupTheaterDto } from './dto/create-group-theater.dto';
 import { UpdateGroupTheaterDto } from './dto/update-group-theater.dto';
@@ -23,7 +31,10 @@ export class GroupTheaterController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGroupTheaterDto: UpdateGroupTheaterDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateGroupTheaterDto: UpdateGroupTheaterDto,
+  ) {
     return this.groupTheaterService.update(+id, updateGroupTheaterDto);
   }
 

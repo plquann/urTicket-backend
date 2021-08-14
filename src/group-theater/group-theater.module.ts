@@ -7,6 +7,6 @@ import { GroupTheater } from './entities/group-theater.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([GroupTheater])],
   controllers: [GroupTheaterController],
-  providers: [GroupTheaterService]
+  providers: [GroupTheaterService],
 })
 export class GroupTheaterModule {}

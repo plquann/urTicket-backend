@@ -21,13 +21,15 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
-    private readonly mailConfirmationService: MailConfirmationService
+    private readonly mailConfirmationService: MailConfirmationService,
   ) {}
 
   @Post('register')
   async register(@Body() registerData: RegisterDto) {
-    const user =  await this.authService.register(registerData);
-    await this.mailConfirmationService.sendVerificationEmail(registerData.email);
+    const user = await this.authService.register(registerData);
+    await this.mailConfirmationService.sendVerificationEmail(
+      registerData.email,
+    );
 
     return user;
   }
