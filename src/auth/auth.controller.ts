@@ -64,7 +64,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthenticationGuard)
   @Get()
-  authenticate() {
+  async authenticate() {
     return this.usersService.getAllUsers();
   }
 

@@ -31,10 +31,13 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   app.use(cookieParser());
-  app.enableCors();
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
   app.use(helmet());
 
-  //amazon s3
+  //amazon s3 config
   config.update({
     accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
     secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
@@ -43,6 +46,6 @@ async function bootstrap() {
 
   await app.listen(PORT);
 
-  logger.log(`Application is running on: http://127.0.0.1:${PORT}/`);
+  logger.log(`Application is running on: http://localhost:${PORT}/`);
 }
 bootstrap();
