@@ -62,12 +62,6 @@ export class AuthController {
     request.res.setHeader('Set-Cookie', this.authService.getCookiesForLogOut());
   }
 
-  @UseGuards(JwtAuthenticationGuard)
-  @Get()
-  async authenticate() {
-    return this.usersService.getAllUsers();
-  }
-
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
   refresh(@Req() request: RequestWithUser) {

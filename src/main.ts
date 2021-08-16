@@ -30,7 +30,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  app.use(cookieParser());
+  app.use(cookieParser() );
   app.enableCors({
     origin: true,
     credentials: true,
