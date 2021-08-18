@@ -20,6 +20,11 @@ export class GroupTheaterController {
     return this.groupTheaterService.create(createGroupTheaterDto);
   }
 
+  @Post('seeders')
+  seeders() {
+    return this.groupTheaterService.seedersGroupTheaters();
+  }
+
   @Get()
   findAll() {
     return this.groupTheaterService.findAll();
