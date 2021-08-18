@@ -35,7 +35,7 @@ export class GenresController {
 
   @Get()
   getAll() {
-    return this.genresService.findAll();
+    return this.genresService.getAllGenres();
   }
 
   @Put(':id')

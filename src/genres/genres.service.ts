@@ -33,7 +33,7 @@ export class GenresService {
       name: genreName,
     });
     if (isGenreExist)
-      throw new HttpException('Genre already exist', HttpStatus.CONFLICT);
+      throw new HttpException('Genre already exist', HttpStatus.BAD_REQUEST);
 
     const newGenre = await this.genresRepository.create(genre);
     await this.genresRepository.save(newGenre);
@@ -41,7 +41,15 @@ export class GenresService {
     return newGenre;
   }
 
-  async findAll(): Promise<Genre[]> {
+  async getGenreById(genreId: string): Promise<Genre> {
+    const genre = await this.genresRepository.findOne(genreId);
+    if (!genre)
+      throw new HttpException('Genre not found', HttpStatus.NOT_FOUND);
+
+    return genre;
+  }
+
+  async getAllGenres(): Promise<Genre[]> {
     const allGenres = await this.genresRepository.find();
 
     return allGenres;

@@ -4,7 +4,7 @@ import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import { ProductOrder } from './productOrder.entity';
 @Entity('Products')
 export class Product extends BaseEntity {
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column('text')
@@ -12,6 +12,9 @@ export class Product extends BaseEntity {
 
   @Column()
   price: number;
+
+  @Column({ nullable: true })
+  discount: number;
 
   @Column()
   image: string;
