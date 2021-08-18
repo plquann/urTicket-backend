@@ -20,23 +20,23 @@ export class PeopleController {
     return this.peopleService.create(createPersonDto);
   }
 
-  @Get()
-  findAll() {
-    return this.peopleService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.peopleService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.peopleService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.peopleService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
-    return this.peopleService.update(+id, updatePersonDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
+  //   return this.peopleService.update(+id, updatePersonDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.peopleService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.peopleService.remove(+id);
+  // }
 }

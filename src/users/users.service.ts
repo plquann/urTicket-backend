@@ -73,13 +73,13 @@ export class UsersService {
   }
 
   async removeRefreshToken(userId: string) {
-    return this.usersRepository.update(userId, {
+    return await this.usersRepository.update(userId, {
       currentHashedRefreshToken: null,
     });
   }
 
   async markEmailAsConfirmed(email: string) {
-    return this.usersRepository.update(
+    return await this.usersRepository.update(
       { email },
       {
         isEmailConfirmed: true,

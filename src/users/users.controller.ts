@@ -29,6 +29,8 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Post()
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -96,10 +98,7 @@ export class UsersController {
   @Delete(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  async deleteUser(@Param('id') id: string, @Res() res: Response) {
-    await this.userService.deleteUserById(id);
-    return res
-      .status(HttpStatus.OK)
-      .json({ statusCode: HttpStatus.OK, message: 'Delete user successfully' });
+  async deleteUser(@Param('id') id: string) {
+    return this.userService.deleteUserById(id);
   }
 }

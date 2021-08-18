@@ -16,6 +16,7 @@ async function bootstrap() {
   const logger = new Logger('main');
 
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
 
   setupSwagger(app);
 

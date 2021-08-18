@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Genre } from './entities/genre.entity';
 
@@ -7,23 +7,40 @@ import { Genre } from './entities/genre.entity';
 export class GenresService {
   constructor(
     @InjectRepository(Genre)
-    private readonly genreRepository: Repository<Genre>,
+    private readonly genresRepository: Repository<Genre>,
   ) {}
 
-  async create(genreName: any): Promise<any> {
-    const newGenre = await this.genreRepository.create(genreName);
-    await this.genreRepository.save(newGenre);
+  async create(genre: any): Promise<any> {
+    const { name: genreName } = genre;
+    const isGenreExist = await this.genresRepository.findOne({
+      name: genreName,
+    });
+    if (isGenreExist)
+      throw new HttpException('Genre already exist', HttpStatus.CONFLICT);
+
+    const newGenre = await this.genresRepository.create(genre);
+    await this.genresRepository.save(newGenre);
 
     return newGenre;
   }
 
   async findAll(): Promise<Genre[]> {
-    const allGenres = await this.genreRepository.find();
+    const allGenres = await this.genresRepository.find();
 
     return allGenres;
   }
 
-  async updateGenreById(genreId: string, newName: string): Promise<Genre> {
-    return await this.genreRepository.save({ id: genreId, name: newName });
+  async updateGenreById(genreId: string, genreName: string): Promise<any> {
+    const genre = await this.genresRepository.update(genreId, {
+      name: genreName,
+    });
+    if (!genre.affected)
+      throw new HttpException('Genre not found', HttpStatus.NOT_FOUND);
+  }
+
+  async deleteGenreById(genreId: string): Promise<any> {
+    const genre = await this.genresRepository.delete(genreId);
+    if (!genre.affected)
+      throw new HttpException('Genre not found', HttpStatus.NOT_FOUND);
   }
 }
