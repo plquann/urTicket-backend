@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   UseGuards,
@@ -57,30 +57,30 @@ export class UsersController {
   @Get()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  findAll() {
+  getAll() {
     return this.userService.getAllUsers();
   }
 
   @Get(':id')
   @UseGuards(JwtAuthenticationGuard)
-  findOne(@Param('id') id: string) {
+  getUserById(@Param('id') id: string) {
     return this.userService.getUserById(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @UseGuards(JwtAuthenticationGuard)
   updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUserById(id, updateUserDto);
   }
 
-  @Patch('block/:id')
+  @Put('block/:id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   blockUser(@Param('id') id: string) {
     return this.userService.blockUserById(id);
   }
 
-  @Patch('unblock/:id')
+  @Put('unblock/:id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   unBlockUser(@Param('id') id: string) {
@@ -89,7 +89,7 @@ export class UsersController {
 
   @Delete('avatar')
   @UseGuards(JwtAuthenticationGuard)
-  async deleteAvatar(@Req() request: RequestWithUser) {
+  deleteAvatar(@Req() request: RequestWithUser) {
     return this.userService.deleteAvatar(request.user.id);
   }
 
