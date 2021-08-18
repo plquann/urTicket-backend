@@ -3,40 +3,53 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { PeopleService } from './people.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { Roles } from 'src/auth/decorators/roles.decorators';
+import { UserRole } from 'src/constants';
+import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('people')
 export class PeopleController {
   constructor(private readonly peopleService: PeopleService) {}
 
   @Post()
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   create(@Body() createPersonDto: CreatePersonDto) {
     return this.peopleService.create(createPersonDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.peopleService.findAll();
-  // }
+  @Post('/seeds')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  seedPeople() {
+    return this.peopleService.seedPeople();
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.peopleService.findOne(+id);
-  // }
+  @Get(':id')
+  getOnePerson(@Param('id') personId: string) {
+    return this.peopleService.getPersonById(personId);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
-  //   return this.peopleService.update(+id, updatePersonDto);
-  // }
+  @Put(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  update(@Param('id') personId: string, @Body() updatePersonDto: UpdatePersonDto) {
+    return this.peopleService.updatePersonById(personId, updatePersonDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.peopleService.remove(+id);
-  // }
+  @Delete(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  remove(@Param('id') personId: string) {
+    return this.peopleService.deletePersonById(personId);
+  }
 }

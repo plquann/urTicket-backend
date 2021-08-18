@@ -3,6 +3,6 @@ import { Column, Entity } from 'typeorm';
 
 @Entity('Genres')
 export class Genre extends BaseEntity {
-  @Column('varchar', { length: 30 })
+  @Column({ type: 'varchar', length: 30, unique: true })
   name: string;
 }
