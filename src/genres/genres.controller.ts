@@ -26,6 +26,13 @@ export class GenresController {
     return this.genresService.create(genre);
   }
 
+  @Post('/seeders')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  seedersGenres(){
+    return this.genresService.seedersGenres();
+  }
+
   @Get()
   getAll() {
     return this.genresService.findAll();

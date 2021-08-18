@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Genre } from './entities/genre.entity';
+import { genresSeed } from 'src/database/seeds/genres.seed';
 
 @Injectable()
 export class GenresService {
@@ -9,6 +10,22 @@ export class GenresService {
     @InjectRepository(Genre)
     private readonly genresRepository: Repository<Genre>,
   ) {}
+
+  async seedersGenres(): Promise<any> {
+    const genres = genresSeed;
+    const result = await this.genresRepository
+      .createQueryBuilder()
+      .insert()
+      .into(Genre)
+      .values(genres)
+      .execute();
+
+    if (!result)
+      throw new HttpException(
+        'Genres seed failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+  }
 
   async create(genre: any): Promise<any> {
     const { name: genreName } = genre;

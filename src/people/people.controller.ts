@@ -27,11 +27,11 @@ export class PeopleController {
     return this.peopleService.create(createPersonDto);
   }
 
-  @Post('/seeds')
+  @Post('/seeders')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  seedPeople() {
-    return this.peopleService.seedPeople();
+  seedersPeople() {
+    return this.peopleService.seedersPeople();
   }
 
   @Get(':id')

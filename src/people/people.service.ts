@@ -4,25 +4,17 @@ import { Repository } from 'typeorm';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { Person } from './entities/person.entity';
-import { peopleSeeds } from './seeds/people.seed';
+import { peopleSeed } from '../database/seeds/people.seed';
 
 @Injectable()
 export class PeopleService {
   constructor(
     @InjectRepository(Person)
-    private readonly personRepository: Repository<Person>,
-  ) // private connection: Connection,
-  {}
+    private readonly personRepository: Repository<Person>, // private connection: Connection,
+  ) {}
 
-  async create(createPersonDto: CreatePersonDto): Promise<Person> {
-    const newPerson = await this.personRepository.create(createPersonDto);
-    await this.personRepository.save(newPerson);
-
-    return newPerson;
-  }
-
-  async seedPeople(): Promise<any> {
-    const people = peopleSeeds;
+  async seedersPeople(): Promise<any> {
+    const people = peopleSeed;
     const result = await this.personRepository
       .createQueryBuilder()
       .insert()
@@ -30,9 +22,19 @@ export class PeopleService {
       .values(people)
       .execute();
 
-      if(!result) {
-        throw new HttpException('Could not seed people', HttpStatus.BAD_REQUEST);
-      }    
+    if (!result) {
+      throw new HttpException(
+        'Could not seed people',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async create(createPersonDto: CreatePersonDto): Promise<Person> {
+    const newPerson = await this.personRepository.create(createPersonDto);
+    await this.personRepository.save(newPerson);
+
+    return newPerson;
   }
 
   async getPersonById(personId: string): Promise<Person> {
