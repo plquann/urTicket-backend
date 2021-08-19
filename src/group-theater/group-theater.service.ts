@@ -35,6 +35,21 @@ export class GroupTheaterService {
     return await this.groupTheaterRepository.find();
   }
 
+  async getGroupTheaterById(groupTheaterId: string): Promise<GroupTheater> {
+    const groupTheater = await this.groupTheaterRepository.findOne(
+      groupTheaterId,
+    );
+
+    if (!groupTheater) {
+      throw new HttpException(
+        `Group theater with id ${groupTheaterId} does not exist`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return groupTheater;
+  }
+
   create(createGroupTheaterDto: CreateGroupTheaterDto) {
     return 'This action adds a new groupTheater';
   }

@@ -13,6 +13,8 @@ export class GroupTheater extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => Theater, (theater: Theater) => theater.groupTheater)
+  @OneToMany(() => Theater, (theater: Theater) => theater.groupTheater, {
+    eager: true,
+  })
   theaters: Theater[];
 }

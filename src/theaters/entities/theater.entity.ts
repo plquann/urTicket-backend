@@ -2,7 +2,7 @@ import { Showtime } from 'src/showtimes/entities/showtime.entity';
 import { BaseEntity } from 'src/base/base.entity';
 import { GroupTheater } from 'src/group-theater/entities/group-theater.entity';
 import { Seat } from 'src/seats/entities/seat.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('Theaters')
 export class Theater extends BaseEntity {
@@ -31,7 +31,11 @@ export class Theater extends BaseEntity {
     () => GroupTheater,
     (groupTheater: GroupTheater) => groupTheater.theaters,
   )
+  @JoinColumn({ name: 'groupTheaterId' })
   groupTheater: GroupTheater;
+
+  @Column()
+  groupTheaterId: string;
 
   @OneToMany(() => Seat, (seat: Seat) => seat.theater)
   seats: Seat[];

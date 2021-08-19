@@ -1,3 +1,4 @@
+import { GroupTheater } from './../group-theater/entities/group-theater.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { theatersSeed } from 'src/database/seeds/theaters.seed';

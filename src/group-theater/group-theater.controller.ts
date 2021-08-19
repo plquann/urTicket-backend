@@ -31,8 +31,8 @@ export class GroupTheaterController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.groupTheaterService.findOne(+id);
+  getGroupTheater(@Param('id') id: string) {
+    return this.groupTheaterService.getGroupTheaterById(id);
   }
 
   @Patch(':id')
