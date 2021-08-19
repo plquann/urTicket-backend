@@ -19,7 +19,7 @@ export class Theater extends BaseEntity {
   email: string;
 
   @Column('simple-array')
-  rooms: number[];
+  rooms: string[];
 
   @Column()
   thumbnail: string;

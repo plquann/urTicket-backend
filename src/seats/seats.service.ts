@@ -1,26 +1,31 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSeatDto } from './dto/create-seat.dto';
-import { UpdateSeatDto } from './dto/update-seat.dto';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { seatsSeed } from 'src/database/seeds/seats.seed';
+import { Repository } from 'typeorm';
+import { Seat } from './entities/seat.entity';
 
 @Injectable()
 export class SeatsService {
-  create(createSeatDto: CreateSeatDto) {
-    return 'This action adds a new seat';
+  constructor(
+    @InjectRepository(Seat)
+    private readonly seatRepository: Repository<Seat>,
+  ) {}
+
+  async seedersSeats(): Promise<void> {
+    const seat = seatsSeed;
+
+    const result = await this.seatRepository
+      .createQueryBuilder()
+      .insert()
+      .into(Seat)
+      .values(seat)
+      .execute();
+
+    if (!result)
+      throw new HttpException(
+        'Could not seed Seats',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
   }
 
-  findAll() {
-    return `This action returns all seats`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} seat`;
-  }
-
-  update(id: number, updateSeatDto: UpdateSeatDto) {
-    return `This action updates a #${id} seat`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} seat`;
-  }
 }

@@ -9,7 +9,6 @@ export class GroupTheater extends BaseEntity {
 
   @Column()
   logo: string;
-
   @Column({ default: true })
   isActive: boolean;
 

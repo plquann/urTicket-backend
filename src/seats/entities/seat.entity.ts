@@ -1,7 +1,7 @@
 import { Ticket } from 'src/tickets/entities/ticket.entity';
 import { BaseEntity } from 'src/base/base.entity';
 import { Theater } from 'src/theaters/entities/theater.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('Seats')
 export class Seat extends BaseEntity {
@@ -15,13 +15,17 @@ export class Seat extends BaseEntity {
   type: string;
 
   @Column()
-  room: number;
+  room: string;
 
   @Column({ default: true })
   isActive: boolean;
 
   @ManyToOne(() => Theater, (theater: Theater) => theater.seats)
+  @JoinColumn({ name: 'theaterId' })
   theater: Theater;
+
+  @Column()
+  theaterId: string;
 
   @OneToMany(() => Ticket, (ticket: Ticket) => ticket.seat)
   tickets: Ticket[];

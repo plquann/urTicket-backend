@@ -1,66 +1,98 @@
 export const productsSeed = [
   {
+    id: '3507d3e6-914b-4c53-806d-ae01cc98dabb',
+    createdDate: '2021-08-18T15:51:10.751Z',
+    updatedDate: '2021-08-18T15:51:10.751Z',
     name: 'Snack Combo',
     description: 'Popcorn(L) + 2 CocaCola(L) + Snack',
     price: 12,
     discount: 10,
     image:
       'https://res.cloudinary.com/jackson-pham/image/upload/v1629294106/movieTicket/combo_1_osub8f.png',
+    isActive: true,
   },
   {
+    id: '9988926d-ab72-415a-85b0-9e58021e67ed',
+    createdDate: '2021-08-18T15:51:10.751Z',
+    updatedDate: '2021-08-18T15:51:10.751Z',
     name: 'MiLo Combo',
     description: 'Popcorn(M) + CocaCola(M) + Milo',
     price: 14,
     discount: 15,
     image:
       'https://res.cloudinary.com/jackson-pham/image/upload/v1629294130/movieTicket/combo_2_vjcrv8.png',
+    isActive: true,
   },
   {
+    id: '567a6ec9-5397-402d-84a7-9d96294b54d2',
+    createdDate: '2021-08-18T15:51:10.751Z',
+    updatedDate: '2021-08-18T15:51:10.751Z',
     name: 'FA Combo',
     description: 'Popcorn(L) + CocaCol(L)',
     price: 5,
     discount: 10,
     image:
       'https://res.cloudinary.com/jackson-pham/image/upload/v1629294141/movieTicket/combo_3_fsclfh.png',
+    isActive: true,
   },
   {
+    id: 'ce697456-857c-461f-9d01-0115b8fbc6d2',
+    createdDate: '2021-08-18T15:51:10.751Z',
+    updatedDate: '2021-08-18T15:51:10.751Z',
     name: 'Tissue Peach Combo',
     description: 'Popcorn(L) + 2 Peaches Tea',
     price: 18,
     discount: 20,
     image:
       'https://res.cloudinary.com/jackson-pham/image/upload/v1629294145/movieTicket/combo_4_pnule2.png',
+    isActive: true,
   },
   {
+    id: '9fa9a50d-52d7-47e8-9aa9-cf677d9c4494',
+    createdDate: '2021-08-18T15:51:10.751Z',
+    updatedDate: '2021-08-18T15:51:10.751Z',
     name: 'Brown Bears Combo',
     description: '2 Brown Bear Water Bottle + Popcorn(L)',
     price: 22,
     discount: 15,
     image:
       'https://res.cloudinary.com/jackson-pham/image/upload/v1629294150/movieTicket/combo_6_zf6rgp.png',
+    isActive: true,
   },
   {
+    id: 'b88fbcf3-8570-472e-8296-b0fdd100a30a',
+    createdDate: '2021-08-18T15:51:10.751Z',
+    updatedDate: '2021-08-18T15:51:10.751Z',
     name: 'Shin Combo',
     description: 'Shin Water Bottle + Popcorn(L)',
     price: 20,
     discount: 10,
     image:
       'https://res.cloudinary.com/jackson-pham/image/upload/v1629294153/movieTicket/combo_5_mnmy1e.png',
+    isActive: true,
   },
   {
+    id: '6ae9e435-eaec-4a29-b640-f157213103a5',
+    createdDate: '2021-08-18T15:51:10.751Z',
+    updatedDate: '2021-08-18T15:51:10.751Z',
     name: 'Couple Combo',
     description: 'Popcorn(L) + CocaCola(L)',
     price: 8,
     discount: 20,
     image:
       'https://res.cloudinary.com/jackson-pham/image/upload/v1629294155/movieTicket/combo_7_aqyfd7.png',
+    isActive: true,
   },
   {
+    id: '10946cc9-71a4-4624-b23e-dcd857a92e70',
+    createdDate: '2021-08-18T15:51:10.751Z',
+    updatedDate: '2021-08-18T15:51:10.751Z',
     name: 'Seasonal Combo',
     description: 'Cheese Rat Water Bottle + Popcorn(L)',
     price: 17,
     discount: 15,
     image:
       'https://res.cloudinary.com/jackson-pham/image/upload/v1629294158/movieTicket/combo_8_nflkbo.png',
+    isActive: true,
   },
 ];
