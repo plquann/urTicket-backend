@@ -51,6 +51,8 @@ export class GenresService {
 
   async getAllGenres(): Promise<Genre[]> {
     const allGenres = await this.genresRepository.find();
+    if (!allGenres)
+      throw new HttpException('Genres not found', HttpStatus.NOT_FOUND);
 
     return allGenres;
   }

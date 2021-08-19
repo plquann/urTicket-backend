@@ -26,8 +26,8 @@ export class GroupTheaterController {
   }
 
   @Get()
-  findAll() {
-    return this.groupTheaterService.findAll();
+  getAllGroupTheater() {
+    return this.groupTheaterService.getAllGroupTheaters();
   }
 
   @Get(':id')

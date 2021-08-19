@@ -34,6 +34,11 @@ export class PeopleController {
     return this.peopleService.seedersPeople();
   }
 
+  @Get()
+  getAllPeople() {
+    return this.peopleService.getAllPeople();
+  }
+
   @Get(':id')
   getOnePerson(@Param('id') personId: string) {
     return this.peopleService.getPersonById(personId);
@@ -42,7 +47,10 @@ export class PeopleController {
   @Put(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  update(@Param('id') personId: string, @Body() updatePersonDto: UpdatePersonDto) {
+  update(
+    @Param('id') personId: string,
+    @Body() updatePersonDto: UpdatePersonDto,
+  ) {
     return this.peopleService.updatePersonById(personId, updatePersonDto);
   }
 

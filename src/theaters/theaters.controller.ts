@@ -20,6 +20,16 @@ export class TheatersController {
     return this.theatersService.create(createTheaterDto);
   }
 
+  @Post('/seeders')
+  seedersTheaters() {
+    return this.theatersService.seedersTheaters();
+  }
+
+  @Get()
+  getAllTheaters() {
+    return this.theatersService.getAllTheaters();
+  }
+
   @Get()
   findAll() {
     return this.theatersService.findAll();

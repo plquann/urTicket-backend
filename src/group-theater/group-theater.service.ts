@@ -31,12 +31,12 @@ export class GroupTheaterService {
     }
   }
 
-  create(createGroupTheaterDto: CreateGroupTheaterDto) {
-    return 'This action adds a new groupTheater';
+  async getAllGroupTheaters(): Promise<GroupTheater[]> {
+    return await this.groupTheaterRepository.find();
   }
 
-  findAll() {
-    return `This action returns all groupTheater`;
+  create(createGroupTheaterDto: CreateGroupTheaterDto) {
+    return 'This action adds a new groupTheater';
   }
 
   findOne(id: number) {

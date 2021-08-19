@@ -30,6 +30,17 @@ export class PeopleService {
     }
   }
 
+  async getAllPeople(): Promise<Person[]> {
+    const people = await this.personRepository.find();
+    if (!people) {
+      throw new HttpException(
+        'Could not find people',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return people;
+  }
+
   async create(createPersonDto: CreatePersonDto): Promise<Person> {
     const newPerson = await this.personRepository.create(createPersonDto);
     await this.personRepository.save(newPerson);
