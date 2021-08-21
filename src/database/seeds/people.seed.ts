@@ -17819,4 +17819,13 @@ export const peopleSeed = [
     position: 'Acting',
     isActive: true,
   },
+  {
+    id: '7b1a87be-3cb4-4539-b44b-ed725dd84097',
+    createdDate: '2021-08-18T15:42:17.955Z',
+    updatedDate: '2021-08-18T15:42:17.955Z',
+    fullName: 'Viola Davis',
+    avatar: 'http://image.tmdb.org/t/p/w185/xDssw6vpYNRjsybvMPRE30e0dPN.jpg',
+    position: 'Acting',
+    isActive: true,
+  },
 ];

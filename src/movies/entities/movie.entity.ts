@@ -34,23 +34,23 @@ export class Movie extends BaseEntity {
   @Column({
     type: 'enum',
     enum: MovieClassification,
-    default: MovieClassification.P,
+    default: MovieClassification.C13,
   })
   classify: MovieClassification;
 
   @Column({ type: 'enum', enum: MovieStatus, default: MovieStatus.PLAYING })
   status: MovieStatus;
 
-  @Column()
+  @Column({ type: 'float', nullable: true })
   voteAverage: number;
 
-  @Column()
+  @Column({ nullable: true })
   voteCount: number;
 
-  @Column('float')
+  @Column({ type: 'float', nullable: true })
   imdbRating: number;
 
-  @Column()
+  @Column({ nullable: true })
   tomatoesRating: number;
 
   @Column({ default: true })

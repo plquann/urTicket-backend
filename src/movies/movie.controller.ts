@@ -20,9 +20,14 @@ export class MovieController {
     return this.movieService.create(createMovieDto);
   }
 
+  @Post('/seeders')
+  seedersMovies() {
+    return this.movieService.seedersMovies();
+  }
+
   @Get()
   findAll() {
-    return this.movieService.findAll();
+    return this.movieService.getAllMovies();
   }
 
   @Get(':id')
