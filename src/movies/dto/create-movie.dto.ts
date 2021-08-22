@@ -57,6 +57,14 @@ export class CreateMovieDto {
   @IsIn([MovieStatus.OVER, MovieStatus.PLAYING, MovieStatus.UPCOMING])
   status: MovieStatus;
 
+  @IsNumber()
+  @IsOptional()
+  voteAverage: number;
+
+  @IsNumber()
+  @IsOptional()
+  voteCount: number;
+
   @IsArray()
   @IsNotEmpty()
   genresArr: string[];

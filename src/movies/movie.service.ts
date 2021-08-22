@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Connection, In } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
@@ -12,6 +12,7 @@ export class MovieService {
   constructor(
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
+    private connection: Connection,
   ) {}
 
   async seedersMovies() {
@@ -67,6 +68,25 @@ export class MovieService {
     }
   }
 
+  async deleteRelationMovie(
+    movieId: string,
+    relationData: string[],
+    relationName: string,
+  ): Promise<void> {
+    try {
+      await this.movieRepository
+        .createQueryBuilder()
+        .relation(Movie, relationName)
+        .of(movieId)
+        .remove(relationData);
+    } catch (error) {
+      throw new HttpException(
+        `Could not delete ${relationName} for movie`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async getAllMovies(): Promise<Movie[]> {
     const movies = await this.movieRepository.find();
 
@@ -107,11 +127,59 @@ export class MovieService {
     return movie;
   }
 
-  update(id: number, updateMovieDto: UpdateMovieDto) {
-    return `This action updates a #${id} movie`;
+  async updateMovieById(
+    movieId: string,
+    updateMovieDto: UpdateMovieDto,
+  ): Promise<Movie> {
+    const { genresArr, castsArr, crewsArr, ...movieData } = updateMovieDto;
+
+    await this.movieRepository.update(movieId, movieData);
+    const movie = await this.movieRepository.findOne(movieId);
+
+    if (!movie)
+      throw new HttpException('Movie not found!', HttpStatus.NOT_FOUND);
+
+    return movie;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} movie`;
+  async loadRelationsMovie(
+    movieId: string,
+    relationName: string,
+  ): Promise<string[]> {
+    const movieWithRelations = await this.movieRepository
+      .createQueryBuilder('movie')
+      .relation(Movie, relationName)
+      .of(movieId)
+      .loadMany();
+
+    if (!movieWithRelations.length)
+      throw new HttpException(
+        `Could not load relations ${relationName} of movie!`,
+        HttpStatus.NOT_FOUND,
+      );
+
+    const result = movieWithRelations.map((item) => item.id);
+
+    return result;
+  }
+
+  async deleteMovieById(movieId: string): Promise<any> {
+    const genres = await this.loadRelationsMovie(movieId, 'genres');
+    const casts = await this.loadRelationsMovie(movieId, 'casts');
+    const crews = await this.loadRelationsMovie(movieId, 'crews');
+
+    await this.deleteRelationMovie(movieId, genres, 'genres');
+    await this.deleteRelationMovie(movieId, casts, 'casts');
+    await this.deleteRelationMovie(movieId, crews, 'crews');
+
+    const result = await this.movieRepository
+      .createQueryBuilder()
+      .delete()
+      .from(Movie)
+      .where('id = :id', { id: movieId })
+      .execute();
+
+    if (!result.affected)
+      throw new HttpException('Movie not found!', HttpStatus.NOT_FOUND);
   }
 }

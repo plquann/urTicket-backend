@@ -104,8 +104,8 @@ export class UsersService {
   }
 
   async deleteUserById(userId: string) {
-    const deleteResponse = await this.usersRepository.delete(userId);
-    if (!deleteResponse.affected) {
+    const result = await this.usersRepository.delete(userId);
+    if (!result.affected) {
       throw new HttpException(
         'User with this id does not exist',
         HttpStatus.NOT_FOUND,
