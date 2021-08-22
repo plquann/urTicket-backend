@@ -68,6 +68,21 @@ export class MovieService {
     }
   }
 
+  async loadRelationsMovie(
+    movieId: string,
+    relationName: string,
+  ): Promise<string[]> {
+    const movieWithRelations = await this.movieRepository
+      .createQueryBuilder('movie')
+      .relation(Movie, relationName)
+      .of(movieId)
+      .loadMany();
+
+    const result = movieWithRelations.map((item) => item.id);
+
+    return result;
+  }
+
   async deleteRelationMovie(
     movieId: string,
     relationData: string[],
@@ -142,35 +157,15 @@ export class MovieService {
     return movie;
   }
 
-  async loadRelationsMovie(
-    movieId: string,
-    relationName: string,
-  ): Promise<string[]> {
-    const movieWithRelations = await this.movieRepository
-      .createQueryBuilder('movie')
-      .relation(Movie, relationName)
-      .of(movieId)
-      .loadMany();
-
-    if (!movieWithRelations.length)
-      throw new HttpException(
-        `Could not load relations ${relationName} of movie!`,
-        HttpStatus.NOT_FOUND,
-      );
-
-    const result = movieWithRelations.map((item) => item.id);
-
-    return result;
-  }
-
   async deleteMovieById(movieId: string): Promise<any> {
     const genres = await this.loadRelationsMovie(movieId, 'genres');
     const casts = await this.loadRelationsMovie(movieId, 'casts');
     const crews = await this.loadRelationsMovie(movieId, 'crews');
 
-    await this.deleteRelationMovie(movieId, genres, 'genres');
-    await this.deleteRelationMovie(movieId, casts, 'casts');
-    await this.deleteRelationMovie(movieId, crews, 'crews');
+    genres.length &&
+      (await this.deleteRelationMovie(movieId, genres, 'genres'));
+    casts.length && (await this.deleteRelationMovie(movieId, casts, 'casts'));
+    crews.length && (await this.deleteRelationMovie(movieId, crews, 'crews'));
 
     const result = await this.movieRepository
       .createQueryBuilder()
