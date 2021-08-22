@@ -10,6 +10,7 @@ import {
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { MovieStatus } from 'src/constants';
 
 @Controller('movie')
 export class MovieController {
@@ -26,8 +27,18 @@ export class MovieController {
   }
 
   @Get()
-  findAll() {
+  getAllMovies() {
     return this.movieService.getAllMovies();
+  }
+
+  @Get('/now_playing')
+  getMoviesNowPlaying() {
+    return this.movieService.getMovieByStatus(MovieStatus.PLAYING);
+  }
+
+  @Get('/upcoming')
+  getMoviesUpcoming() {
+    return this.movieService.getMovieByStatus(MovieStatus.UPCOMING);
   }
 
   @Get(':id')

@@ -5,6 +5,7 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { moviesSeed } from './../database/seeds/movies.seed';
+import { MovieStatus } from 'src/constants';
 
 @Injectable()
 export class MovieService {
@@ -75,8 +76,23 @@ export class MovieService {
     return movies;
   }
 
+  async getMovieByStatus(status: MovieStatus): Promise<Movie[]> {
+    const movies = await this.movieRepository.find({
+      where: {
+        status: status,
+      },
+    });
+
+    if (!movies.length)
+      throw new HttpException(
+        `Movies ${status} not found!`,
+        HttpStatus.NOT_FOUND,
+      );
+
+    return movies;
+  }
+
   async getMovieById(movieId: string): Promise<Movie> {
-    
     const movie = await this.movieRepository
       .createQueryBuilder('movie')
       .where('movie.id = :id', { id: movieId })
