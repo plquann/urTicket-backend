@@ -21,7 +21,7 @@ export class RolesGuard implements CanActivate {
     const user = request.user;
 
     if (!user) {
-      throw new UnauthorizedException('Permission Denied!');
+      throw new UnauthorizedException({}, 'Permission Denied!');
     }
 
     return roles.includes(user.roles);
