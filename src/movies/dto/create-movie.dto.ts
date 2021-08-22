@@ -59,13 +59,13 @@ export class CreateMovieDto {
 
   @IsArray()
   @IsNotEmpty()
-  genres: string[];
+  genresArr: string[];
 
   @IsArray()
   @IsNotEmpty()
-  casts: string[];
+  castsArr: string[];
 
   @IsArray()
   @IsNotEmpty()
-  crews: string[];
+  crewsArr: string[];
 }

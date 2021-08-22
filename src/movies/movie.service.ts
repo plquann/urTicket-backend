@@ -30,24 +30,65 @@ export class MovieService {
       );
   }
 
-  create(createMovieDto: CreateMovieDto) {
-    return 'This action adds a new movie';
+  async createMovie(createMovie: CreateMovieDto): Promise<Movie> {
+    try {
+      const { genresArr, castsArr, crewsArr, ...movieData } = createMovie;
+      const movie = await this.movieRepository.create(movieData);
+
+      await this.movieRepository.save(movie);
+
+      await this.createRelationMovie(movie.id, genresArr, 'genres');
+      await this.createRelationMovie(movie.id, castsArr, 'casts');
+      await this.createRelationMovie(movie.id, crewsArr, 'crews');
+
+      return movie;
+    } catch (error) {
+      throw new HttpException('Can not create Movie !', HttpStatus.CONFLICT);
+    }
+  }
+
+  async createRelationMovie(
+    movieId: string,
+    relationData: string[],
+    relationName: string,
+  ): Promise<void> {
+    try {
+      await this.movieRepository
+        .createQueryBuilder()
+        .relation(Movie, relationName)
+        .of(movieId)
+        .add(relationData);
+    } catch (error) {
+      throw new HttpException(
+        `Could not create ${relationName} for movie`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async getAllMovies(): Promise<Movie[]> {
     const movies = await this.movieRepository.find();
 
     if (!movies.length)
-      throw new HttpException(
-        'Movies not found!',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Movies not found!', HttpStatus.NOT_FOUND);
 
     return movies;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} movie`;
+  async getMovieById(movieId: string): Promise<Movie> {
+    
+    const movie = await this.movieRepository
+      .createQueryBuilder('movie')
+      .where('movie.id = :id', { id: movieId })
+      .leftJoinAndSelect('movie.genres', 'genres')
+      .leftJoinAndSelect('movie.casts', 'casts')
+      .leftJoinAndSelect('movie.crews', 'crews')
+      .getOne();
+
+    if (!movie)
+      throw new HttpException('Movie not found!', HttpStatus.NOT_FOUND);
+
+    return movie;
   }
 
   update(id: number, updateMovieDto: UpdateMovieDto) {

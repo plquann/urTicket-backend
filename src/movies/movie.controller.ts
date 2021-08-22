@@ -17,7 +17,7 @@ export class MovieController {
 
   @Post()
   create(@Body() createMovieDto: CreateMovieDto) {
-    return this.movieService.create(createMovieDto);
+    return this.movieService.createMovie(createMovieDto);
   }
 
   @Post('/seeders')
@@ -32,7 +32,7 @@ export class MovieController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.movieService.findOne(+id);
+    return this.movieService.getMovieById(id);
   }
 
   @Patch(':id')
