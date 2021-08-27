@@ -51,8 +51,34 @@ export class ReviewsService {
     return review;
   }
 
-  create(createReviewDto: CreateReviewDto): Promise<any> {
-    return Promise.resolve(createReviewDto);
+  async createReview(
+    createReviewDto: CreateReviewDto,
+    authorId: string,
+  ): Promise<Review> {
+    const { movieId, rating } = createReviewDto;
+    const movie = await this.movieService.getMovieById(movieId);
+    if (!movie) {
+      throw new HttpException(
+        `Movie with ${movieId} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const voteCount = movie.voteCount + 1;
+
+    await this.movieService.updateMovieById(movie.id, {
+      voteAverage:
+        Math.round(
+          ((movie.voteAverage * movie.voteCount + rating) / voteCount) * 10,
+        ) / 10,
+      voteCount: voteCount,
+    });
+
+    const review = await this.reviewRepository.create({
+      ...createReviewDto,
+      authorId,
+    });
+
+    return await this.reviewRepository.save(review);
   }
 
   async deleteReview(reviewId: string): Promise<any> {

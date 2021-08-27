@@ -16,8 +16,4 @@ export class CreateReviewDto {
     @IsString()
     @IsNotEmpty()
     movieId: string;
-
-    @IsString()
-    @IsNotEmpty()
-    userId: string;
 }
