@@ -24,5 +24,9 @@ export class ReviewsController {
   getReviewsByMovieId(@Param('movieId') movieId: string) {
     return this.reviewsService.getReviewsByMovieId(movieId);
   }
-  
+
+  @Delete('/:reviewId')
+  deleteReview(@Param('reviewId') reviewId: string) {
+    return this.reviewsService.deleteReview(reviewId);
+  }
 }
