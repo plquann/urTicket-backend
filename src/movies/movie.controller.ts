@@ -42,6 +42,11 @@ export class MovieController {
     return this.movieService.getMovieByStatus(MovieStatus.UPCOMING);
   }
 
+  @Get('/highlight')
+  getHighlightMovies() {
+    return this.movieService.getMovieHighlight();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.movieService.getMovieById(id);

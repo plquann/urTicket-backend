@@ -113,6 +113,7 @@ export class MovieService {
 
   async getMovieByStatus(status: MovieStatus): Promise<Movie[]> {
     const movies = await this.movieRepository.find({
+      relations: ["genres"],
       where: {
         status: status,
       },
@@ -140,6 +141,21 @@ export class MovieService {
       throw new HttpException('Movie not found!', HttpStatus.NOT_FOUND);
 
     return movie;
+  }
+
+  async getMovieHighlight(): Promise<Movie[]> {
+    const movies = await this.movieRepository.find({
+      relations: ["genres"],
+      where: {
+        status: MovieStatus.PLAYING,
+      },
+      order: {
+        voteCount: 'DESC',
+      },
+      take: 5,
+    });
+
+    return movies;
   }
 
   async updateMovieById(

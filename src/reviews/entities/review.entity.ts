@@ -5,7 +5,10 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity('Reviews')
 export class Review extends BaseEntity {
-  @Column('text')
+  @Column()
+  title: string;
+
+  @Column('text', { nullable: true })
   content: string;
 
   @Column()
