@@ -15,11 +15,29 @@ export class ReviewsService {
   ) {}
 
   async getReviewsByMovieId(movieId: string): Promise<Review[]> {
-    const reviews = await this.reviewRepository.find({
-      where: {
-        movie: movieId,
-      },
-    });
+    // Unable to select specific fields
+    // const reviews = await this.reviewRepository.find({
+    //   select: ['id', 'title', 'content', 'rating', 'author.id'],
+    //   relations: ['author'],
+    //   where: {
+    //     movieId: movieId,
+    //   },
+    // });
+
+    const reviews = await this.reviewRepository
+      .createQueryBuilder('review')
+      .leftJoinAndSelect('review.author', 'author')
+      .select([
+        'review.id',
+        'review.title',
+        'review.content',
+        'review.rating',
+        'author.id',
+        'author.userName',
+        'author.avatar',
+      ])
+      .where('review.movieId = :movieId', { movieId })
+      .getMany();
 
     return reviews;
   }
@@ -53,7 +71,10 @@ export class ReviewsService {
     const voteCount = movie.voteCount - 1;
 
     await this.movieService.updateMovieById(movie.id, {
-      voteAverage: (movie.voteAverage * movie.voteCount) / voteCount,
+      voteAverage: voteCount
+        ? 0
+        : Math.round(((movie.voteAverage * movie.voteCount) / voteCount) * 10) /
+          10,
       voteCount: voteCount,
     });
 
