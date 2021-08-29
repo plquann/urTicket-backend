@@ -32,6 +32,7 @@ export class ReviewsService {
         'review.title',
         'review.content',
         'review.rating',
+        'review.createdDate',
         'author.id',
         'author.userName',
         'author.avatar',
@@ -111,5 +112,7 @@ export class ReviewsService {
     //  .getOne();
 
     await this.reviewRepository.delete(reviewId);
+
+    return movie.id;
   }
 }

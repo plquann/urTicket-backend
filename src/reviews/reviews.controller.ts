@@ -15,7 +15,7 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import RequestWithUser from 'src/auth/interfaces/requestWithUser.interface';
 
-@Controller('reviews')
+@Controller('review')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
