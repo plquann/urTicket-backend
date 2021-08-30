@@ -1,4 +1,3 @@
-import { GroupTheater } from './../group-theater/entities/group-theater.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { theatersSeed } from 'src/database/seeds/theaters.seed';
@@ -23,6 +22,7 @@ export class TheatersService {
       .into(Theater)
       .values(theaters)
       .execute();
+
     if (!result) {
       throw new HttpException(
         'Could not seed theaters',
@@ -41,11 +41,32 @@ export class TheatersService {
 
   async getTheaterById(id: string): Promise<Theater> {
     const theater = await this.theaterRepository.findOne(id);
-    
+
     if (!theater) {
       throw new HttpException('Theater not found!', HttpStatus.NOT_FOUND);
     }
     return theater;
+  }
+
+  async getSeatsByTheaterIdAndRoom(
+    theaterId: string,
+    room: string,
+  ): Promise<any> {
+    const result = await this.theaterRepository
+      .createQueryBuilder('theater')
+      .leftJoinAndSelect('theater.seats', 'seats')
+      .where('theater.id = :id', { id: theaterId })
+      .andWhere('seats.room = :room', { room: room })
+      .getOne();
+
+    if (!result) {
+      throw new HttpException(
+        `Seats not found in rom ${room} of theater ${theaterId}!`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return result.seats;
   }
 
   create(createTheaterDto: CreateTheaterDto) {

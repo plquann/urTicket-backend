@@ -27,19 +27,4 @@ export class SeatsService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
   }
-
-  async getSeatsByTheaterId(theaterId: string, room: string): Promise<Seat[]> {
-    const seats = await this.seatRepository.find({
-      theaterId,
-      room,
-    });
-
-    if (!seats.length)
-      throw new HttpException(
-        `Room ${room} of theater ${theaterId} have not seats!`,
-        HttpStatus.NOT_FOUND,
-      );
-
-    return seats;
-  }
 }

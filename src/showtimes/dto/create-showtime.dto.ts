@@ -18,7 +18,4 @@ export class CreateShowtimeDto {
     @IsNotEmpty()
     @Type(() => Date)
     startTime: Date; 
-
-    
-
 }

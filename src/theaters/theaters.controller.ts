@@ -37,7 +37,7 @@ export class TheatersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.theatersService.findOne(+id);
+    return this.theatersService.getSeatsByTheaterIdAndRoom(id, '3D 1');
   }
 
   @Patch(':id')
