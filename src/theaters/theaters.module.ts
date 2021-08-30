@@ -7,6 +7,7 @@ import { Theater } from './entities/theater.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Theater])],
   controllers: [TheatersController],
+  exports: [TheatersService],
   providers: [TheatersService],
 })
 export class TheatersModule {}

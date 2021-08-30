@@ -8,7 +8,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 @Entity('ShowTimes')
 export class Showtime extends BaseEntity {
   @Column()
-  room: number;
+  room: string;
 
   @Column()
   startTime: Date;

@@ -38,6 +38,7 @@ export class ReviewsService {
         'author.avatar',
       ])
       .where('review.movieId = :movieId', { movieId })
+      .orderBy('review.createdDate', 'DESC')
       .getMany();
 
     return reviews;
@@ -49,6 +50,7 @@ export class ReviewsService {
         id: reviewId,
       },
     });
+
     return review;
   }
 
@@ -99,9 +101,9 @@ export class ReviewsService {
 
     await this.movieService.updateMovieById(movie.id, {
       voteAverage: voteCount
-        ? 0
-        : Math.round(((movie.voteAverage * movie.voteCount) / voteCount) * 10) /
-          10,
+        ? Math.round(((movie.voteAverage * movie.voteCount) / voteCount) * 10) /
+          10
+        : 0,
       voteCount: voteCount,
     });
 

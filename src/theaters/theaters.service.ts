@@ -39,6 +39,15 @@ export class TheatersService {
     return theaters;
   }
 
+  async getTheaterById(id: string): Promise<Theater> {
+    const theater = await this.theaterRepository.findOne(id);
+    
+    if (!theater) {
+      throw new HttpException('Theater not found!', HttpStatus.NOT_FOUND);
+    }
+    return theater;
+  }
+
   create(createTheaterDto: CreateTheaterDto) {
     return 'This action adds a new theater';
   }
