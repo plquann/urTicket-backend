@@ -14,17 +14,14 @@ export class TicketsService {
   ) {}
 
   async createTickets(seats: Seat[], showtimeId: string): Promise<void> {
-    const tickets = [];
-    for (let i = 0; i < seats.length; i++) {
-      const ticket = {
-        seatId: seats[i].id,
-        showtimeId: showtimeId,
-        price:
-          seats[i].type === 'NORMAL' ? 6 : seats[i].type === 'VIP' ? 10 : 15,
+    const tickets: any[] = seats.map((seat) => {
+      return {
+        seat: seat.id,
+        showtime: showtimeId,
+        price: seat.type === 'NORMAL' ? 6 : seat.type === 'VIP' ? 10 : 15,
         reservation: null,
       };
-      tickets.push(ticket);
-    }
+    });
 
     const result = await this.ticketRepository
       .createQueryBuilder()

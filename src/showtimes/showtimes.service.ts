@@ -18,7 +18,6 @@ export class ShowtimesService {
     private readonly ticketService: TicketsService,
   ) {}
 
-
   async getShowtimesByMovieId(movieId: string): Promise<Showtime[]> {
     const showtimes = await this.showtimeRepository.find({
       where: { movieId },
@@ -33,7 +32,9 @@ export class ShowtimesService {
     return showtimes;
   }
 
-  async createShowtime(createShowtimeDto: CreateShowtimeDto): Promise<any> {
+  async createShowtime(
+    createShowtimeDto: CreateShowtimeDto,
+  ): Promise<Showtime> {
     const { movieId, theaterId, startTime, room } = createShowtimeDto;
 
     const movie = await this.movieService.getMovieById(movieId);
@@ -54,6 +55,7 @@ export class ShowtimesService {
     }
 
     //check time
+    
     // const showtimes = await this.showtimeRepository
     //   .createQueryBuilder()
     //   .where('theaterId = :theaterId', { theaterId: theater.id })
@@ -68,22 +70,27 @@ export class ShowtimesService {
     const endTime = new Date(start.getTime() + movie.duration * 60000);
 
     //create Show time
-    const showtime = await this.showtimeRepository
-    .createQueryBuilder()
-    .insert()
-    .into(Showtime)
-    .values({movieId, theaterId, startTime, endTime, room})
-    .execute();
+    const result = await this.showtimeRepository
+      .createQueryBuilder()
+      .insert()
+      .into(Showtime)
+      .values({ movieId, theaterId, startTime, endTime, room })
+      .execute();
 
-    console.log('🚀 ~ file: showtimes.service.ts ~ line 79 ~ showtime', showtime);
+    // create tickets
+    const seats = await this.theaterService.getSeatsByTheaterIdAndRoom(theaterId, room);
 
-    //create tickets
-    // const seats = await this.theaterService.getSeatsByTheaterIdAndRoom(theaterId, room);
+    await this.ticketService.createTickets(seats, result.identifiers[0].id);
+    // console.log(
+    //   '🚀 ~ file: showtimes.service.ts ~ line 84 ~ result.raw.insertId',
+    //   result.identifiers[0].id,
+    // );
 
-    // await this.ticketService.createTickets(showtime.raw.insertId, seats);
+    const showtime = await this.showtimeRepository.findOne(
+      result.identifiers[0].id,
+    );
 
-    // return showtime;
-    
+    return showtime;
   }
 
   create(createShowtimeDto: CreateShowtimeDto) {
