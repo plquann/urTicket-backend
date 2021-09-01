@@ -20,14 +20,15 @@ export class ShowtimesController {
     return this.showtimesService.createShowtime(createShowtimeDto);
   }
 
-  @Get()
-  findAll() {
-    return this.showtimesService.findAll();
+  @Get('/movies/:movieId')
+  getShowtimesByMovieId(@Param('movieId') movieId: string) {
+    return this.showtimesService.getShowtimesByMovieId(movieId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.showtimesService.findOne(+id);
+
+  @Get('/theaters/:theaterId')
+  getShowtimesByTheaterId(@Param('theaterId') theaterId: string) {
+    return this.showtimesService.getShowtimesByTheaterId(theaterId);
   }
 
   @Patch(':id')

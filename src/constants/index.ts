@@ -35,3 +35,5 @@ export enum MovieStatus {
   UPCOMING = 'UPCOMING',
   OVER = 'OVER',
 }
+
+
