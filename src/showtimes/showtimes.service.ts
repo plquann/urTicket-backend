@@ -8,11 +8,8 @@ import { Connection, Raw, Repository } from 'typeorm';
 import { CreateShowtimeDto } from './dto/create-showtime.dto';
 import { UpdateShowtimeDto } from './dto/update-showtime.dto';
 import { Showtime } from './entities/showtime.entity';
+import * as dayjs from 'dayjs';
 
-type MovieAndShowtimes ={
-  movie: Movie,
-  showtimes: Showtime[]
-}
 @Injectable()
 export class ShowtimesService {
   constructor(
@@ -31,60 +28,43 @@ export class ShowtimesService {
     });
 
     const temp = await this.showtimeRepository
-    .createQueryBuilder('showtime')
-    .where('showtime.movieId = :movieId', { movieId })
-    .leftJoinAndSelect('showtime.movie', 'movies')
-    .leftJoinAndSelect('showtime.theater', 'theaters')
-    .getMany();
+      .createQueryBuilder('showtime')
+      .where('showtime.movieId = :movieId', { movieId })
+      .leftJoinAndSelect('showtime.movie', 'movies')
+      .leftJoinAndSelect('showtime.theater', 'theaters')
+      .getMany();
 
     return temp;
   }
 
-  async getShowtimesByTheaterId(theaterId: string): Promise<any[]> {
+  async getShowtimesByTheaterId(theaterId: string): Promise<Movie[]> {
+    const theater = await this.theaterService.getTheaterById(theaterId);
+    // if (!theater) {
+    //   throw new HttpException(
+    //     `Theater with id ${theaterId} not found`,
+    //     HttpStatus.NOT_FOUND,
+    //   );
+    // }
 
-    //Find all movie that have showtimes at the theater
-    // const movies = await this.showtimeRepository
-    // .createQueryBuilder('showtime')
-    // .select('showtime.movieId')
-    // .where('showtime.theaterId = :theaterId', { theaterId })
-    // .distinctOn(['showtime.movieId'])
-    // .leftJoinAndSelect('showtime.movie', 'movies')
-    // .getMany();
+    const currentDay = new Date();
 
-    const movies = await this.connection.getRepository(Movie)
-    .createQueryBuilder('movie')
-    .leftJoinAndSelect('movie.showtimes', 'showtimes')
-    .where('showtimes.theaterId = :theaterId', { theaterId })
-    .getMany();
+    const start = dayjs(currentDay).startOf('day').toDate();
+    console.log('🚀 ~ file: showtimes.service.ts ~ line 52 ~ start', start);
+    const end = dayjs(currentDay).endOf('day').toDate();
+    console.log('🚀 ~ file: showtimes.service.ts ~ line 54 ~ end', end);
+
+    const movies = await this.connection
+      .getRepository(Movie)
+      .createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.showtimes', 'showtimes')
+      .where('showtimes.theaterId = :theaterId', { theaterId })
+      .andWhere('showtimes.startTime >= :start AND showtimes.endTime <= :end', {
+        start,
+        end,
+      })
+      .getMany();
 
     return movies;
-    
-    //Data return 
-    // const result = [
-    //   {
-    //     movieID: '1',
-    //     showtime: [
-    //       {showtime: 1,}.
-    //       {showtime: 2,}
-    //     ]
-    //   }
-    //   {
-    //     movieID: '2',
-    //     showtime: [
-    //       {showtime: 3,},
-    //       {showtime: 4,}
-    //     ]
-    //   }
-    // ];
-
-    // const showtimes = await this.showtimeRepository.find({
-    //   where: { theaterId },
-    //   relations: ['movie'],
-    // });
-
-    
-
-    // return showtimes;
   }
 
   async createShowtime(createShowtimeDto: CreateShowtimeDto): Promise<any> {
@@ -110,30 +90,16 @@ export class ShowtimesService {
     const start = new Date(startTime);
     const endTime = new Date(start.getTime() + movie.duration * 60000);
 
-    const showtimes = await this.showtimeRepository.find({
-      where: [
-        {
-          theaterId,
-          room,
-          startTime: Raw((alias) => `${alias} <= :date`, { date: start }),
-          endTime: Raw((alias) => `${alias} >= :date`, { date: start }),
-        },
-        {
-          theaterId,
-          room,
-          startTime: Raw((alias) => `${alias} <= :date`, { date: endTime }),
-          endTime: Raw((alias) => `${alias} >= :date`, { date: endTime }),
-        },
-        {
-          theaterId,
-          room,
-          startTime: Raw((alias) => `${alias} > :date`, { date: start }),
-          endTime: Raw((alias) => `${alias} < :date`, { date: endTime }),
-        },
-      ],
-    });
+    const showtimes = await this.showtimeRepository
+      .createQueryBuilder('showtime')
+      .where('showtime.theaterId = :theaterId', { theaterId })
+      .andWhere('showtime.room = :room', { room })
+      .andWhere('showtime.startTime < :end AND showtime.endTime > :start', {
+        start,
+        end: endTime,
+      })
+      .getMany();
 
-    console.log('🚀 ~ file: showtimes.service.ts ~ line 123 ~ showtimes.length', showtimes.length);
     if (showtimes.length) {
       throw new HttpException(
         `Already have showtime in this time period!`,
