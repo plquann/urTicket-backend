@@ -10,6 +10,7 @@ import { CreateShowtimeDto } from './dto/create-showtime.dto';
 import { UpdateShowtimeDto } from './dto/update-showtime.dto';
 import { Showtime } from './entities/showtime.entity';
 import * as dayjs from 'dayjs';
+import { showtimesSeed } from 'src/database/seeds/showtime.seed';
 
 @Injectable()
 export class ShowtimesService {
@@ -21,6 +22,17 @@ export class ShowtimesService {
     private readonly ticketService: TicketsService,
     private connection: Connection,
   ) {}
+
+  async seedersShowtimes() {
+    const seedShowtimes = showtimesSeed;
+
+    for (const showtime of seedShowtimes) {
+      await this.createShowtime({
+        ...showtime,
+        startTime: new Date(showtime.startTime),
+      });
+    }
+  }
 
   async getShowtimesByMovieId(movieId: string): Promise<any[]> {
     /**
@@ -185,6 +197,11 @@ export class ShowtimesService {
     );
 
     return showtime;
+  }
+
+  async getAllShowtimes(): Promise<Showtime[]> {
+    const showtimes = await this.showtimeRepository.find();
+    return showtimes;
   }
 
   create(createShowtimeDto: CreateShowtimeDto) {
