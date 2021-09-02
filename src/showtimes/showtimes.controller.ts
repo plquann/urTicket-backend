@@ -20,13 +20,13 @@ export class ShowtimesController {
     return this.showtimesService.createShowtime(createShowtimeDto);
   }
 
-  @Get('/movies/:movieId')
+  @Get('/movie/:movieId')
   getShowtimesByMovieId(@Param('movieId') movieId: string) {
     return this.showtimesService.getShowtimesByMovieId(movieId);
   }
 
 
-  @Get('/theaters/:theaterId')
+  @Get('/theater/:theaterId')
   getShowtimesByTheaterId(@Param('theaterId') theaterId: string) {
     return this.showtimesService.getShowtimesByTheaterId(theaterId);
   }

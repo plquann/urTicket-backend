@@ -143,6 +143,7 @@ export class MovieService {
     return movie;
   }
 
+
   async getMovieHighlight(): Promise<Movie[]> {
     const movies = await this.movieRepository.find({
       relations: ["genres"],

@@ -1,10 +1,11 @@
+import { GroupTheater } from 'src/group-theater/entities/group-theater.entity';
 import { Movie } from 'src/movies/entities/movie.entity';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MovieService } from 'src/movies/movie.service';
 import { TheatersService } from 'src/theaters/theaters.service';
 import { TicketsService } from 'src/tickets/tickets.service';
-import { Connection, Raw, Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { CreateShowtimeDto } from './dto/create-showtime.dto';
 import { UpdateShowtimeDto } from './dto/update-showtime.dto';
 import { Showtime } from './entities/showtime.entity';
@@ -21,20 +22,70 @@ export class ShowtimesService {
     private connection: Connection,
   ) {}
 
-  async getShowtimesByMovieId(movieId: string): Promise<Showtime[]> {
-    const showtimes = await this.showtimeRepository.find({
-      where: { movieId },
-      relations: ['movie', 'theater'],
-    });
+  async getShowtimesByMovieId(movieId: string): Promise<any[]> {
+    /**
+    * @Output {*} result = [
+     {
+       groupTheater: 'CGV',
+       cinemas: [
+         {
+           cinema: 1,
+           showtimes: [
+             {
+               startTime: '2020-01-01T00:00:00.000Z',
+               endTime: '2020-01-01T00:00:00.000Z',
+             },
+           ],
+         },
+         {
+           cinema: 2,
+           showtimes: [
+             {
+               startTime: '2020-01-01T00:00:00.000Z',
+               endTime: '2020-01-01T00:00:00.000Z',
+             },
+           ],
+         }
+       ]
+     },
+     {
+       groupTheater: 'Lotte',
+       cinemas: [
+         {
+           cinema: 1,
+           showtimes: [
+             {
+               startTime: '2020-01-01T00:00:00.000Z',
+               endTime: '2020-01-01T00:00:00.000Z',
+             },
+           ],
+         },
+         {
+           cinema: 2,
+           showtimes: [
+             {
+               startTime: '2020-01-01T00:00:00.000Z',
+               endTime: '2020-01-01T00:00:00.000Z',
+             },
+           ],
+         }
+       ]
+     },
+   ]
+    */
 
-    const temp = await this.showtimeRepository
-      .createQueryBuilder('showtime')
-      .where('showtime.movieId = :movieId', { movieId })
-      .leftJoinAndSelect('showtime.movie', 'movies')
-      .leftJoinAndSelect('showtime.theater', 'theaters')
+    //get All GroupTheater --> join theater --> join showtime --> where showtime.movieId = movieId
+    const result = await this.connection
+      .getRepository(GroupTheater)
+      .createQueryBuilder('groupTheater')
+      .leftJoinAndSelect('groupTheater.theaters', 'theaters')
+      .leftJoinAndSelect('theaters.showtimes', 'showtimes')
+      .where('showtimes.movieId = :movieId', { movieId })
       .getMany();
 
-    return temp;
+    // not yet check date
+
+    return result;
   }
 
   async getShowtimesByTheaterId(theaterId: string): Promise<Movie[]> {
@@ -49,9 +100,9 @@ export class ShowtimesService {
     const currentDay = new Date();
 
     const start = dayjs(currentDay).startOf('day').toDate();
-    console.log('🚀 ~ file: showtimes.service.ts ~ line 52 ~ start', start);
     const end = dayjs(currentDay).endOf('day').toDate();
-    console.log('🚀 ~ file: showtimes.service.ts ~ line 54 ~ end', end);
+    // console.log('🚀 ~ file: showtimes.service.ts ~ line 52 ~ start', start);
+    // console.log('🚀 ~ file: showtimes.service.ts ~ line 54 ~ end', end);
 
     const movies = await this.connection
       .getRepository(Movie)
@@ -70,7 +121,8 @@ export class ShowtimesService {
   async createShowtime(createShowtimeDto: CreateShowtimeDto): Promise<any> {
     const { movieId, theaterId, startTime, room } = createShowtimeDto;
 
-    const movie = await this.movieService.getMovieById(movieId);
+    // const movie = await this.movieService.getMovieById(movieId);
+    const movie = await this.connection.getRepository(Movie).findOne(movieId);
     const theater = await this.theaterService.getTheaterById(theaterId);
 
     if (!movie || !theater) {
