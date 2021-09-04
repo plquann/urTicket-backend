@@ -1,14 +1,12 @@
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import StripeService from 'src/stripe/stripe.service';
-import { CardsService } from './cards.service';
 import AddCardDto from './dto/add-card.dto';
 import RequestWithUser from 'src/auth/interfaces/requestWithUser.interface';
 
 @Controller('cards')
 export class CardsController {
   constructor(
-    private readonly cardsService: CardsService,
     private readonly stripeService: StripeService,
   ) {}
 
@@ -24,7 +22,7 @@ export class CardsController {
   @Get()
   @UseGuards(JwtAuthenticationGuard)
   async getCards(@Req() request: RequestWithUser) {
-    return this.stripeService.listCreditCards(request.user.stripeCustomerId);
+    return this.stripeService.getCreditCards(request.user.stripeCustomerId);
   }
 
   

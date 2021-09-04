@@ -10,7 +10,6 @@ import { TicketsModule } from 'src/tickets/tickets.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Showtime]),
-    MovieModule,
     TheatersModule,
     TicketsModule,
   ],

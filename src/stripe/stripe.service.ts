@@ -11,18 +11,14 @@ export default class StripeService {
     });
   }
 
-  public async createCustomer(name: string, email: string) {
-    return this.stripe.customers.create({
+  async createCustomer(name: string, email: string) {
+    return await this.stripe.customers.create({
       name,
       email,
     });
   }
 
-  public async charge(
-    amount: number,
-    paymentMethodId: string,
-    customerId: string,
-  ) {
+  async charge(amount: number, paymentMethodId: string, customerId: string) {
     return this.stripe.paymentIntents.create({
       amount,
       customer: customerId,
@@ -33,17 +29,19 @@ export default class StripeService {
     });
   }
 
-  public async attachCreditCard(paymentMethodId: string, customerId: string) {
+  async attachCreditCard(paymentMethodId: string, customerId: string) {
     return this.stripe.setupIntents.create({
       customer: customerId,
       payment_method: paymentMethodId,
     });
   }
 
-  public async listCreditCards(customerId: string) {
-    return this.stripe.paymentMethods.list({
+  async getCreditCards(customerId: string): Promise<any> {
+    const paymentMethods = await this.stripe.paymentMethods.list({
       customer: customerId,
       type: 'card',
     });
+
+    return paymentMethods.data;
   }
 }

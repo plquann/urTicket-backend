@@ -2,7 +2,6 @@ import { GroupTheater } from 'src/group-theater/entities/group-theater.entity';
 import { Movie } from 'src/movies/entities/movie.entity';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MovieService } from 'src/movies/movie.service';
 import { TheatersService } from 'src/theaters/theaters.service';
 import { TicketsService } from 'src/tickets/tickets.service';
 import { Connection, Repository } from 'typeorm';
@@ -17,7 +16,6 @@ export class ShowtimesService {
   constructor(
     @InjectRepository(Showtime)
     private readonly showtimeRepository: Repository<Showtime>,
-    private readonly movieService: MovieService,
     private readonly theaterService: TheatersService,
     private readonly ticketService: TicketsService,
     private connection: Connection,
