@@ -29,6 +29,21 @@ export default class StripeService {
       payment_method: paymentMethodId,
       currency: this.configService.get('STRIPE_CURRENCY'),
       confirm: true,
+      off_session: true,
+    });
+  }
+
+  public async attachCreditCard(paymentMethodId: string, customerId: string) {
+    return this.stripe.setupIntents.create({
+      customer: customerId,
+      payment_method: paymentMethodId,
+    });
+  }
+
+  public async listCreditCards(customerId: string) {
+    return this.stripe.paymentMethods.list({
+      customer: customerId,
+      type: 'card',
     });
   }
 }

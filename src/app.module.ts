@@ -18,6 +18,9 @@ import { GroupTheaterModule } from './group-theater/group-theater.module';
 import { PromotionsModule } from './promotions/promotions.module';
 import { GenresModule } from './genres/genres.module';
 import { TicketsModule } from './tickets/tickets.module';
+import { StripeModule } from './stripe/stripe.module';
+import { PaymentModule } from './payments/payment.module';
+import { CardsModule } from './cards/cards.module';
 
 @Module({
   imports: [
@@ -70,6 +73,9 @@ import { TicketsModule } from './tickets/tickets.module';
     PromotionsModule,
     GenresModule,
     TicketsModule,
+    StripeModule,
+    PaymentModule,
+    CardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

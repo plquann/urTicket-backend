@@ -4,10 +4,11 @@ import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { FilesModule } from 'src/files/files.module';
+import { StripeModule } from 'src/stripe/stripe.module';
 // import { AuthModule } from './../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), FilesModule],
+  imports: [TypeOrmModule.forFeature([User]), FilesModule,  StripeModule],
   controllers: [UsersController],
   exports: [UsersService],
   providers: [UsersService],

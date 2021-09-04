@@ -27,9 +27,9 @@ export class AuthController {
   @Post('register')
   async register(@Body() registerData: RegisterDto) {
     const user = await this.authService.register(registerData);
-    await this.mailConfirmationService.sendVerificationEmail(
-      registerData.email,
-    );
+    // await this.mailConfirmationService.sendVerificationEmail(
+    //   registerData.email,
+    // );
 
     return user;
   }
