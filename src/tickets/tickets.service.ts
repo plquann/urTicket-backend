@@ -37,4 +37,13 @@ export class TicketsService {
 
     return tickets;
   }
+
+  async getTicketById(id: string): Promise<Ticket> {
+    const ticket = await this.ticketRepository
+      .createQueryBuilder('tickets')
+      .where('tickets.id = :id', { id })
+      .getOne();
+
+      return ticket;
+  }
 }

@@ -1,3 +1,4 @@
+import { Ticket } from 'src/tickets/entities/ticket.entity';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import StripeService from 'src/stripe/stripe.service';
@@ -32,13 +33,36 @@ export class ReservationsService {
     } = createReservationDto;
 
     const user = await this.usersService.getUserById(userId);
-    //charge => create reservation => update ticket => send email
+
+    //stripe charge
+    const paymentIndent = await this.stripeService.charge(
+      amount,
+      paymentMethodId,
+      user.stripeCustomerId,
+    );
+
+    let reservation: Reservation;
+
     const queryRunner = this.connection.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
       // execute some operations on this transaction
+
+      //create reservation
+      reservation = await queryRunner.manager.save(Reservation, {
+        amount,
+        showtimeId,
+        userId: user.id,
+      });
+
+      //update tickets
+      for (const ticketId of tickets) {
+        await queryRunner.manager.update(Ticket, ticketId, {
+          reservationId: reservation.id,
+        });
+      }
 
       // commit transaction now:
       await queryRunner.commitTransaction();
