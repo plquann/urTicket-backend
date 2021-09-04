@@ -1,8 +1,6 @@
 import { Ticket } from './entities/ticket.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { Repository } from 'typeorm';
 import { Seat } from 'src/seats/entities/seat.entity';
 
@@ -23,31 +21,20 @@ export class TicketsService {
       };
     });
 
-    const result = await this.ticketRepository
+    await this.ticketRepository
       .createQueryBuilder()
       .insert()
       .into(Ticket)
       .values(tickets)
       .execute();
   }
+  async getTicketsByShowtime(showtimeId: string) {
+    const tickets = await this.ticketRepository
+      .createQueryBuilder('tickets')
+      .leftJoinAndSelect('tickets.seat', 'seat')
+      .where('tickets.showtime = :showtimeId', { showtimeId })
+      .getMany();
 
-  create(createTicketDto: CreateTicketDto) {
-    return 'This action adds a new ticket';
-  }
-
-  findAll() {
-    return `This action returns all tickets`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} ticket`;
-  }
-
-  update(id: number, updateTicketDto: UpdateTicketDto) {
-    return `This action updates a #${id} ticket`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} ticket`;
+    return tickets;
   }
 }

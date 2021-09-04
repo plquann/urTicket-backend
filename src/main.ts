@@ -31,11 +31,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  app.use(cookieParser() );
+  app.use(cookieParser());
+  
   app.enableCors({
-    origin: true,
+    origin: configService.get('FRONTEND_URL'),
     credentials: true,
   });
+
   app.use(helmet());
 
   //amazon s3 config

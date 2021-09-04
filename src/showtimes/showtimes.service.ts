@@ -33,6 +33,19 @@ export class ShowtimesService {
       });
     }
   }
+  async getShowtimeById(showtimeId: string): Promise<Showtime> {
+    const showtime = await this.showtimeRepository
+      .createQueryBuilder('showtime')
+      .leftJoinAndSelect('showtime.movie', 'movie')
+      .leftJoinAndSelect('showtime.theater', 'theater')
+      .where('showtime.id = :showtimeId', { showtimeId })
+      .getOne();
+
+    if (!showtime) {
+      throw new HttpException('Showtime not found', HttpStatus.NOT_FOUND);
+    }
+    return showtime;
+  }
 
   async getShowtimesByMovieId(movieId: string): Promise<any[]> {
     /**
@@ -121,10 +134,10 @@ export class ShowtimesService {
       .createQueryBuilder('movie')
       .leftJoinAndSelect('movie.showtimes', 'showtimes')
       .where('showtimes.theaterId = :theaterId', { theaterId })
-      .andWhere('showtimes.startTime >= :start AND showtimes.endTime <= :end', {
-        start,
-        end,
-      })
+      // .andWhere('showtimes.startTime >= :start AND showtimes.endTime <= :end', {
+      //   start,
+      //   end,
+      // })
       .getMany();
 
     return movies;

@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { FilesService } from 'src/files/files.service';
+import StripeService from 'src/stripe/stripe.service';
 
 @Injectable()
 export class UsersService {
@@ -13,10 +14,20 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private readonly filesService: FilesService,
+    private stripeService: StripeService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const newUser = await this.usersRepository.create(createUserDto);
+    const stripeCustomer = await this.stripeService.createCustomer(
+      createUserDto.userName,
+      createUserDto.email,
+    );
+
+    const newUser = await this.usersRepository.create({
+      ...createUserDto,
+      stripeCustomerId: stripeCustomer.id,
+    });
+
     await this.usersRepository.save(newUser);
 
     return newUser;

@@ -11,7 +11,7 @@ import { ShowtimesService } from './showtimes.service';
 import { CreateShowtimeDto } from './dto/create-showtime.dto';
 import { UpdateShowtimeDto } from './dto/update-showtime.dto';
 
-@Controller('showtimes')
+@Controller('showtime')
 export class ShowtimesController {
   constructor(private readonly showtimesService: ShowtimesService) {}
 
@@ -35,9 +35,9 @@ export class ShowtimesController {
     return this.showtimesService.getShowtimesByTheaterId(theaterId);
   }
 
-  @Get()
-  getAllShowtimes() {
-    return this.showtimesService.getAllShowtimes();
+  @Get(':id')
+  getShowtimeById(@Param('id') id: string) {
+    return this.showtimesService.getShowtimeById(id);
   }
 
   @Patch(':id')

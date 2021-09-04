@@ -70,4 +70,8 @@ export class User extends BaseEntity {
     { nullable: true },
   )
   reservations?: Reservation[];
+
+  //PAYMENT INFO
+  @Column()
+  public stripeCustomerId: string;
 }
