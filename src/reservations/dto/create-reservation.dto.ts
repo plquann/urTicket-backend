@@ -37,5 +37,5 @@ export class CreateReservationDto {
   @IsArray()
   @IsOptional()
   @IsNotEmpty({ each: true })
-  product: ProductList[];
+  products: ProductList[];
 }

@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { Connection, Repository } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { Reservation } from './entities/reservation.entity';
+import { ProductOrder } from 'src/products/entities/productOrder.entity';
 
 @Injectable()
 export class ReservationsService {
@@ -22,14 +23,14 @@ export class ReservationsService {
   async createReservation(
     userId: string,
     createReservationDto: CreateReservationDto,
-  ): Promise<any> {
+  ): Promise<Reservation> {
     const {
       paymentMethodId,
       amount,
       showtimeId,
       tickets,
       promotionId,
-      product,
+      products,
     } = createReservationDto;
 
     const user = await this.usersService.getUserById(userId);
@@ -49,7 +50,6 @@ export class ReservationsService {
 
     try {
       // execute some operations on this transaction
-
       //create reservation
       reservation = await queryRunner.manager.save(Reservation, {
         amount,
@@ -58,22 +58,34 @@ export class ReservationsService {
       });
 
       //update tickets
-      for (const ticketId of tickets) {
+      for (const ticketId of tickets)
         await queryRunner.manager.update(Ticket, ticketId, {
           reservationId: reservation.id,
         });
-      }
 
-      // commit transaction now:
+      //update products
+      for (const product of products)
+        await queryRunner.manager.save(ProductOrder, {
+          reservationId: reservation.id,
+          productId: product.productId,
+          quantity: product.quantity,
+        });
+
+      // commit transaction now
       await queryRunner.commitTransaction();
-    } catch (e) {
-      console.log('🚀 ~ file: reservations.service.ts ~ line 46 ~ e', e);
+    } catch (error) {
+      console.log('🚀 ~ file: reservations.service.ts ~ line 46 ~ e', error);
+
       // since we have errors let's rollback changes we made
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException();
     } finally {
-      // you need to release query runner which is manually created:
+      // you need to release query runner which is manually created
       await queryRunner.release();
     }
+
+    //send email
+
+    return reservation;
   }
 }

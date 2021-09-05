@@ -5,6 +5,7 @@ import MailService from 'src/mail/mail.service';
 import { UsersService } from 'src/users/users.service';
 import VerificationTokenPayload from './verificationTokenPayload.interface';
 import { BadRequestException } from '@nestjs/common';
+import { mailConfirmTemplate } from 'src/common/mailHtmlTemplate';
 
 @Injectable()
 export class MailConfirmationService {
@@ -30,11 +31,14 @@ export class MailConfirmationService {
     )}?token=${token}`;
 
     const text = `Welcome to the Booking Movie Platform. To confirm the email address, click here : ${url}`;
+    const html = mailConfirmTemplate(url);
 
     return this.mailService.sendMail({
+      from: '"UR-TICKET 🎉✨🎉" <bookingmovie.application@gmail.com>',
       to: email,
       subject: 'Booking Movie Platform - Email Confirmation',
-      text,
+      text: text,
+      html: html,
     });
   }
 
