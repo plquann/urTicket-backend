@@ -7,22 +7,30 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { MovieStatus } from 'src/constants';
+import { MovieStatus, UserRole } from 'src/constants';
+import { Roles } from 'src/auth/decorators/roles.decorators';
+import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('movie')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
   @Post()
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   create(@Body() createMovieDto: CreateMovieDto) {
     return this.movieService.createMovie(createMovieDto);
   }
 
   @Post('/seeders')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   seedersMovies() {
     return this.movieService.seedersMovies();
   }
@@ -53,11 +61,15 @@ export class MovieController {
   }
 
   @Put(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   updateMovie(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
     return this.movieService.updateMovieById(id, updateMovieDto);
   }
 
   @Delete(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   remove(@Param('id') id: string) {
     return this.movieService.deleteMovieById(id);
   }

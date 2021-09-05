@@ -1,8 +1,6 @@
 import { GroupTheater } from './entities/group-theater.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateGroupTheaterDto } from './dto/create-group-theater.dto';
-import { UpdateGroupTheaterDto } from './dto/update-group-theater.dto';
 import { Repository } from 'typeorm';
 import { theaterGroupSeed } from 'src/database/seeds/theaterGroup.seed';
 
@@ -48,21 +46,5 @@ export class GroupTheaterService {
     }
 
     return groupTheater;
-  }
-
-  create(createGroupTheaterDto: CreateGroupTheaterDto) {
-    return 'This action adds a new groupTheater';
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} groupTheater`;
-  }
-
-  update(id: number, updateGroupTheaterDto: UpdateGroupTheaterDto) {
-    return `This action updates a #${id} groupTheater`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} groupTheater`;
   }
 }

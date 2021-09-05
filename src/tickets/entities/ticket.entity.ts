@@ -15,7 +15,6 @@ export class Ticket extends BaseEntity {
   @Column({ nullable: true })
   reservationId: string;
 
-  
   @Column()
   showtimeId: string;
 

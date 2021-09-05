@@ -1,3 +1,4 @@
+import { UserRole } from './../constants/index';
 import {
   Controller,
   Get,
@@ -6,21 +7,21 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
+import { Roles } from 'src/auth/decorators/roles.decorators';
 import { TheatersService } from './theaters.service';
-import { CreateTheaterDto } from './dto/create-theater.dto';
-import { UpdateTheaterDto } from './dto/update-theater.dto';
+import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('theaters')
 export class TheatersController {
   constructor(private readonly theatersService: TheatersService) {}
 
-  @Post()
-  create(@Body() createTheaterDto: CreateTheaterDto) {
-    return this.theatersService.create(createTheaterDto);
-  }
-
+ 
   @Post('/seeders')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   seedersTheaters() {
     return this.theatersService.seedersTheaters();
   }
@@ -30,23 +31,4 @@ export class TheatersController {
     return this.theatersService.getAllTheaters();
   }
 
-  @Get()
-  findAll() {
-    return this.theatersService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.theatersService.getSeatsByTheaterIdAndRoom(id, '3D 1');
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTheaterDto: UpdateTheaterDto) {
-    return this.theatersService.update(+id, updateTheaterDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.theatersService.remove(+id);
-  }
 }

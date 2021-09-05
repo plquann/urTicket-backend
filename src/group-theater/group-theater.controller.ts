@@ -6,21 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { GroupTheaterService } from './group-theater.service';
-import { CreateGroupTheaterDto } from './dto/create-group-theater.dto';
-import { UpdateGroupTheaterDto } from './dto/update-group-theater.dto';
+import { Roles } from 'src/auth/decorators/roles.decorators';
+import { UserRole } from 'src/constants';
+import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('group-theater')
 export class GroupTheaterController {
   constructor(private readonly groupTheaterService: GroupTheaterService) {}
 
-  @Post()
-  create(@Body() createGroupTheaterDto: CreateGroupTheaterDto) {
-    return this.groupTheaterService.create(createGroupTheaterDto);
-  }
-
   @Post('seeders')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   seeders() {
     return this.groupTheaterService.seedersGroupTheaters();
   }
@@ -33,18 +33,5 @@ export class GroupTheaterController {
   @Get(':id')
   getGroupTheater(@Param('id') id: string) {
     return this.groupTheaterService.getGroupTheaterById(id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateGroupTheaterDto: UpdateGroupTheaterDto,
-  ) {
-    return this.groupTheaterService.update(+id, updateGroupTheaterDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.groupTheaterService.remove(+id);
   }
 }

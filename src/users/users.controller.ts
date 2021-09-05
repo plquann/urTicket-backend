@@ -56,6 +56,16 @@ export class UsersController {
     return this.userService.getUserById(me);
   }
 
+  @Post('me')
+  @UseGuards(JwtAuthenticationGuard)
+  async updateMe(
+    @Body() updateUserDto: UpdateUserDto,
+    @Req() request: RequestWithUser,
+  ): Promise<any> {
+    const me = request.user.id;
+    return this.userService.updateUserById(me, updateUserDto);
+  }
+
   @Get()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
@@ -75,19 +85,19 @@ export class UsersController {
     return this.userService.updateUserById(id, updateUserDto);
   }
 
-  @Put('block/:id')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  blockUser(@Param('id') id: string) {
-    return this.userService.blockUserById(id);
-  }
+  // @Put('block/:id')
+  // @Roles(UserRole.ADMIN)
+  // @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  // blockUser(@Param('id') id: string) {
+  //   return this.userService.blockUserById(id);
+  // }
 
-  @Put('unblock/:id')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  unBlockUser(@Param('id') id: string) {
-    return this.userService.unBlockUserById(id);
-  }
+  // @Put('unblock/:id')
+  // @Roles(UserRole.ADMIN)
+  // @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  // unBlockUser(@Param('id') id: string) {
+  //   return this.userService.unBlockUserById(id);
+  // }
 
   @Delete('avatar')
   @UseGuards(JwtAuthenticationGuard)

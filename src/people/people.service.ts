@@ -69,11 +69,4 @@ export class PeopleService {
 
     return updatePerson;
   }
-
-  async deletePersonById(personId: string): Promise<void> {
-    const deletePerson = await this.personRepository.delete(personId);
-    if (!deletePerson.affected) {
-      throw new HttpException('Person not found', HttpStatus.NOT_FOUND);
-    }
-  }
 }

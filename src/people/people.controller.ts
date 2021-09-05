@@ -53,11 +53,4 @@ export class PeopleController {
   ) {
     return this.peopleService.updatePersonById(personId, updatePersonDto);
   }
-
-  @Delete(':id')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  remove(@Param('id') personId: string) {
-    return this.peopleService.deletePersonById(personId);
-  }
 }

@@ -14,7 +14,6 @@ import { CreateReservationDto } from './dto/create-reservation.dto';
 import { Reservation } from './entities/reservation.entity';
 import { ProductOrder } from 'src/products/entities/productOrder.entity';
 import { ShowtimesService } from 'src/showtimes/showtimes.service';
-import { ProductsService } from 'src/products/products.service';
 import { mailReservationTemplate } from 'src/common/mailHtmlTemplate';
 import MailService from 'src/mail/mail.service';
 
@@ -75,21 +74,17 @@ export class ReservationsService {
     await queryRunner.startTransaction();
 
     try {
-      // execute some operations on this transaction
-      //create reservation
       reservation = await queryRunner.manager.save(Reservation, {
         amount,
         showtimeId,
         userId: user.id,
       });
 
-      //update tickets
       for (const ticketId of tickets)
         await queryRunner.manager.update(Ticket, ticketId, {
           reservationId: reservation.id,
         });
 
-      // update products
       if (products.length) {
         for (const product of products)
           await queryRunner.manager.save(ProductOrder, {
@@ -99,16 +94,13 @@ export class ReservationsService {
           });
       }
 
-      // commit transaction now
       await queryRunner.commitTransaction();
     } catch (error) {
-      console.log('🚀 ~ file: reservations.service.ts ~ line 46 ~ e', error);
+      console.log('🚀 ~ file: reservations.service.ts error', error);
 
-      // since we have errors let's rollback changes we made
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException();
     } finally {
-      // you need to release query runner which is manually created
       await queryRunner.release();
     }
 
@@ -161,7 +153,12 @@ export class ReservationsService {
     //   productsString,
     // );
 
-    const html = mailReservationTemplate(reservation, showtime, ticketString);
+    const html = mailReservationTemplate(
+      reservation,
+      showtime,
+      ticketString,
+      productsString,
+    );
     console.log('send mail');
 
     return this.mailService.sendMail({
@@ -170,5 +167,57 @@ export class ReservationsService {
       subject: 'Booking Movie Platform - Reservation Information',
       html,
     });
+  }
+
+  async getReservationById(reservationId: string): Promise<Reservation> {
+    const reservation = await this.reservationRepository.findOne(reservationId);
+
+    if (!reservation)
+      throw new HttpException('Reservation not found', HttpStatus.NOT_FOUND);
+
+    return reservation;
+  }
+
+  async getReservationsByUserId(userId: string): Promise<Reservation[]> {
+    const reservations = await this.reservationRepository
+      .createQueryBuilder('reservation')
+      .leftJoinAndSelect('reservation.showtime', 'showtime')
+      .leftJoinAndSelect('reservation.ticket', 'tickets')
+      .leftJoinAndSelect('showtime.movie', 'movie')
+      .where('reservation.userId = :userId', { userId })
+      .getMany();
+
+    if (!reservations)
+      throw new HttpException('Reservations not found', HttpStatus.NOT_FOUND);
+
+    return reservations;
+  }
+
+  async getReservationsByShowtimeId(
+    showtimeId: string,
+  ): Promise<Reservation[]> {
+    const reservations = await this.reservationRepository
+      .createQueryBuilder('reservation')
+      .leftJoinAndSelect('reservation.showtime', 'showtime')
+      .where('reservation.showtimeId = :showtimeId', { showtimeId })
+      .getMany();
+
+    if (!reservations)
+      throw new HttpException('Reservations not found', HttpStatus.NOT_FOUND);
+
+    return reservations;
+  }
+
+  async getAllReservations(): Promise<Reservation[]> {
+    const reservations = await this.reservationRepository
+      .createQueryBuilder('reservation')
+      .leftJoinAndSelect('reservation.showtime', 'showtime')
+      .leftJoinAndSelect('reservation.ticket', 'tickets')
+      .getMany();
+
+    if (!reservations)
+      throw new HttpException('Reservations not found', HttpStatus.NOT_FOUND);
+
+    return reservations;
   }
 }

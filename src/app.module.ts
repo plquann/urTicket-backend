@@ -15,11 +15,9 @@ import { ReservationsModule } from './reservations/reservations.module';
 import { ProductsModule } from './products/products.module';
 import { ShowtimesModule } from './showtimes/showtimes.module';
 import { GroupTheaterModule } from './group-theater/group-theater.module';
-import { PromotionsModule } from './promotions/promotions.module';
 import { GenresModule } from './genres/genres.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { StripeModule } from './stripe/stripe.module';
-import { PaymentModule } from './payments/payment.module';
 import { CardsModule } from './cards/cards.module';
 
 @Module({
@@ -70,11 +68,9 @@ import { CardsModule } from './cards/cards.module';
     ProductsModule,
     ShowtimesModule,
     GroupTheaterModule,
-    PromotionsModule,
     GenresModule,
     TicketsModule,
     StripeModule,
-    PaymentModule,
     CardsModule,
   ],
   controllers: [AppController],

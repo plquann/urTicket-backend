@@ -10,7 +10,6 @@ export class CreatePersonDto {
 
   @IsString()
   position?: string;
-
 }
 
 export default CreatePersonDto;

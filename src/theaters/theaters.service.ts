@@ -2,8 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { theatersSeed } from 'src/database/seeds/theaters.seed';
 import { Repository } from 'typeorm';
-import { CreateTheaterDto } from './dto/create-theater.dto';
-import { UpdateTheaterDto } from './dto/update-theater.dto';
 import { Theater } from './entities/theater.entity';
 
 @Injectable()
@@ -67,25 +65,5 @@ export class TheatersService {
     }
 
     return result.seats;
-  }
-
-  create(createTheaterDto: CreateTheaterDto) {
-    return 'This action adds a new theater';
-  }
-
-  findAll() {
-    return `This action returns all theaters`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} theater`;
-  }
-
-  update(id: number, updateTheaterDto: UpdateTheaterDto) {
-    return `This action updates a #${id} theater`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} theater`;
   }
 }

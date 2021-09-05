@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import RequestWithUser from 'src/auth/interfaces/requestWithUser.interface';
 

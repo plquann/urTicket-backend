@@ -40,11 +40,15 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.updateProduct(id, updateProductDto);
   }
 
   @Delete(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   remove(@Param('id') id: string) {
     return this.productsService.deleteProduct(id);
   }
