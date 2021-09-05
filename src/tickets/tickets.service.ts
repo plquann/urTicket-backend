@@ -33,6 +33,10 @@ export class TicketsService {
       .createQueryBuilder('tickets')
       .leftJoinAndSelect('tickets.seat', 'seat')
       .where('tickets.showtime = :showtimeId', { showtimeId })
+      .orderBy({
+        'seat.row': 'ASC',
+        'seat.column': 'ASC',
+      })
       .getMany();
 
     return tickets;

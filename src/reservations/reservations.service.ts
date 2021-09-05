@@ -1,6 +1,10 @@
-import { Showtime } from './../showtimes/entities/showtime.entity';
 import { Ticket } from 'src/tickets/entities/ticket.entity';
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import StripeService from 'src/stripe/stripe.service';
 import { TicketsService } from 'src/tickets/tickets.service';
@@ -11,6 +15,8 @@ import { Reservation } from './entities/reservation.entity';
 import { ProductOrder } from 'src/products/entities/productOrder.entity';
 import { ShowtimesService } from 'src/showtimes/showtimes.service';
 import { ProductsService } from 'src/products/products.service';
+import { mailReservationTemplate } from 'src/common/mailHtmlTemplate';
+import MailService from 'src/mail/mail.service';
 
 @Injectable()
 export class ReservationsService {
@@ -22,7 +28,7 @@ export class ReservationsService {
     private readonly stripeService: StripeService,
     private readonly ticketsService: TicketsService,
     private readonly showtimesService: ShowtimesService,
-    private readonly productsService: ProductsService,
+    private readonly mailService: MailService,
   ) {}
 
   async createReservation(
@@ -35,17 +41,32 @@ export class ReservationsService {
       showtimeId,
       tickets,
       promotionId,
-      products,
+      products = [],
     } = createReservationDto;
+    console.log(
+      '🚀 ~ file: reservations.service.ts ~ line 42 ~ products',
+      products,
+    );
 
     const user = await this.usersService.getUserById(userId);
-
+    const convertAmount = amount * 100;
     //stripe charge
     const paymentIndent = await this.stripeService.charge(
-      amount,
+      convertAmount,
       paymentMethodId,
       user.stripeCustomerId,
     );
+    console.log(
+      '🚀 ~ file: reservations.service.ts ~ line 49 ~ paymentIndent',
+      paymentIndent,
+    );
+
+    if (paymentIndent.status !== 'succeeded') {
+      throw new HttpException(
+        'Payment Failure!',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
 
     let reservation: Reservation;
 
@@ -68,13 +89,15 @@ export class ReservationsService {
           reservationId: reservation.id,
         });
 
-      //update products
-      for (const product of products)
-        await queryRunner.manager.save(ProductOrder, {
-          reservationId: reservation.id,
-          productId: product.productId,
-          quantity: product.quantity,
-        });
+      // update products
+      if (products.length) {
+        for (const product of products)
+          await queryRunner.manager.save(ProductOrder, {
+            reservationId: reservation.id,
+            productId: product.productId,
+            quantity: product.quantity,
+          });
+      }
 
       // commit transaction now
       await queryRunner.commitTransaction();
@@ -90,29 +113,62 @@ export class ReservationsService {
     }
 
     //send email
+    await this.sendMailReservation(reservation, user.email);
 
     return reservation;
   }
 
-  async sendMailReservation(reservation: Reservation) {
-    const showtime = this.showtimesService.getShowtimeById(
+  async sendMailReservation(reservation: Reservation, email: string) {
+    const showtime = await this.showtimesService.getShowtimeById(
       reservation.showtimeId,
+    );
+    console.log(
+      '🚀 ~ file: reservations.service.ts ~ line 111 ~ showtime',
+      showtime,
     );
 
     const tickets = await this.ticketsService.getTicketsByReservation(
       reservation.id,
     );
 
-    const products = await this.productsService.getProductsByReservationId(
-      reservation.id,
-    );
+    const products = await this.connection
+      .getRepository(ProductOrder)
+      .createQueryBuilder('productOrder')
+      .innerJoinAndSelect('productOrder.product', 'product')
+      .where('productOrder.reservationId = :reservationId', {
+        reservationId: reservation.id,
+      })
+      .getMany();
+
+    // console.log(
+    //   '🚀 ~ file: reservations.service.ts ~ line 114 ~ products',
+    //   products,
+    // );
 
     const ticketString = tickets
       .map((ticket) => `${ticket.seat.row}${ticket.seat.column}`)
       .join(', ');
+    // console.log(
+    //   '🚀 ~ file: reservations.service.ts ~ line 113 ~ ticketString',
+    //   ticketString,
+    // );
 
     const productsString = products
       .map((product) => `${product.quantity}x ${product.product.name}`)
       .join(', ');
+    // console.log(
+    //   '🚀 ~ file: reservations.service.ts ~ line 121 ~ productsString',
+    //   productsString,
+    // );
+
+    const html = mailReservationTemplate(reservation, showtime, ticketString);
+    console.log('send mail');
+
+    return this.mailService.sendMail({
+      from: '"UR-TICKET 🎉✨🎉" <bookingmovie.application@gmail.com>',
+      to: email,
+      subject: 'Booking Movie Platform - Reservation Information',
+      html,
+    });
   }
 }

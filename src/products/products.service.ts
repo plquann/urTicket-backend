@@ -12,7 +12,6 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-    private readonly productsOrderService: Repository<ProductOrder>,
   ) {}
 
   async seedersProducts(): Promise<void> {
@@ -50,13 +49,13 @@ export class ProductsService {
 
   async getProductsByReservationId(
     reservationId: string,
-  ): Promise<ProductOrder[]> {
-    const products = await this.productsOrderService
-      .createQueryBuilder('productOrder')
-      .leftJoinAndSelect('productOrder.product', 'product')
-      .where('productOrder.reservationId = :reservationId', { reservationId })
-      .getMany();
-
+  ): Promise<Product[]> {
+    const products = await this.productRepository
+    .createQueryBuilder('product')
+    .leftJoinAndSelect('product.orders', 'productOrder')
+    .where('productOrder.reservationId = :reservationId', { reservationId })
+    .getMany();
+      
     return products;
   }
 

@@ -249,7 +249,7 @@ export const mailConfirmTemplate = (url) => `
 </html>
 `;
 
-export const mailReservationTemplate = (reservation, showtime, tickets, products) => `
+export const mailReservationTemplate = (reservation, showtime, tickets, products='') => `
 <html>
   <head>
 
@@ -419,87 +419,87 @@ export const mailReservationTemplate = (reservation, showtime, tickets, products
                     <td
                       align='left'
                       bgcolor='#D2C7BA'
-                      width='75%'
+                      width='25%'
                       style="padding: 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     ><strong>Reservation #</strong></td>
                     <td
                       align='left'
                       bgcolor='#D2C7BA'
-                      width='25%'
+                      width='75%'
                       style="padding: 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     ><strong>${reservation.id}</strong></td>
                   </tr>
                   <tr>
                     <td
                       align='left'
-                      width='75%'
+                      width='25%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >Movie</td>
                     <td
                       align='left'
-                      width='25%'
+                      width='75%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >${showtime.movie.title}</td>
                   </tr>
                   <tr>
                     <td
                       align='left'
-                      width='75%'
+                      width='25%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >Theater</td>
                     <td
                       align='left'
-                      width='25%'
+                      width='75%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >${showtime.theater.name} - Room: ${showtime.room}</td>
                   </tr>
                   <tr>
                     <td
                       align='left'
-                      width='75%'
+                      width='25%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >Showtime</td>
                     <td
                       align='left'
-                      width='25%'
+                      width='75%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >${new Date(showtime.startTime).toLocaleString()}</td>
                   </tr>
                   <tr>
                     <td
                       align='left'
-                      width='75%'
+                      width='25%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >Seats</td>
                     <td
                       align='left'
-                      width='25%'
+                      width='75%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >${tickets}</td>
                   </tr>
                   <tr>
                     <td
                       align='left'
-                      width='75%'
+                      width='15%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >Food</td>
                     <td
                       align='left'
-                      width='25%'
+                      width='85%'
                       style="padding: 6px 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
                     >${products}</td>
                   </tr>
                   <tr>
                     <td
                       align='left'
-                      width='75%'
+                      width='15%'
                       style="padding: 12px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-top: 2px dashed #D2C7BA; border-bottom: 2px dashed #D2C7BA;"
                     ><strong>Total</strong></td>
                     <td
                       align='left'
-                      width='25%'
+                      width='85%'
                       style="padding: 12px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-top: 2px dashed #D2C7BA; border-bottom: 2px dashed #D2C7BA;"
-                    ><strong>${reservation.amount}</strong></td>
+                    >$<strong>${reservation.amount}</strong></td>
                   </tr>
                 </table>
               </td>
@@ -515,6 +515,25 @@ export const mailReservationTemplate = (reservation, showtime, tickets, products
         </td>
       </tr>
       <!-- end copy block -->
+
+
+      <!-- start footer -->
+      <tr>
+        <td align='center' bgcolor='#D2C7BA' style='padding: 24px;'>
+          <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+        <tr>
+        <td align="center" valign="top" width="600">
+        <![endif]-->
+
+          <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+        </td>
+      </tr>
+      <!-- end footer -->
 
     </table>
     <!-- end body -->

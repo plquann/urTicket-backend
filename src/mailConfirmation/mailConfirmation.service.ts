@@ -30,14 +30,12 @@ export class MailConfirmationService {
       'EMAIL_CONFIRMATION_URL',
     )}?token=${token}`;
 
-    const text = `Welcome to the Booking Movie Platform. To confirm the email address, click here : ${url}`;
     const html = mailConfirmTemplate(url);
 
     return this.mailService.sendMail({
       from: '"UR-TICKET 🎉✨🎉" <bookingmovie.application@gmail.com>',
       to: email,
       subject: 'Booking Movie Platform - Email Confirmation',
-      text: text,
       html: html,
     });
   }

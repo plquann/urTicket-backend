@@ -14,6 +14,7 @@ import { TicketsModule } from 'src/tickets/tickets.module';
     TicketsModule,
   ],
   controllers: [ShowtimesController],
+  exports: [ShowtimesService],
   providers: [ShowtimesService],
 })
 export class ShowtimesModule {}

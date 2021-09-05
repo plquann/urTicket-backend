@@ -7,7 +7,8 @@ import { Reservation } from './entities/reservation.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from 'src/users/users.module';
 import { TicketsModule } from 'src/tickets/tickets.module';
-import MailService from 'src/mail/mail.service';
+import { MailModule } from 'src/mail/mail.module';
+import { ShowtimesModule } from 'src/showtimes/showtimes.module';
 
 @Module({
   imports: [
@@ -15,8 +16,8 @@ import MailService from 'src/mail/mail.service';
     UsersModule,
     StripeModule,
     TicketsModule,
-    MailService,
-    ProductsModule
+    MailModule,
+    ShowtimesModule,
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService],
