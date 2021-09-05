@@ -5,12 +5,14 @@ import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
+import { ProductOrder } from './entities/productOrder.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private readonly productsOrderService: Repository<ProductOrder>,
   ) {}
 
   async seedersProducts(): Promise<void> {
@@ -44,6 +46,18 @@ export class ProductsService {
 
   async getAllProducts(): Promise<Product[]> {
     return await this.productRepository.find();
+  }
+
+  async getProductsByReservationId(
+    reservationId: string,
+  ): Promise<ProductOrder[]> {
+    const products = await this.productsOrderService
+      .createQueryBuilder('productOrder')
+      .leftJoinAndSelect('productOrder.product', 'product')
+      .where('productOrder.reservationId = :reservationId', { reservationId })
+      .getMany();
+
+    return products;
   }
 
   async updateProduct(

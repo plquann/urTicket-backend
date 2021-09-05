@@ -1,3 +1,4 @@
+import { Showtime } from './../showtimes/entities/showtime.entity';
 import { Ticket } from 'src/tickets/entities/ticket.entity';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,6 +9,8 @@ import { Connection, Repository } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { Reservation } from './entities/reservation.entity';
 import { ProductOrder } from 'src/products/entities/productOrder.entity';
+import { ShowtimesService } from 'src/showtimes/showtimes.service';
+import { ProductsService } from 'src/products/products.service';
 
 @Injectable()
 export class ReservationsService {
@@ -18,6 +21,8 @@ export class ReservationsService {
     private readonly usersService: UsersService,
     private readonly stripeService: StripeService,
     private readonly ticketsService: TicketsService,
+    private readonly showtimesService: ShowtimesService,
+    private readonly productsService: ProductsService,
   ) {}
 
   async createReservation(
@@ -87,5 +92,27 @@ export class ReservationsService {
     //send email
 
     return reservation;
+  }
+
+  async sendMailReservation(reservation: Reservation) {
+    const showtime = this.showtimesService.getShowtimeById(
+      reservation.showtimeId,
+    );
+
+    const tickets = await this.ticketsService.getTicketsByReservation(
+      reservation.id,
+    );
+
+    const products = await this.productsService.getProductsByReservationId(
+      reservation.id,
+    );
+
+    const ticketString = tickets
+      .map((ticket) => `${ticket.seat.row}${ticket.seat.column}`)
+      .join(', ');
+
+    const productsString = products
+      .map((product) => `${product.quantity}x ${product.product.name}`)
+      .join(', ');
   }
 }

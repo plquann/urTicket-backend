@@ -38,12 +38,22 @@ export class TicketsService {
     return tickets;
   }
 
+  async getTicketsByReservation(reservationId: string): Promise<Ticket[]> {
+    const tickets = await this.ticketRepository
+      .createQueryBuilder('tickets')
+      .leftJoinAndSelect('tickets.seat', 'seat')
+      .where('tickets.reservation = :reservationId', { reservationId })
+      .getMany();
+
+    return tickets;
+  }
+
   async getTicketById(id: string): Promise<Ticket> {
     const ticket = await this.ticketRepository
       .createQueryBuilder('tickets')
       .where('tickets.id = :id', { id })
       .getOne();
 
-      return ticket;
+    return ticket;
   }
 }
