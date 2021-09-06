@@ -8,13 +8,19 @@ import {
 } from '../constants';
 
 export const setupSwagger = (app: INestApplication) => {
-  const logger = new Logger('swagger');
+  const logger = new Logger('Swagger');
   const options = new DocumentBuilder()
     .setTitle(SWAGGER_API_NAME)
     .setDescription(SWAGGER_API_DESCRIPTION)
     .setVersion(SWAGGER_API_CURRENT_VERSION)
-    // .addBearerAuth()
+    .addTag('Endpoints')
+    .setContact(
+      'Jackson Pham',
+      'https://github.com/quankhs',
+      'quanphamluong@gmail.com',
+    )
     .build();
+    
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(SWAGGER_API_ROOT, app, document);
 

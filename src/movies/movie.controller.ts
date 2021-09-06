@@ -17,7 +17,9 @@ import { Roles } from 'src/auth/decorators/roles.decorators';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { PaginationParams } from 'src/common/paginationParams';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('movies')
 @Controller('movie')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
@@ -38,7 +40,7 @@ export class MovieController {
 
   @Get()
   getAllMovies(
-    @Query('search') search: string,
+    // @Query('search') search: string,
     @Query()
     { page, limit, startId }: PaginationParams,
   ) {

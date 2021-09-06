@@ -122,6 +122,7 @@ export class MovieService {
       relations: ['genres'],
       order: {
         id: 'ASC',
+        voteCount: 'DESC',
       },
       take: pagination.limit,
       skip: pagination.skip,

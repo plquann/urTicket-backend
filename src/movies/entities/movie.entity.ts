@@ -38,7 +38,7 @@ export class Movie extends BaseEntity {
   })
   classify: MovieClassification;
 
-  @Column({ type: 'enum', enum: MovieStatus, default: MovieStatus.PLAYING })
+  @Column({ type: 'enum', enum: MovieStatus, default: MovieStatus.OVER })
   status: MovieStatus;
 
   @Column({ type: 'float', nullable: true })

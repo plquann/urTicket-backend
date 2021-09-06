@@ -41,7 +41,7 @@ export class CreateMovieDto {
 
   @IsString()
   @IsOptional()
-  language: string;
+  language?: string;
 
   @IsString()
   @IsOptional()
@@ -55,25 +55,28 @@ export class CreateMovieDto {
   @IsString()
   @IsOptional()
   @IsIn([MovieStatus.OVER, MovieStatus.PLAYING, MovieStatus.UPCOMING])
-  status: MovieStatus;
+  status?: MovieStatus;
 
   @IsNumber()
   @IsOptional()
-  voteAverage: number;
+  voteAverage?: number;
 
   @IsNumber()
   @IsOptional()
-  voteCount: number;
+  voteCount?: number;
 
   @IsArray()
   @IsNotEmpty()
-  genresArr: string[];
+  @IsOptional()
+  genresArr?: string[];
 
   @IsArray()
   @IsNotEmpty()
-  castsArr: string[];
+  @IsOptional()
+  castsArr?: string[];
 
+  @IsOptional()
   @IsArray()
   @IsNotEmpty()
-  crewsArr: string[];
+  crewsArr?: string[];
 }
