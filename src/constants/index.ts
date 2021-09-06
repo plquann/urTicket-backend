@@ -34,6 +34,10 @@ export enum MovieStatus {
   PLAYING = 'PLAYING',
   UPCOMING = 'UPCOMING',
   OVER = 'OVER',
-}
+};
 
+export const paginationDefault = {
+  page: 1,
+  limit: 16,
+}
 

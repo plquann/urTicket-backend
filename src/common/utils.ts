@@ -1,3 +1,6 @@
+import { paginationDefault } from 'src/constants';
+import { PaginationParams } from './paginationParams';
+
 /**
  * - Overlap: Returns true if the two time overlap.
  * Input:
@@ -18,7 +21,7 @@ export function areTwoDateTimeRangesOverlapping(
 }
 
 /**
- * - getDate: Returns the numeric value of the specified date 
+ * - getDate: Returns the numeric value of the specified date
  * Input:
  * @param {*} dateTimeString {start: string, end: string}
  *
@@ -28,11 +31,24 @@ export function areTwoDateTimeRangesOverlapping(
  */
 
 export function getDateTimeRangeFromString(start, end) {
-    const startTime = new Date(start);
-    const endTime = new Date(end);
+  const startTime = new Date(start);
+  const endTime = new Date(end);
 
-    return {
-        start: startTime.getTime(),
-        end: endTime.getTime(),
-    }
+  return {
+    start: startTime.getTime(),
+    end: endTime.getTime(),
+  };
+}
+
+export function getSkipLimit(pagination: PaginationParams) {
+  let page = pagination.page ?? paginationDefault.page;
+  let limit = pagination.limit ?? paginationDefault.limit;
+
+  if (page < 1) page = paginationDefault.page;
+  if (limit < 1) limit = paginationDefault.limit;
+
+  return {
+    limit: limit,
+    skip: (page - 1) * limit,
+  };
 }

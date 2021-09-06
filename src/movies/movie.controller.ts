@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Put,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -16,6 +16,7 @@ import { MovieStatus, UserRole } from 'src/constants';
 import { Roles } from 'src/auth/decorators/roles.decorators';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { PaginationParams } from 'src/common/paginationParams';
 
 @Controller('movie')
 export class MovieController {
@@ -36,8 +37,12 @@ export class MovieController {
   }
 
   @Get()
-  getAllMovies() {
-    return this.movieService.getAllMovies();
+  getAllMovies(
+    @Query('search') search: string,
+    @Query()
+    { page, limit, startId }: PaginationParams,
+  ) {
+    return this.movieService.getAllMovies(page, limit, startId);
   }
 
   @Get('/now_playing')

@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Connection, In } from 'typeorm';
+import { Repository, Connection, FindManyOptions, MoreThan } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { moviesSeed } from './../database/seeds/movies.seed';
 import { MovieStatus } from 'src/constants';
-
+import { getSkipLimit } from 'src/common/utils';
 @Injectable()
 export class MovieService {
   constructor(
@@ -102,18 +102,43 @@ export class MovieService {
     }
   }
 
-  async getAllMovies(): Promise<Movie[]> {
-    const movies = await this.movieRepository.find();
+  async getAllMovies(
+    page: number,
+    limit?: number,
+    startId?: string,
+  ): Promise<any> {
+    const where: FindManyOptions<Movie>['where'] = {};
+    let separateCount = 0;
+
+    if (startId) {
+      where.id = MoreThan(startId);
+      separateCount = await this.movieRepository.count();
+    }
+
+    const pagination = getSkipLimit({ page, limit });
+
+    const [movies, count] = await this.movieRepository.findAndCount({
+      where,
+      relations: ['genres'],
+      order: {
+        id: 'ASC',
+      },
+      take: pagination.limit,
+      skip: pagination.skip,
+    });
 
     if (!movies.length)
       throw new HttpException('Movies not found!', HttpStatus.NOT_FOUND);
 
-    return movies;
+    return {
+      movies,
+      totalRow: startId ? separateCount : count,
+    };
   }
 
   async getMovieByStatus(status: MovieStatus): Promise<Movie[]> {
     const movies = await this.movieRepository.find({
-      relations: ["genres"],
+      relations: ['genres'],
       where: {
         status: status,
       },
@@ -143,10 +168,9 @@ export class MovieService {
     return movie;
   }
 
-
   async getMovieHighlight(): Promise<Movie[]> {
     const movies = await this.movieRepository.find({
-      relations: ["genres"],
+      relations: ['genres'],
       where: {
         status: MovieStatus.PLAYING,
       },
