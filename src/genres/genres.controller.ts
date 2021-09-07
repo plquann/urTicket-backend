@@ -8,13 +8,16 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators/roles.decorators';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { ForAdmin } from 'src/common/swagger.decorator';
 import { UserRole } from 'src/constants';
 import { Genre } from './entities/genre.entity';
 import { GenresService } from './genres.service';
 
+@ApiTags('genres')
 @Controller('genres')
 export class GenresController {
   constructor(private readonly genresService: GenresService) {}
@@ -26,6 +29,8 @@ export class GenresController {
     return this.genresService.create(genre);
   }
 
+  @ForAdmin()
+  @ApiCreatedResponse()
   @Post('/seeders')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
@@ -33,11 +38,13 @@ export class GenresController {
     return this.genresService.seedersGenres();
   }
 
+  @ApiOkResponse()
   @Get()
   getAll() {
     return this.genresService.getAllGenres();
   }
 
+  @ForAdmin()
   @Put(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
@@ -46,6 +53,7 @@ export class GenresController {
     return this.genresService.updateGenreById(id, genreName);
   }
 
+  @ForAdmin()
   @Delete(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)

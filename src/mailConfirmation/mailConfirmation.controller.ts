@@ -11,7 +11,9 @@ import {
 } from '@nestjs/common';
 import MailConfirmationDto from './dtos/mail-confirm.dto';
 import { MailConfirmationService } from './mailConfirmation.service';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Mail Confirmation')
 @Controller('mail-confirmation')
 @UseInterceptors(ClassSerializerInterceptor)
 export class MailConfirmationController {
@@ -19,6 +21,7 @@ export class MailConfirmationController {
     private readonly mailConfirmationService: MailConfirmationService,
   ) {}
 
+  @ApiCreatedResponse()
   @Post('confirm')
   async confirm(@Body() confirmationData: MailConfirmationDto) {
     const email = await this.mailConfirmationService.decodeVerificationToken(
@@ -27,6 +30,7 @@ export class MailConfirmationController {
     await this.mailConfirmationService.confirmMail(email);
   }
 
+  @ApiOkResponse()
   @Post('resend-confirm-link')
   @UseGuards(JwtAuthenticationGuard)
   async resendConfirmLink(@Req() request: RequestWithUser) {

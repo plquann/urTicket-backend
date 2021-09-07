@@ -1,5 +1,5 @@
 import { paginationDefault } from 'src/constants';
-import { PaginationParams } from './paginationParams';
+import { PaginationDto } from './pagination.dto';
 
 /**
  * - Overlap: Returns true if the two time overlap.
@@ -40,7 +40,7 @@ export function getDateTimeRangeFromString(start, end) {
   };
 }
 
-export function getSkipLimit(pagination: PaginationParams) {
+export function getSkipLimit(pagination: PaginationDto) {
   let page = pagination.page ?? paginationDefault.page;
   let limit = pagination.limit ?? paginationDefault.limit;
 

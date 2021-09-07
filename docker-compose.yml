@@ -1,74 +1,61 @@
 version: '3.8'
 
+volumes:
+  postgres_data_local: {}
+  postgres_backup_local: {}
+
 services:
-  dev:
+  api:
     container_name: urticket-backend-dev
     image: urticket-backend-dev:1.0.0
     build:
       context: .
-      target: development
-      dockerfile: ./Dockerfile
-    command: npm run start:debug
+      dockerfile: Dockerfile
+    command: npm run start
     ports:
       - 5000:5000
-      - 9229:9229
-    # depends_on:
-    #   - postgres
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    links:
+      - postgres
     networks:
-      - nesjs-network
+      - postgres
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    restart: unless-stopped
-  prod:
-    container_name: urticket-backend-prod
-    image: urticket-backend-prod:1.0.0
-    build:
-      context: .
-      target: production
-      dockerfile: ./Dockerfile
-    command: npm run start:prod
-    # depends_on:
-    #   - postgres
-    ports:
-      - 5000:5000
-      - 9229:9229
-    networks:
-      - nesjs-network
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    restart: unless-stopped
+    restart: always
 
   postgres:
     container_name: postgres
     image: postgres:latest
-    restart: always
     ports:
       - '5432:5432'
     volumes:
-      - /data/postgres:/data/postgres
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: urtcket-db
+      - postgres_data_local:/var/lib/postgresql/data
+      - postgres_backup_local:/backups
+    env_file:
+      - docker.env
     networks:
       - postgres
+    restart: always
+
   pgadmin:
     links:
       - postgres:postgres
     container_name: pgadmin
     image: dpage/pgadmin4
-    restart: always
     ports:
       - '8080:80'
     volumes:
       - /data/pgadmin:/root/.pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+    env_file:
+      - docker.env
     networks:
       - postgres
+    restart: always
 
 networks:
-  nesjs-network:
+  postgres:
+    driver: bridge

@@ -1,3 +1,4 @@
+import { ForAdmin } from './../common/swagger.decorator';
 import {
   Controller,
   Get,
@@ -15,11 +16,20 @@ import { Roles } from 'src/auth/decorators/roles.decorators';
 import { UserRole } from 'src/constants';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import {
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('people')
 @Controller('people')
 export class PeopleController {
   constructor(private readonly peopleService: PeopleService) {}
 
+  @ForAdmin()
+  @ApiCreatedResponse()
   @Post()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
@@ -27,6 +37,8 @@ export class PeopleController {
     return this.peopleService.create(createPersonDto);
   }
 
+  @ForAdmin()
+  @ApiCreatedResponse()
   @Post('/seeders')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
@@ -34,16 +46,21 @@ export class PeopleController {
     return this.peopleService.seedersPeople();
   }
 
+  @ApiOkResponse()
+  @ApiNotFoundResponse()
   @Get()
   getAllPeople() {
     return this.peopleService.getAllPeople();
   }
 
+  @ApiOkResponse()
   @Get(':id')
   getOnePerson(@Param('id') personId: string) {
     return this.peopleService.getPersonById(personId);
   }
 
+  @ForAdmin()
+  @ApiCreatedResponse()
   @Put(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)

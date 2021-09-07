@@ -32,10 +32,10 @@ export class CreateReservationDto {
 
   @IsOptional()
   @IsString()
-  promotionId: string;
+  promotionId?: string;
 
   @IsArray()
   @IsOptional()
   @IsNotEmpty({ each: true })
-  products: ProductList[];
+  products?: ProductList[];
 }

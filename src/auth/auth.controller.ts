@@ -2,7 +2,6 @@ import {
   Body,
   Req,
   Controller,
-  HttpCode,
   Post,
   UseGuards,
   Get,
@@ -15,7 +14,10 @@ import JwtRefreshGuard from './guards/jwt-refresh.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { MailConfirmationService } from './../mailConfirmation/mailConfirmation.service';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -23,7 +25,8 @@ export class AuthController {
     private readonly usersService: UsersService,
     private readonly mailConfirmationService: MailConfirmationService,
   ) {}
-
+  
+  @ApiCreatedResponse()
   @Post('register')
   async register(@Body() registerData: RegisterDto) {
     const user = await this.authService.register(registerData);
@@ -34,10 +37,11 @@ export class AuthController {
     return user;
   }
 
-  @HttpCode(200)
+  @ApiOkResponse()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async logIn(@Req() request: RequestWithUser) {
+  async logIn(@Req() request: RequestWithUser, @Body() loginData: LoginDto) {
+    console.log('🚀 ~ file: auth.controller.ts ~ line 43 ~ request', request);
     const { user } = request;
     const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
       user.id,
@@ -54,7 +58,7 @@ export class AuthController {
     return user;
   }
 
-  @HttpCode(200)
+  @ApiOkResponse()
   @UseGuards(JwtAuthenticationGuard)
   @Post('logout')
   async logOut(@Req() request: RequestWithUser) {
@@ -62,6 +66,7 @@ export class AuthController {
     request.res.setHeader('Set-Cookie', this.authService.getCookiesForLogOut());
   }
 
+  @ApiOkResponse()
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
   refresh(@Req() request: RequestWithUser) {
