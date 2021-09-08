@@ -1,9 +1,5 @@
 version: '3.8'
 
-volumes:
-  postgres_data_local: {}
-  postgres_backup_local: {}
-
 services:
   api:
     container_name: urticket-backend-dev
@@ -33,8 +29,9 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - postgres_data_local:/var/lib/postgresql/data
-      - postgres_backup_local:/backups
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./database/urticket.sql:/docker-entrypoint-initdb.d/urticket.sql
+      - ./database/import-data.sql:/docker-entrypoint-initdb.d/import-data.sql
     env_file:
       - docker.env
     networks:

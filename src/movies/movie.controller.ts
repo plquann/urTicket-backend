@@ -27,7 +27,7 @@ import {
 } from '@nestjs/swagger';
 import { ForAdmin } from 'src/common/swagger.decorator';
 
-@ApiTags('movies')
+@ApiTags('Movies')
 @Controller('movie')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}

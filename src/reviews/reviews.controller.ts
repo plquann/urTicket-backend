@@ -13,7 +13,9 @@ import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import RequestWithUser from 'src/auth/interfaces/requestWithUser.interface';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Reviews')
 @Controller('review')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}

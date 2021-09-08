@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -23,7 +24,9 @@ import { Roles } from 'src/auth/decorators/roles.decorators';
 import { UserRole } from 'src/constants';
 import { FileInterceptor } from '@nestjs/platform-express';
 import RequestWithUser from 'src/auth/interfaces/requestWithUser.interface';
+import { ForAdmin } from 'src/common/swagger.decorator';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
@@ -66,6 +69,7 @@ export class UsersController {
     return this.userService.updateUserById(me, updateUserDto);
   }
 
+  @ForAdmin()
   @Get()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
@@ -105,6 +109,7 @@ export class UsersController {
     return this.userService.deleteAvatar(request.user.id);
   }
 
+  @ForAdmin()
   @Delete(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)

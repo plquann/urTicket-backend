@@ -18,7 +18,7 @@ import { UserRole } from 'src/constants';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('reservations')
+@ApiTags('Reservations')
 @Controller('reservations')
 export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}

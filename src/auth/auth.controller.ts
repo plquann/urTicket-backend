@@ -17,7 +17,7 @@ import { MailConfirmationService } from './../mailConfirmation/mailConfirmation.
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(

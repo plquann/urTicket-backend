@@ -13,12 +13,13 @@ import { Roles } from 'src/auth/decorators/roles.decorators';
 import { TheatersService } from './theaters.service';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Theaters')
 @Controller('theaters')
 export class TheatersController {
   constructor(private readonly theatersService: TheatersService) {}
 
- 
   @Post('/seeders')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
@@ -30,5 +31,4 @@ export class TheatersController {
   getAllTheaters() {
     return this.theatersService.getAllTheaters();
   }
-
 }

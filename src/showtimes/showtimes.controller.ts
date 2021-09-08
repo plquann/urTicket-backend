@@ -14,7 +14,9 @@ import { Roles } from 'src/auth/decorators/roles.decorators';
 import { UserRole } from 'src/constants';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Showtimes')
 @Controller('showtime')
 export class ShowtimesController {
   constructor(private readonly showtimesService: ShowtimesService) {}
