@@ -11,7 +11,6 @@ import * as helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { AllExceptionsFilter } from './filters/http-exception.filter';
 import { config } from 'aws-sdk';
-
 async function bootstrap() {
   const logger = new Logger('main');
 

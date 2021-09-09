@@ -56,13 +56,16 @@ export class MovieController {
   @ApiNotFoundResponse()
   @Get()
   getAllMovies(
-    // @Query('search') search: string,
+    @Query('searchTerm') searchTerm: string,
     @Query()
     { page, limit, startId }: PaginationDto,
   ) {
+    if (searchTerm) {
+      return this.movieService.searchForMovies(page, limit, searchTerm);
+    }
     return this.movieService.getAllMovies(page, limit, startId);
   }
-  
+
   @ApiOkResponse()
   @ApiNotFoundResponse()
   @Get('/now_playing')

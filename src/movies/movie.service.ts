@@ -1,6 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Connection, FindManyOptions, MoreThan } from 'typeorm';
+import {
+  Repository,
+  Connection,
+  FindManyOptions,
+  MoreThan,
+  ILike,
+} from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
@@ -182,6 +188,30 @@ export class MovieService {
     });
 
     return movies;
+  }
+
+  async searchForMovies(
+    page: number,
+    limit: number,
+    searchTerm: string,
+  ): Promise<any> {
+    const pagination = getSkipLimit({ page, limit });
+
+    const [movies, count] = await this.movieRepository.findAndCount({
+      select: ['title', 'releaseDate', 'voteAverage'],
+      where: { title: ILike(`%${searchTerm}%`) },
+      order: {
+        id: 'ASC',
+        voteCount: 'DESC',
+      },
+      take: pagination.limit,
+      skip: pagination.skip,
+    });
+
+    return {
+      movies,
+      totalRow: count,
+    };
   }
 
   async updateMovieById(
