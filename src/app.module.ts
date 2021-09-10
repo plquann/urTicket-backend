@@ -19,6 +19,7 @@ import { GenresModule } from './genres/genres.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { StripeModule } from './stripe/stripe.module';
 import { CardsModule } from './cards/cards.module';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { CardsModule } from './cards/cards.module';
     TicketsModule,
     StripeModule,
     CardsModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
