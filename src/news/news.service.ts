@@ -64,6 +64,7 @@ export class NewsService {
 
   async getNewsById(newsId: string): Promise<News> {
     const news = await this.newsRepository.findOne(newsId);
+    await this.newsRepository.update(newsId, { views: news.views + 1 });
 
     if (!news)
       throw new HttpException('Could not find News!', HttpStatus.NOT_FOUND);
@@ -83,5 +84,30 @@ export class NewsService {
       throw new HttpException('Could not find any News!', HttpStatus.NOT_FOUND);
 
     return news;
+  }
+
+  async updateNews(
+    newsId: string,
+    updateNewsDto: UpdateNewsDto,
+  ): Promise<News> {
+    await this.newsRepository.update(newsId, updateNewsDto);
+    const news = await this.newsRepository.findOne(newsId);
+
+    if (!news)
+      throw new HttpException('Could not find News!', HttpStatus.NOT_FOUND);
+
+    return news;
+  }
+
+  async deleteNews(newsId: string): Promise<any> {
+    const result = await this.newsRepository
+      .createQueryBuilder()
+      .delete()
+      .from(News)
+      .where('id = :id', { id: newsId })
+      .execute();
+
+    if (!result.affected)
+      throw new HttpException('Could not delete News!', HttpStatus.BAD_REQUEST);
   }
 }

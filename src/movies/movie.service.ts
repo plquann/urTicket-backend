@@ -247,6 +247,9 @@ export class MovieService {
       .execute();
 
     if (!result.affected)
-      throw new HttpException('Movie not found!', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Could not delete movie!',
+        HttpStatus.BAD_REQUEST,
+      );
   }
 }
