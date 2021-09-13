@@ -33,19 +33,23 @@ export class PeopleService {
   async getAllPeople(): Promise<Person[]> {
     const people = await this.personRepository.find();
     if (!people) {
-      throw new HttpException(
-        'Could not find people',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Could not find people', HttpStatus.NOT_FOUND);
     }
     return people;
   }
 
   async create(createPersonDto: CreatePersonDto): Promise<Person> {
-    const newPerson = await this.personRepository.create(createPersonDto);
-    await this.personRepository.save(newPerson);
+    try {
+      const newPerson = await this.personRepository.create(createPersonDto);
+      await this.personRepository.save(newPerson);
 
-    return newPerson;
+      return newPerson;
+    } catch (error) {
+      throw new HttpException(
+        'Could not create Person',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async getPersonById(personId: string): Promise<Person> {

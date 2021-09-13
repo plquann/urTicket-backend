@@ -6,9 +6,6 @@ export class News extends BaseEntity {
   @Column()
   title: string;
 
-  @Column()
-  description: string;
-
   @Column('text')
   content: string;
 
@@ -18,15 +15,18 @@ export class News extends BaseEntity {
   @Column()
   isPublished: boolean;
 
-  @Column()
+  @Column({ default: new Date() })
   publishedDate: Date;
 
   @Column('simple-array')
-  category: string[];
+  tags: string[];
 
   @Column()
   views: number;
 
   @Column('simple-json')
   author: { name: string; introduction: string };
+
+  @Column('text', { array: true })
+  paragraphs: string[];
 }

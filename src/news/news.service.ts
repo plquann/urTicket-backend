@@ -1,26 +1,87 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { getSkipLimit } from 'src/common/utils';
+import { Repository } from 'typeorm';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
+import { News } from './entities/news.entity';
 
 @Injectable()
 export class NewsService {
-  create(createNewsDto: CreateNewsDto) {
-    return 'This action adds a new news';
+  constructor(
+    @InjectRepository(News)
+    private readonly newsRepository: Repository<News>,
+  ) {}
+
+  async seedersNews(): Promise<any> {
+    const news = [];
+
+    const result = await this.newsRepository
+      .createQueryBuilder()
+      .insert()
+      .into(News)
+      .values(news)
+      .execute();
+
+    if (!result)
+      throw new HttpException(
+        'Could not seed News',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
   }
 
-  findAll() {
-    return `This action returns all news`;
+  async postNews(createNewsDto: CreateNewsDto): Promise<News> {
+    try {
+      const news = this.newsRepository.create(createNewsDto);
+      await this.newsRepository.save(news);
+
+      return news;
+    } catch (error) {
+      throw new HttpException('Could not create News!', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} news`;
+  async getAllNews(page: number, limit: number): Promise<any> {
+    const pagination = getSkipLimit({ page, limit });
+
+    const [news, count] = await this.newsRepository.findAndCount({
+      order: {
+        publishedDate: 'DESC',
+        views: 'DESC',
+      },
+      take: pagination.limit,
+      skip: pagination.skip,
+    });
+
+    if (!news.length)
+      throw new HttpException('Could not find any News!', HttpStatus.NOT_FOUND);
+
+    return {
+      news,
+      totalRow: count,
+    };
   }
 
-  update(id: number, updateNewsDto: UpdateNewsDto) {
-    return `This action updates a #${id} news`;
+  async getNewsById(newsId: string): Promise<News> {
+    const news = await this.newsRepository.findOne(newsId);
+
+    if (!news)
+      throw new HttpException('Could not find News!', HttpStatus.NOT_FOUND);
+
+    return news;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} news`;
+  async getPopularNews(): Promise<News[]> {
+    const news = await this.newsRepository.find({
+      order: {
+        views: 'DESC',
+      },
+      take: 5,
+    });
+
+    if (!news.length)
+      throw new HttpException('Could not find any News!', HttpStatus.NOT_FOUND);
+
+    return news;
   }
 }

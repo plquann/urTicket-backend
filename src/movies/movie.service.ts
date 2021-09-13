@@ -109,7 +109,7 @@ export class MovieService {
   }
 
   async getAllMovies(
-    page: number,
+    page?: number,
     limit?: number,
     startId?: string,
   ): Promise<any> {
