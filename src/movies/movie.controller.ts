@@ -35,9 +35,9 @@ export class MovieController {
   @ApiCreatedResponse()
   @ApiUnauthorizedResponse()
   @ForAdmin()
-  @Post()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  @Post()
   create(@Body() createMovieDto: CreateMovieDto) {
     return this.movieService.createMovie(createMovieDto);
   }
@@ -45,9 +45,9 @@ export class MovieController {
   @ApiCreatedResponse()
   @ApiUnauthorizedResponse()
   @ForAdmin()
-  @Post('/seeders')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  @Post('/seeders')
   seedersMovies() {
     return this.movieService.seedersMovies();
   }
@@ -107,9 +107,9 @@ export class MovieController {
   @ApiOkResponse()
   @ApiUnauthorizedResponse()
   @ForAdmin()
-  @Delete(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.movieService.deleteMovieById(id);
   }
