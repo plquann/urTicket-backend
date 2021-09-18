@@ -20,9 +20,14 @@ export const setupSwagger = (app: INestApplication) => {
       'quanphamluong@gmail.com',
     )
     .build();
-    
+
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(SWAGGER_API_ROOT, app, document);
+  SwaggerModule.setup(SWAGGER_API_ROOT, app, document, {
+    swaggerOptions: {
+      apisSorter: 'alpha',
+      operationsSorter: 'alpha',
+    },
+  });
 
   logger.log(`Swagger document at url: ${SWAGGER_API_ROOT}`);
 };

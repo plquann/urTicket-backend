@@ -228,28 +228,4 @@ export class MovieService {
 
     return movie;
   }
-
-  async deleteMovieById(movieId: string): Promise<any> {
-    const genres = await this.loadRelationsMovie(movieId, 'genres');
-    const casts = await this.loadRelationsMovie(movieId, 'casts');
-    const crews = await this.loadRelationsMovie(movieId, 'crews');
-
-    genres.length &&
-      (await this.deleteRelationMovie(movieId, genres, 'genres'));
-    casts.length && (await this.deleteRelationMovie(movieId, casts, 'casts'));
-    crews.length && (await this.deleteRelationMovie(movieId, crews, 'crews'));
-
-    const result = await this.movieRepository
-      .createQueryBuilder()
-      .delete()
-      .from(Movie)
-      .where('id = :id', { id: movieId })
-      .execute();
-
-    if (!result.affected)
-      throw new HttpException(
-        'Could not delete movie!',
-        HttpStatus.BAD_REQUEST,
-      );
-  }
 }

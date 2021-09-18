@@ -35,6 +35,7 @@ export class ShowtimesService {
       });
     }
   }
+  
   async getShowtimeById(showtimeId: string): Promise<Showtime> {
     const showtime = await this.showtimeRepository
       .createQueryBuilder('showtime')

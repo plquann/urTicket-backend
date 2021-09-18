@@ -12,7 +12,7 @@ export class News extends BaseEntity {
   @Column()
   image: string;
 
-  @Column()
+  @Column({ default: true })
   isPublished: boolean;
 
   @Column({ default: new Date() })

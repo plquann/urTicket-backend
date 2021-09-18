@@ -5,7 +5,7 @@ import AddCardDto from './dto/add-card.dto';
 import RequestWithUser from 'src/auth/interfaces/requestWithUser.interface';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('cards')
+@ApiTags('Cards')
 @Controller('cards')
 export class CardsController {
   constructor(private readonly stripeService: StripeService) {}

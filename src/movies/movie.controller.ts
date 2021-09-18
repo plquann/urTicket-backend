@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Param,
-  Delete,
   Put,
   UseGuards,
   Query,
@@ -102,15 +101,5 @@ export class MovieController {
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   updateMovie(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
     return this.movieService.updateMovieById(id, updateMovieDto);
-  }
-
-  @ApiOkResponse()
-  @ApiUnauthorizedResponse()
-  @ForAdmin()
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.movieService.deleteMovieById(id);
   }
 }

@@ -17,7 +17,7 @@ import { UserRole } from 'src/constants';
 import { Genre } from './entities/genre.entity';
 import { GenresService } from './genres.service';
 
-@ApiTags('genres')
+@ApiTags('Genres')
 @Controller('genres')
 export class GenresController {
   constructor(private readonly genresService: GenresService) {}
