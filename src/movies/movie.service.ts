@@ -167,20 +167,13 @@ export class MovieService {
   ): Promise<any> {
     const pagination = getSkipLimit({ page, limit });
 
-    const [movies, count] = await this.movieRepository.findAndCount({
-      relations: ['genres'],
-      where: {
-        genres: {
-          name: genre,
-        },
-      },
-      order: {
-        id: 'ASC',
-        voteCount: 'DESC',
-      },
-      take: pagination.limit,
-      skip: pagination.skip,
-    });
+    const [movies, count] = await this.movieRepository
+    .createQueryBuilder('movie')
+    .leftJoinAndSelect('movie.genres', 'genres')
+    .where('genres.name = :genreName', { genreName: genre })
+    .take(pagination.limit)
+    .skip(pagination.skip)
+    .getManyAndCount();
 
     if (!movies.length)
       throw new HttpException(
