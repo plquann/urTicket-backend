@@ -38,6 +38,6 @@ export enum MovieStatus {
 
 export const paginationDefault = {
   page: 1,
-  limit: 16,
+  limit: 12,
 }
 

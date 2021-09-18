@@ -55,8 +55,9 @@ export class NewsController {
   @ApiOkResponse()
   @ApiNotFoundResponse()
   @Get()
-  getAll(
-      @Query() { page, limit }: PaginationDto) {
+  getAll(@Query('tag') tag: string, @Query() { page, limit }: PaginationDto) {
+    if (tag) return this.newsService.getNewsByTag(page, limit, tag);
+
     return this.newsService.getAllNews(page, limit);
   }
 

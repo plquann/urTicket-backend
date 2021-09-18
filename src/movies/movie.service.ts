@@ -198,7 +198,7 @@ export class MovieService {
     const pagination = getSkipLimit({ page, limit });
 
     const [movies, count] = await this.movieRepository.findAndCount({
-      select: ['title', 'releaseDate', 'voteAverage'],
+      select: ['id', 'title', 'releaseDate', 'voteAverage'],
       where: { title: ILike(`%${searchTerm}%`) },
       order: {
         id: 'ASC',
