@@ -55,7 +55,8 @@ export class NewsController {
   @ApiOkResponse()
   @ApiNotFoundResponse()
   @Get()
-  getAll(@Query() { page, limit }: PaginationDto) {
+  getAll(
+      @Query() { page, limit }: PaginationDto) {
     return this.newsService.getAllNews(page, limit);
   }
 

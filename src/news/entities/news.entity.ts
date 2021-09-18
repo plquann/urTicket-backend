@@ -6,9 +6,6 @@ export class News extends BaseEntity {
   @Column()
   title: string;
 
-  @Column('text')
-  content: string;
-
   @Column()
   image: string;
 

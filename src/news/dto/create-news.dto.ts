@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsObject,
+  IsOptional,
   IsString,
 } from 'class-validator';
 
@@ -11,10 +12,6 @@ export class CreateNewsDto {
   @IsString()
   @IsNotEmpty()
   title: string;
-
-  @IsString()
-  @IsNotEmpty()
-  content: string;
 
   @IsString()
   @IsNotEmpty()
@@ -27,7 +24,8 @@ export class CreateNewsDto {
 
   @IsBoolean()
   @IsNotEmpty()
-  isPublished: boolean;
+  @IsOptional()
+  isPublished?: boolean;
 
   @IsString({ each: true })
   @IsNotEmpty()

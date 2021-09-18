@@ -41,7 +41,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async logIn(@Req() request: RequestWithUser, @Body() loginData: LoginDto) {
-    console.log('🚀 ~ file: auth.controller.ts ~ line 43 ~ request', request);
+    // console.log('🚀 ~ file: auth.controller.ts ~ line 43 ~ request', request);
     const { user } = request;
     const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
       user.id,
