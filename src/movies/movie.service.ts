@@ -160,6 +160,40 @@ export class MovieService {
     return movies;
   }
 
+  async getMovieByGenre(
+    page: number,
+    limit: number,
+    genre: string,
+  ): Promise<any> {
+    const pagination = getSkipLimit({ page, limit });
+
+    const [movies, count] = await this.movieRepository.findAndCount({
+      relations: ['genres'],
+      where: {
+        genres: {
+          name: genre,
+        },
+      },
+      order: {
+        id: 'ASC',
+        voteCount: 'DESC',
+      },
+      take: pagination.limit,
+      skip: pagination.skip,
+    });
+
+    if (!movies.length)
+      throw new HttpException(
+        `Movies ${genre} not found!`,
+        HttpStatus.NOT_FOUND,
+      );
+
+    return {
+      movies,
+      totalRow: count,
+    };
+  }
+
   async getMovieById(movieId: string): Promise<Movie> {
     const movie = await this.movieRepository
       .createQueryBuilder('movie')
@@ -190,13 +224,7 @@ export class MovieService {
     return movies;
   }
 
-  async searchForMovies(
-    page: number,
-    limit: number,
-    searchTerm: string,
-  ): Promise<any> {
-    const pagination = getSkipLimit({ page, limit });
-
+  async searchForMovies(searchTerm: string): Promise<any> {
     const [movies, count] = await this.movieRepository.findAndCount({
       select: ['id', 'title', 'releaseDate', 'voteAverage'],
       where: { title: ILike(`%${searchTerm}%`) },
@@ -204,8 +232,8 @@ export class MovieService {
         id: 'ASC',
         voteCount: 'DESC',
       },
-      take: pagination.limit,
-      skip: pagination.skip,
+      take: 10,
+      skip: 0,
     });
 
     return {

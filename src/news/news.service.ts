@@ -66,6 +66,7 @@ export class NewsService {
     const pagination = getSkipLimit({ page, limit });
 
     const [news, count] = await this.newsRepository.findAndCount({
+      select: ['id', 'title', 'image', 'publishedDate', 'views', 'tags'],
       where: {
         tags: ILike(`%${tag}%`),
       },

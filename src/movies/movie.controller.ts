@@ -55,14 +55,21 @@ export class MovieController {
   @ApiNotFoundResponse()
   @Get()
   getAllMovies(
-    @Query('searchTerm') searchTerm: string,
+    @Query('genre') genre: string,
     @Query()
     { page, limit, startId }: PaginationDto,
   ) {
-    if (searchTerm) {
-      return this.movieService.searchForMovies(page, limit, searchTerm);
+    if (genre) {
+      return this.movieService.getMovieByGenre(page, limit, genre);
     }
     return this.movieService.getAllMovies(page, limit, startId);
+  }
+
+  @ApiOkResponse()
+  @ApiNotFoundResponse()
+  @Get('/search')
+  searchMovies(@Query('searchTerm') searchTerm: string) {
+    return this.movieService.searchForMovies(searchTerm);
   }
 
   @ApiOkResponse()
