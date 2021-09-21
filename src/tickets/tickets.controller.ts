@@ -1,6 +1,10 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
+import { Roles } from 'src/auth/decorators/roles.decorators';
+import { UserRole } from 'src/constants';
+import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 @ApiTags('Tickets')
 @Controller('tickets')
 export class TicketsController {
@@ -10,8 +14,11 @@ export class TicketsController {
   getTicketsByShowtime(@Param('id') id: string) {
     return this.ticketsService.getTicketsByShowtime(id);
   }
-  @Get('/null')
-  getNull() {
-    return this.ticketsService.destroyTicketsWithoutReservation();
+
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  @Delete('/remove-tickets')
+  destroyTicketsWithoutReservation() {
+    return this.ticketsService.destroyTicketsWithNoReservationId();
   }
 }

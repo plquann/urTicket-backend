@@ -1,7 +1,7 @@
 import { Ticket } from './entities/ticket.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { Seat } from 'src/seats/entities/seat.entity';
 
 @Injectable()
@@ -9,6 +9,7 @@ export class TicketsService {
   constructor(
     @InjectRepository(Ticket)
     private readonly ticketRepository: Repository<Ticket>,
+    private connection: Connection,
   ) {}
 
   async createTickets(seats: Seat[], showtimeId: string): Promise<void> {
@@ -61,11 +62,23 @@ export class TicketsService {
     return ticket;
   }
 
-  async destroyTicketsWithoutReservation(): Promise<any> {
-    return await this.ticketRepository
+  async destroyTicketsWithNoReservationId(): Promise<any> {
+    const date = new Date();
+
+    const tickets = await this.ticketRepository
       .createQueryBuilder('tickets')
+      .leftJoinAndSelect('tickets.showtime', 'showtime')
       .where('tickets.reservationId is null')
-      .take(100)
+      .andWhere('showtime.startTime < :date', { date })
       .getMany();
+
+    const ticketIds = tickets.map((ticket) => ticket.id);
+
+    await this.connection
+      .createQueryBuilder()
+      .delete()
+      .from(Ticket)
+      .where('id IN (:...ids)', { ids: ticketIds })
+      .execute();
   }
 }

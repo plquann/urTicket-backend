@@ -66,12 +66,10 @@ export class ShowtimesService {
   }
 
   async getShowtimesByTheaterId(theaterId: string): Promise<Movie[]> {
-    const theater = await this.theaterService.getTheaterById(theaterId);
-
     const currentDay = new Date();
 
-    const start = dayjs(currentDay).startOf('day').toDate();
-    const end = dayjs(currentDay).endOf('day').toDate();
+    const start = dayjs(currentDay).startOf('day').add(8, 'hour').toDate();
+    const end = dayjs(currentDay).endOf('day').add(8, 'hour').toDate();
     // console.log('🚀 ~ file: showtimes.service.ts  ~ start', start);
     // console.log('🚀 ~ file: showtimes.service.ts  ~ end', end);
 
@@ -80,10 +78,10 @@ export class ShowtimesService {
       .createQueryBuilder('movie')
       .leftJoinAndSelect('movie.showtimes', 'showtimes')
       .where('showtimes.theaterId = :theaterId', { theaterId })
-      // .andWhere('showtimes.startTime >= :start AND showtimes.endTime <= :end', {
-      //   start,
-      //   end,
-      // })
+      .andWhere('showtimes.startTime >= :start AND showtimes.endTime <= :end', {
+        start,
+        end,
+      })
       .getMany();
 
     return movies;
