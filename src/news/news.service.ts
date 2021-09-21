@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getSkipLimit } from 'src/common/utils';
-import { ILike, Raw, Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateNewsDto } from './dto/create-news.dto';
 import { UpdateNewsDto } from './dto/update-news.dto';
 import { News } from './entities/news.entity';
@@ -12,23 +12,6 @@ export class NewsService {
     @InjectRepository(News)
     private readonly newsRepository: Repository<News>,
   ) {}
-
-  async seedersNews(): Promise<any> {
-    const news = [];
-
-    const result = await this.newsRepository
-      .createQueryBuilder()
-      .insert()
-      .into(News)
-      .values(news)
-      .execute();
-
-    if (!result)
-      throw new HttpException(
-        'Could not seed News',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-  }
 
   async postNews(createNewsDto: CreateNewsDto): Promise<News> {
     try {

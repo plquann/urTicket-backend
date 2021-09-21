@@ -10,4 +10,8 @@ export class TicketsController {
   getTicketsByShowtime(@Param('id') id: string) {
     return this.ticketsService.getTicketsByShowtime(id);
   }
+  @Get('/null')
+  getNull() {
+    return this.ticketsService.destroyTicketsWithoutReservation();
+  }
 }

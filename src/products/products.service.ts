@@ -1,4 +1,3 @@
-import { productsSeed } from './../database/seeds/products.seed';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,22 +12,6 @@ export class ProductsService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {}
-
-  async seedersProducts(): Promise<void> {
-    const products = productsSeed;
-    const result = await this.productRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Product)
-      .values(products)
-      .execute();
-
-    if (!result)
-      throw new HttpException(
-        'Could not seed products',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-  }
 
   async createProduct(createProductDto: CreateProductDto): Promise<Product> {
     const isProductExist = await this.productRepository.findOne({
@@ -47,15 +30,13 @@ export class ProductsService {
     return await this.productRepository.find();
   }
 
-  async getProductsByReservationId(
-    reservationId: string,
-  ): Promise<Product[]> {
+  async getProductsByReservationId(reservationId: string): Promise<Product[]> {
     const products = await this.productRepository
-    .createQueryBuilder('product')
-    .leftJoinAndSelect('product.orders', 'productOrder')
-    .where('productOrder.reservationId = :reservationId', { reservationId })
-    .getMany();
-      
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.orders', 'productOrder')
+      .where('productOrder.reservationId = :reservationId', { reservationId })
+      .getMany();
+
     return products;
   }
 

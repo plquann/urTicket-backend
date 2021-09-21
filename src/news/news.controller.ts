@@ -34,16 +34,6 @@ export class NewsController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ForAdmin()
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  @Post('/seeders')
-  seedersNews() {
-    return this.newsService.seedersNews();
-  }
-
-  @ApiCreatedResponse()
-  @ApiBadRequestResponse()
-  @ForAdmin()
   @Post()
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   @Roles(UserRole.ADMIN)

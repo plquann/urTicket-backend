@@ -29,15 +29,6 @@ export class GenresController {
     return this.genresService.create(genre);
   }
 
-  @ForAdmin()
-  @ApiCreatedResponse()
-  @Post('/seeders')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  seedersGenres(){
-    return this.genresService.seedersGenres();
-  }
-
   @ApiOkResponse()
   @Get()
   getAll() {

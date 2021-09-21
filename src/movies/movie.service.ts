@@ -1,16 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Repository,
-  Connection,
-  FindManyOptions,
-  MoreThan,
-  ILike,
-} from 'typeorm';
+import { Repository, FindManyOptions, MoreThan, ILike } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
-import { moviesSeed } from './../database/seeds/movies.seed';
 import { MovieStatus } from 'src/constants';
 import { getSkipLimit } from 'src/common/utils';
 @Injectable()
@@ -18,25 +11,7 @@ export class MovieService {
   constructor(
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
-    private connection: Connection,
   ) {}
-
-  async seedersMovies() {
-    const movies = moviesSeed;
-
-    const result = await this.movieRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Movie)
-      .values(movies)
-      .execute();
-
-    if (!result)
-      throw new HttpException(
-        'Could not seed Movies',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-  }
 
   async createMovie(createMovie: CreateMovieDto): Promise<Movie> {
     try {
@@ -168,12 +143,12 @@ export class MovieService {
     const pagination = getSkipLimit({ page, limit });
 
     const [movies, count] = await this.movieRepository
-    .createQueryBuilder('movie')
-    .leftJoinAndSelect('movie.genres', 'genres')
-    .where('genres.name = :genreName', { genreName: genre })
-    .take(pagination.limit)
-    .skip(pagination.skip)
-    .getManyAndCount();
+      .createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.genres', 'genres')
+      .where('genres.name = :genreName', { genreName: genre })
+      .take(pagination.limit)
+      .skip(pagination.skip)
+      .getManyAndCount();
 
     if (!movies.length)
       throw new HttpException(

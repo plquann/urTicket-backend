@@ -32,16 +32,6 @@ export class ProductsController {
     return this.productsService.createProduct(createProductDto);
   }
 
-  @ForAdmin()
-  @ApiCreatedResponse()
-  @Post('/seeders')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  seedersProducts() {
-    return this.productsService.seedersProducts();
-  }
-
-
   @Get()
   getAllProducts() {
     return this.productsService.getAllProducts();

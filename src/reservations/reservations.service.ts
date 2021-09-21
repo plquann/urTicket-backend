@@ -42,10 +42,10 @@ export class ReservationsService {
       promotionId,
       products = [],
     } = createReservationDto;
-    console.log(
-      '🚀 ~ file: reservations.service.ts ~ line 42 ~ products',
-      products,
-    );
+    // console.log(
+    //   '🚀 ~ file: reservations.service.ts ~ line 42 ~ products',
+    //   products,
+    // );
 
     const user = await this.usersService.getUserById(userId);
     const convertAmount = amount * 100;
@@ -55,10 +55,10 @@ export class ReservationsService {
       paymentMethodId,
       user.stripeCustomerId,
     );
-    console.log(
-      '🚀 ~ file: reservations.service.ts ~ line 49 ~ paymentIndent',
-      paymentIndent,
-    );
+    // console.log(
+    //   '🚀 ~ file: reservations.service.ts ~ line 49 ~ paymentIndent',
+    //   paymentIndent,
+    // );
 
     if (paymentIndent.status !== 'succeeded') {
       throw new HttpException(
@@ -114,10 +114,10 @@ export class ReservationsService {
     const showtime = await this.showtimesService.getShowtimeById(
       reservation.showtimeId,
     );
-    console.log(
-      '🚀 ~ file: reservations.service.ts ~ line 111 ~ showtime',
-      showtime,
-    );
+    // console.log(
+    //   '🚀 ~ file: reservations.service.ts ~ line 111 ~ showtime',
+    //   showtime,
+    // );
 
     const tickets = await this.ticketsService.getTicketsByReservation(
       reservation.id,

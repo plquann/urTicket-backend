@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { Person } from './entities/person.entity';
-import { peopleSeed } from '../database/seeds/people.seed';
 
 @Injectable()
 export class PeopleService {
@@ -12,23 +11,6 @@ export class PeopleService {
     @InjectRepository(Person)
     private readonly personRepository: Repository<Person>, // private connection: Connection,
   ) {}
-
-  async seedersPeople(): Promise<any> {
-    const people = peopleSeed;
-    const result = await this.personRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Person)
-      .values(people)
-      .execute();
-
-    if (!result) {
-      throw new HttpException(
-        'Could not seed people',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
 
   async getAllPeople(): Promise<Person[]> {
     const people = await this.personRepository.find();

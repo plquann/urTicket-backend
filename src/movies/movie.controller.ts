@@ -41,16 +41,6 @@ export class MovieController {
     return this.movieService.createMovie(createMovieDto);
   }
 
-  @ApiCreatedResponse()
-  @ApiUnauthorizedResponse()
-  @ForAdmin()
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  @Post('/seeders')
-  seedersMovies() {
-    return this.movieService.seedersMovies();
-  }
-
   @ApiOkResponse()
   @ApiNotFoundResponse()
   @Get()

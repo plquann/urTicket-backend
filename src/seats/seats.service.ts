@@ -1,6 +1,5 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { seatsSeed } from 'src/database/seeds/seats.seed';
 import { Repository } from 'typeorm';
 import { Seat } from './entities/seat.entity';
 
@@ -11,20 +10,13 @@ export class SeatsService {
     private readonly seatRepository: Repository<Seat>,
   ) {}
 
-  async seedersSeats(): Promise<void> {
-    const seat = seatsSeed;
+  async getAll(): Promise<Seat[]> {
+    const seats = await this.seatRepository.find();
 
-    const result = await this.seatRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Seat)
-      .values(seat)
-      .execute();
+    if (!seats) {
+      throw new HttpException('No seats found', HttpStatus.NOT_FOUND);
+    }
 
-    if (!result)
-      throw new HttpException(
-        'Could not seed Seats',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    return seats;
   }
 }

@@ -37,15 +37,6 @@ export class PeopleController {
     return this.peopleService.create(createPersonDto);
   }
 
-  @ForAdmin()
-  @ApiCreatedResponse()
-  @Post('/seeders')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  seedersPeople() {
-    return this.peopleService.seedersPeople();
-  }
-
   @ApiOkResponse()
   @ApiNotFoundResponse()
   @Get()
@@ -61,9 +52,9 @@ export class PeopleController {
 
   @ForAdmin()
   @ApiCreatedResponse()
-  @Put(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  @Put(':id')
   update(
     @Param('id') personId: string,
     @Body() updatePersonDto: UpdatePersonDto,

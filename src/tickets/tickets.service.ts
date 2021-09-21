@@ -60,4 +60,12 @@ export class TicketsService {
 
     return ticket;
   }
+
+  async destroyTicketsWithoutReservation(): Promise<any> {
+    return await this.ticketRepository
+      .createQueryBuilder('tickets')
+      .where('tickets.reservationId is null')
+      .take(100)
+      .getMany();
+  }
 }
