@@ -14,6 +14,7 @@ import { CreateShowtimeDto } from './dto/create-showtime.dto';
 import { Showtime } from './entities/showtime.entity';
 import * as dayjs from 'dayjs';
 import { showtimesSeed } from 'src/database/seeds/showtime.seed';
+import { SeedShowtimeDto } from './dto/seed-showtime.dto';
 
 @Injectable()
 export class ShowtimesService {
@@ -25,8 +26,8 @@ export class ShowtimesService {
     private connection: Connection,
   ) {}
 
-  async seedersShowtimes() {
-    const seedShowtimes = showtimesSeed("2021-09-02");
+  async seedersShowtimes(seedShowtimeDto: SeedShowtimeDto) {
+    const seedShowtimes = showtimesSeed(seedShowtimeDto.date);
 
     for (const showtime of seedShowtimes) {
       await this.createShowtime({
@@ -35,7 +36,7 @@ export class ShowtimesService {
       });
     }
   }
-  
+
   async getShowtimeById(showtimeId: string): Promise<Showtime> {
     const showtime = await this.showtimeRepository
       .createQueryBuilder('showtime')
@@ -135,8 +136,6 @@ export class ShowtimesService {
     let newShowtime: Showtime;
 
     const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
 
     try {
       newShowtime = await queryRunner.manager.save(Showtime, {
@@ -148,14 +147,12 @@ export class ShowtimesService {
       });
 
       await this.ticketService.createTickets(seats, newShowtime.id);
-      await queryRunner.commitTransaction();
     } catch (error) {
       console.log('🚀 ~ file: showtimes.service.ts ~ line 151 ~ error', error);
-
-      await queryRunner.rollbackTransaction();
-      throw new InternalServerErrorException();
-    } finally {
-      await queryRunner.release();
+      throw new HttpException(
+        'Can not create showtime',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     return newShowtime;

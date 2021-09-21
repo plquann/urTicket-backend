@@ -15,6 +15,7 @@ import { UserRole } from 'src/constants';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { SeedShowtimeDto } from './dto/seed-showtime.dto';
 
 @ApiTags('Showtimes')
 @Controller('showtime')
@@ -22,17 +23,17 @@ export class ShowtimesController {
   constructor(private readonly showtimesService: ShowtimesService) {}
 
   @Post()
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  // @Roles(UserRole.ADMIN)
+  // @UseGuards(JwtAuthenticationGuard, RolesGuard)
   createShowtime(@Body() createShowtimeDto: CreateShowtimeDto) {
     return this.showtimesService.createShowtime(createShowtimeDto);
   }
 
   @Post('/seeders')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  seedShowtimes() {
-    return this.showtimesService.seedersShowtimes();
+  // @Roles(UserRole.ADMIN)
+  // @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  seedShowtimes(@Body() seedShowtimeDto: SeedShowtimeDto) {
+    return this.showtimesService.seedersShowtimes(seedShowtimeDto);
   }
 
   @Get('/movie/:movieId')
