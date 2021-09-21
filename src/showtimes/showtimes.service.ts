@@ -26,7 +26,7 @@ export class ShowtimesService {
   ) {}
 
   async seedersShowtimes() {
-    const seedShowtimes = showtimesSeed;
+    const seedShowtimes = showtimesSeed("2021-09-02");
 
     for (const showtime of seedShowtimes) {
       await this.createShowtime({

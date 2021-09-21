@@ -21,14 +21,6 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 export class GroupTheaterController {
   constructor(private readonly groupTheaterService: GroupTheaterService) {}
 
-  @ForAdmin()
-  @Post('seeders')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  seeders() {
-    return this.groupTheaterService.seedersGroupTheaters();
-  }
-
   @ApiOkResponse()
   @Get()
   getAllGroupTheater() {
