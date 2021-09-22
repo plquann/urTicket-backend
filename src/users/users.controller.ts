@@ -39,8 +39,8 @@ export class UsersController {
   }
 
   @Post('avatar')
-  @UseGuards(JwtAuthenticationGuard)
   @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(JwtAuthenticationGuard)
   async uploadAvatar(
     @Req() request: RequestWithUser,
     @UploadedFile() file: Express.Multer.File,
@@ -69,8 +69,8 @@ export class UsersController {
     return this.userService.updateUserById(me, updateUserDto);
   }
 
-  @ForAdmin()
   @Get()
+  @ForAdmin()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   getAll() {
@@ -109,8 +109,8 @@ export class UsersController {
     return this.userService.deleteAvatar(request.user.id);
   }
 
-  @ForAdmin()
   @Delete(':id')
+  @ForAdmin()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   async deleteUser(@Param('id') id: string) {

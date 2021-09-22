@@ -31,13 +31,12 @@ import { PaginationDto } from 'src/common/pagination.dto';
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
+  @Post()
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ForAdmin()
-  @Post()
-  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  @Post()
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   create(@Body() createNewsDto: CreateNewsDto) {
     return this.newsService.postNews(createNewsDto);
   }
@@ -65,23 +64,22 @@ export class NewsController {
     return this.newsService.getNewsById(id);
   }
 
+  @Patch(':id')
   @ApiOkResponse()
   @ApiUnauthorizedResponse()
   @ForAdmin()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  @Patch(':id')
   update(@Param('id') id: string, @Body() updateNewsDto: UpdateNewsDto) {
     return this.newsService.updateNews(id, updateNewsDto);
   }
 
+  @Delete(':id')
   @ApiOkResponse()
   @ApiUnauthorizedResponse()
   @ForAdmin()
-  @Delete(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.newsService.deleteNews(id);
   }

@@ -23,15 +23,15 @@ export class ShowtimesController {
   constructor(private readonly showtimesService: ShowtimesService) {}
 
   @Post()
-  // @Roles(UserRole.ADMIN)
-  // @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   createShowtime(@Body() createShowtimeDto: CreateShowtimeDto) {
     return this.showtimesService.createShowtime(createShowtimeDto);
   }
 
   @Post('/seeders')
-  // @Roles(UserRole.ADMIN)
-  // @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
   seedShowtimes(@Body() seedShowtimeDto: SeedShowtimeDto) {
     return this.showtimesService.seedersShowtimes(seedShowtimeDto);
   }

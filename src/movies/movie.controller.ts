@@ -31,19 +31,19 @@ import { ForAdmin } from 'src/common/swagger.decorator';
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
+  @Post()
   @ApiCreatedResponse()
   @ApiUnauthorizedResponse()
   @ForAdmin()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  @Post()
   create(@Body() createMovieDto: CreateMovieDto) {
     return this.movieService.createMovie(createMovieDto);
   }
 
+  @Get()
   @ApiOkResponse()
   @ApiNotFoundResponse()
-  @Get()
   getAllMovies(
     @Query('genre') genre: string,
     @Query()
@@ -55,45 +55,45 @@ export class MovieController {
     return this.movieService.getAllMovies(page, limit, startId);
   }
 
+  @Get('/search')
   @ApiOkResponse()
   @ApiNotFoundResponse()
-  @Get('/search')
   searchMovies(@Query('searchTerm') searchTerm: string) {
     return this.movieService.searchForMovies(searchTerm);
   }
 
+  @Get('/now_playing')
   @ApiOkResponse()
   @ApiNotFoundResponse()
-  @Get('/now_playing')
   getMoviesNowPlaying() {
     return this.movieService.getMovieByStatus(MovieStatus.PLAYING);
   }
 
+  @Get('/upcoming')
   @ApiOkResponse()
   @ApiNotFoundResponse()
-  @Get('/upcoming')
   getMoviesUpcoming() {
     return this.movieService.getMovieByStatus(MovieStatus.UPCOMING);
   }
 
+  @Get('/highlight')
   @ApiOkResponse()
   @ApiNotFoundResponse()
-  @Get('/highlight')
   getHighlightMovies() {
     return this.movieService.getMovieHighlight();
   }
 
+  @Get(':id')
   @ApiOkResponse()
   @ApiNotFoundResponse()
-  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.movieService.getMovieById(id);
   }
 
+  @Put(':id')
   @ApiOkResponse()
   @ApiUnauthorizedResponse()
   @ForAdmin()
-  @Put(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   updateMovie(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {

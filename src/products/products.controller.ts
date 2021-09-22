@@ -23,9 +23,9 @@ import { ForAdmin } from 'src/common/swagger.decorator';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @ForAdmin()
-  @ApiCreatedResponse()
   @Post()
+  @ApiCreatedResponse()
+  @ForAdmin()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   create(@Body() createProductDto: CreateProductDto) {
@@ -37,18 +37,18 @@ export class ProductsController {
     return this.productsService.getAllProducts();
   }
 
+  @Patch(':id')
   @ForAdmin()
   @ApiCreatedResponse()
-  @Patch(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.updateProduct(id, updateProductDto);
   }
 
+  @Delete(':id')
   @ForAdmin()
   @ApiCreatedResponse()
-  @Delete(':id')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   remove(@Param('id') id: string) {

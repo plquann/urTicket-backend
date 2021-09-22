@@ -41,55 +41,12 @@ export const mailConfirmTemplate = (url) => `
       class='preheader'
       style='display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;'
     >
-      A preheader is the short summary text that follows the subject line when
-      an email is viewed in the inbox.
+      UR-TICKET - Confirmation Email
     </div>
     <!-- end preheader -->
 
     <!-- start body -->
     <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-
-      <!-- start logo -->
-      <tr>
-        <td align='center' bgcolor='#e9ecef'>
-          <!--[if (gte mso 9)|(IE)]>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-        <tr>
-        <td align="center" valign="top" width="600">
-        <![endif]-->
-          <table
-            border='0'
-            cellpadding='0'
-            cellspacing='0'
-            width='100%'
-            style='max-width: 600px;'
-          >
-            <tr>
-              <td align='center' valign='top' style='padding: 36px 24px;'>
-                <a
-                  href='https://sendgrid.com'
-                  target='_blank'
-                  style='display: inline-block;'
-                >
-                  <img
-                    src='./img/paste-logo-light@2x.png'
-                    alt='Logo'
-                    border='0'
-                    width='48'
-                    style='display: block; width: 48px; max-width: 48px; min-width: 48px;'
-                  />
-                </a>
-              </td>
-            </tr>
-          </table>
-          <!--[if (gte mso 9)|(IE)]>
-        </td>
-        </tr>
-        </table>
-        <![endif]-->
-        </td>
-      </tr>
-      <!-- end logo -->
 
       <!-- start hero -->
       <tr>
@@ -293,55 +250,12 @@ export const mailReservationTemplate = (reservation, showtime, tickets, products
       class='preheader'
       style='display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;'
     >
-      A preheader is the short summary text that follows the subject line when
-      an email is viewed in the inbox.
+        UR-TICKET - Reservation Confirmation
     </div>
     <!-- end preheader -->
 
     <!-- start body -->
     <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-
-      <!-- start logo -->
-      <tr>
-        <td align='center' bgcolor='#D2C7BA'>
-          <!--[if (gte mso 9)|(IE)]>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-        <tr>
-        <td align="center" valign="top" width="600">
-        <![endif]-->
-          <table
-            border='0'
-            cellpadding='0'
-            cellspacing='0'
-            width='100%'
-            style='max-width: 600px;'
-          >
-            <tr>
-              <td align='center' valign='top' style='padding: 36px 24px;'>
-                <a
-                  href='https://sendgrid.com'
-                  target='_blank'
-                  style='display: inline-block;'
-                >
-                  <img
-                    src='./img/paste-logo-light@2x.png'
-                    alt='Logo'
-                    border='0'
-                    width='48'
-                    style='display: block; width: 48px; max-width: 48px; min-width: 48px;'
-                  />
-                </a>
-              </td>
-            </tr>
-          </table>
-          <!--[if (gte mso 9)|(IE)]>
-        </td>
-        </tr>
-        </table>
-        <![endif]-->
-        </td>
-      </tr>
-      <!-- end logo -->
 
       <!-- start hero -->
       <tr>
@@ -366,7 +280,7 @@ export const mailReservationTemplate = (reservation, showtime, tickets, products
               >
                 <h1
                   style='margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;'
-                >Thank you for your order!</h1>
+                >Thank you for your reservation!</h1>
               </td>
             </tr>
           </table>
@@ -421,13 +335,13 @@ export const mailReservationTemplate = (reservation, showtime, tickets, products
                       bgcolor='#D2C7BA'
                       width='25%'
                       style="padding: 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
-                    ><strong>Reservation #</strong></td>
+                    ><strong>Reservation</strong></td>
                     <td
                       align='left'
                       bgcolor='#D2C7BA'
                       width='75%'
                       style="padding: 12px;font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
-                    ><strong>${reservation.id}</strong></td>
+                    ><strong>#${reservation.id}</strong></td>
                   </tr>
                   <tr>
                     <td

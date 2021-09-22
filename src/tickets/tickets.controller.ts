@@ -15,9 +15,9 @@ export class TicketsController {
     return this.ticketsService.getTicketsByShowtime(id);
   }
 
+  @Delete('/remove-tickets')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  @Delete('/remove-tickets')
   destroyTicketsWithoutReservation() {
     return this.ticketsService.destroyTicketsWithNoReservationId();
   }

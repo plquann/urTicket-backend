@@ -28,33 +28,33 @@ import {
 export class PeopleController {
   constructor(private readonly peopleService: PeopleService) {}
 
+  @Post()
   @ForAdmin()
   @ApiCreatedResponse()
-  @Post()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   create(@Body() createPersonDto: CreatePersonDto) {
     return this.peopleService.create(createPersonDto);
   }
 
+  @Get()
   @ApiOkResponse()
   @ApiNotFoundResponse()
-  @Get()
   getAllPeople() {
     return this.peopleService.getAllPeople();
   }
 
-  @ApiOkResponse()
   @Get(':id')
+  @ApiOkResponse()
   getOnePerson(@Param('id') personId: string) {
     return this.peopleService.getPersonById(personId);
   }
 
-  @ForAdmin()
+  @Put(':id')
   @ApiCreatedResponse()
+  @ForAdmin()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  @Put(':id')
   update(
     @Param('id') personId: string,
     @Body() updatePersonDto: UpdatePersonDto,
