@@ -1,4 +1,4 @@
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -11,8 +11,6 @@ import {
   UseInterceptors,
   Req,
   UploadedFile,
-  Res,
-  HttpStatus,
 } from '@nestjs/common';
 import { Express, Response } from 'express';
 import { UsersService } from './users.service';
@@ -26,6 +24,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import RequestWithUser from 'src/auth/interfaces/requestWithUser.interface';
 import { ForAdmin } from 'src/common/swagger.decorator';
 import { ChangePasswordDto } from './dtos/change-password.dto';
+import { ForgotPasswordDto } from './dtos/forgot-password.dto';
+import { TokenPasswordDto } from './dtos/token-password.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -71,6 +71,7 @@ export class UsersController {
   }
 
   @Post('me/change-password')
+  @ApiOkResponse()
   @UseGuards(JwtAuthenticationGuard)
   async changePassword(
     @Req() request: RequestWithUser,
@@ -78,6 +79,17 @@ export class UsersController {
   ) {
     const me = request.user.id;
     return this.userService.changePassword(me, changePasswordDto);
+  }
+
+  @Post('/forgot-password')
+  @ApiOkResponse()
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.userService.sendEmailForgotPassword(forgotPasswordDto.email);
+  }
+
+  @Post('/email-password-change')
+  async emailChangePassword(@Body() tokenPasswordDto: TokenPasswordDto) {
+    return this.userService.emailChangePassword(tokenPasswordDto);
   }
 
   @Get()

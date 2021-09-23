@@ -41,10 +41,14 @@ import { NewsModule } from './news/news.module';
         EMAIL_SERVICE: Joi.string().required(),
         EMAIL_USER: Joi.string().required(),
         EMAIL_PASSWORD: Joi.string().required(),
-
+        
         JWT_VERIFICATION_TOKEN_SECRET: Joi.string().required(),
         JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
         EMAIL_CONFIRMATION_URL: Joi.string().required(),
+
+        JWT_FORGOT_PASSWORD_TOKEN_SECRET: Joi.string().required(),
+        JWT_FORGOT_PASSWORD_EXPIRATION_TIME: Joi.string().required(),
+        EMAIL_FORGOT_PASSWORD_URL: Joi.string().required(),
 
         AWS_REGION: Joi.string().required(),
         AWS_ACCESS_KEY_ID: Joi.string().required(),

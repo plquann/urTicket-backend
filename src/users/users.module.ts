@@ -5,10 +5,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { FilesModule } from 'src/files/files.module';
 import { StripeModule } from 'src/stripe/stripe.module';
-// import { AuthModule } from './../auth/auth.module';
+import { MailModule } from 'src/mail/mail.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), FilesModule,  StripeModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    JwtModule.register({}),
+    ConfigModule,
+    FilesModule,
+    StripeModule,
+    MailModule,
+  ],
   controllers: [UsersController],
   exports: [UsersService],
   providers: [UsersService],

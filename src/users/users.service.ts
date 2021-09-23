@@ -1,3 +1,4 @@
+import { mailForgotPasswordTemplate } from './../common/mailHtmlTemplate';
 import { ChangePasswordDto } from './dtos/change-password.dto';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,12 +9,20 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { FilesService } from 'src/files/files.service';
 import StripeService from 'src/stripe/stripe.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import MailService from 'src/mail/mail.service';
+import { ForgotPasswordDto } from './dtos/forgot-password.dto';
+import { TokenPasswordDto } from './dtos/token-password.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly mailService: MailService,
     private readonly filesService: FilesService,
     private stripeService: StripeService,
   ) {}
@@ -26,6 +35,7 @@ export class UsersService {
 
     const newUser = await this.usersRepository.create({
       ...createUserDto,
+      password: await bcrypt.hash(createUserDto.password, 10),
       stripeCustomerId: stripeCustomer.id,
     });
 
@@ -115,7 +125,7 @@ export class UsersService {
     );
   }
 
-  async deleteUserById(userId: string) {
+  async deleteUserById(userId: string): Promise<void> {
     const result = await this.usersRepository.delete(userId);
     if (!result.affected) {
       throw new HttpException(
@@ -125,10 +135,13 @@ export class UsersService {
     }
   }
 
-  async changePassword(userId: string, changePasswordDto: ChangePasswordDto):Promise<User> {
+  async changePassword(
+    userId: string,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<User> {
     const { currentPassword, newPassword } = changePasswordDto;
     const user = await this.getUserById(userId);
-    console.log('🚀 ~ file: users.service.ts ~ line 131 ~ user', user.password);
+    // console.log('🚀 ~ file: users.service.ts ~ line 131 ~ user', user.password);
 
     const isPasswordMatching = await bcrypt.compare(
       currentPassword,
@@ -146,6 +159,62 @@ export class UsersService {
     await this.usersRepository.update(userId, { password: hashedPassword });
 
     return user;
+  }
+
+  async sendEmailForgotPassword(email: string): Promise<void> {
+    const user = await this.getUserByEmail(email);
+
+    const payload = { email };
+
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_FORGOT_PASSWORD_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'JWT_FORGOT_PASSWORD_EXPIRATION_TIME',
+      )}s`,
+    });
+
+    const url = `${this.configService.get(
+      'EMAIL_FORGOT_PASSWORD_URL',
+    )}?token=${token}`;
+
+    const html = mailForgotPasswordTemplate(url, user.userName);
+
+    await this.mailService.sendMail({
+      from: '"UR-TICKET 🎉✨🎉" <bookingmovie.application@gmail.com>',
+      to: email,
+      subject: 'Booking Movie Platform - Reset Password',
+      html,
+    });
+  }
+
+  async emailChangePassword(tokenPasswordDto: TokenPasswordDto): Promise<void> {
+    const { token, password } = tokenPasswordDto;
+    let email = '';
+
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: this.configService.get('JWT_FORGOT_PASSWORD_TOKEN_SECRET'),
+      });
+
+      if (typeof payload !== 'object' || !('email' in payload)) {
+        throw new HttpException('Token is invalid', HttpStatus.BAD_REQUEST);
+      }
+
+      email = payload.email;
+    } catch (err) {
+      if (err?.name === 'TokenExpiredError') {
+        throw new HttpException('Token is expired!', HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException(
+        'Bad reset password token!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const user = await this.getUserByEmail(email);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await this.usersRepository.update(user.id, { password: hashedPassword });
   }
 
   async blockUserById(userId: string): Promise<User> {
