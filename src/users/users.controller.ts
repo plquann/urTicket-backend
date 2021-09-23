@@ -25,6 +25,7 @@ import { UserRole } from 'src/constants';
 import { FileInterceptor } from '@nestjs/platform-express';
 import RequestWithUser from 'src/auth/interfaces/requestWithUser.interface';
 import { ForAdmin } from 'src/common/swagger.decorator';
+import { ChangePasswordDto } from './dtos/change-password.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -67,6 +68,16 @@ export class UsersController {
   ): Promise<any> {
     const me = request.user.id;
     return this.userService.updateUserById(me, updateUserDto);
+  }
+
+  @Post('me/change-password')
+  @UseGuards(JwtAuthenticationGuard)
+  async changePassword(
+    @Req() request: RequestWithUser,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    const me = request.user.id;
+    return this.userService.changePassword(me, changePasswordDto);
   }
 
   @Get()

@@ -1,3 +1,4 @@
+import { ChangePasswordDto } from './dtos/change-password.dto';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -124,6 +125,29 @@ export class UsersService {
     }
   }
 
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto):Promise<User> {
+    const { currentPassword, newPassword } = changePasswordDto;
+    const user = await this.getUserById(userId);
+    console.log('🚀 ~ file: users.service.ts ~ line 131 ~ user', user.password);
+
+    const isPasswordMatching = await bcrypt.compare(
+      currentPassword,
+      user.password,
+    );
+
+    if (!isPasswordMatching) {
+      throw new HttpException(
+        'Current password is incorrect!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.usersRepository.update(userId, { password: hashedPassword });
+
+    return user;
+  }
+
   async blockUserById(userId: string): Promise<User> {
     await this.usersRepository.update(userId, { isActive: false });
 
@@ -176,6 +200,4 @@ export class UsersService {
     }
     await this.filesService.deletePublicFile(fileId);
   }
-
-  
 }

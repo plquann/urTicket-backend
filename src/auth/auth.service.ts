@@ -27,10 +27,10 @@ export class AuthService {
       createUser.password = undefined;
       return createUser;
     } catch (error) {
-      console.log(
-        '🚀 ~ file: auth.service.ts ~ line 31 ~ AuthService ~ register ~ error',
-        error,
-      );
+      // console.log(
+      //   '🚀 ~ file: auth.service.ts ~ line 31 ~ AuthService ~ register ~ error',
+      //   error,
+      // );
       if (error?.code === PostgresErrorCode.UniqueViolation) {
         throw new HttpException(
           'User with that email already exists',
