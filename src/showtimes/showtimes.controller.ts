@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ShowtimesService } from './showtimes.service';
 import { CreateShowtimeDto } from './dto/create-showtime.dto';
@@ -15,7 +16,7 @@ import { UserRole } from 'src/constants';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiTags } from '@nestjs/swagger';
-import { SeedShowtimeDto } from './dto/seed-showtime.dto';
+import { DateDto } from './dto/date.dto';
 
 @ApiTags('Showtimes')
 @Controller('showtime')
@@ -32,12 +33,16 @@ export class ShowtimesController {
   @Post('/seeders')
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
-  seedShowtimes(@Body() seedShowtimeDto: SeedShowtimeDto) {
-    return this.showtimesService.seedersShowtimes(seedShowtimeDto);
+  seedShowtimes(@Body() dateDto: DateDto) {
+    return this.showtimesService.seedersShowtimes(dateDto);
   }
 
   @Get('/movie/:movieId')
-  getShowtimesByMovieId(@Param('movieId') movieId: string) {
+  getShowtimesByMovieId(
+    @Param('movieId') movieId: string,
+    @Query() { date }: DateDto,
+  ) {
+    if (date) return this.showtimesService.getShowtimesByMovieId(movieId, date);
     return this.showtimesService.getShowtimesByMovieId(movieId);
   }
 

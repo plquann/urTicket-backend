@@ -16,7 +16,7 @@ export class TicketsService {
     const tickets: any[] = seats.map((seat) => {
       return {
         seat: seat.id,
-        showtime: showtimeId,
+        showtimeId: showtimeId,
         price: seat.type === 'NORMAL' ? 6 : seat.type === 'VIP' ? 10 : 15,
         reservation: null,
       };

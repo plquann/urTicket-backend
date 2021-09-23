@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsDateString } from 'class-validator';
 
-export class SeedShowtimeDto {
+export class DateDto {
   @IsDateString()
   @IsNotEmpty()
   date: string;

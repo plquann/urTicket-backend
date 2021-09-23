@@ -14,7 +14,7 @@ import { CreateShowtimeDto } from './dto/create-showtime.dto';
 import { Showtime } from './entities/showtime.entity';
 import * as dayjs from 'dayjs';
 import { showtimesSeed } from 'src/database/seeds/showtime.seed';
-import { SeedShowtimeDto } from './dto/seed-showtime.dto';
+import { DateDto } from './dto/date.dto';
 
 @Injectable()
 export class ShowtimesService {
@@ -26,8 +26,8 @@ export class ShowtimesService {
     private connection: Connection,
   ) {}
 
-  async seedersShowtimes(seedShowtimeDto: SeedShowtimeDto) {
-    const seedShowtimes = showtimesSeed(seedShowtimeDto.date);
+  async seedersShowtimes(dateDto: DateDto) {
+    const seedShowtimes = showtimesSeed(dateDto.date);
 
     for (const showtime of seedShowtimes) {
       await this.createShowtime({
@@ -51,7 +51,19 @@ export class ShowtimesService {
     return showtime;
   }
 
-  async getShowtimesByMovieId(movieId: string): Promise<any[]> {
+  async getShowtimesByMovieId(movieId: string, date?: string): Promise<any[]> {
+    let currentDate = new Date();
+    let start;
+    let end;
+
+    if (date) {
+      currentDate = new Date(date);
+      start = dayjs(currentDate).startOf('day').add(8, 'hour').toDate();
+      end = dayjs(currentDate).endOf('day').add(8, 'hour').toDate();
+    } else {
+      start = dayjs(currentDate).toDate();
+      end = dayjs(currentDate).endOf('day').add(8, 'hour').toDate();
+    }
     //get All GroupTheater --> join theater --> join showtime --> where showtime.movieId = movieId
     const result = await this.connection
       .getRepository(GroupTheater)
@@ -59,9 +71,11 @@ export class ShowtimesService {
       .leftJoinAndSelect('groupTheater.theaters', 'theaters')
       .leftJoinAndSelect('theaters.showtimes', 'showtimes')
       .where('showtimes.movieId = :movieId', { movieId })
+      .andWhere('showtimes.startTime >= :start AND showtimes.endTime <= :end', {
+        start,
+        end,
+      })
       .getMany();
-
-    // not yet check date
 
     return result;
   }
@@ -69,7 +83,7 @@ export class ShowtimesService {
   async getShowtimesByTheaterId(theaterId: string): Promise<Movie[]> {
     const currentDay = new Date();
 
-    const start = dayjs(currentDay).startOf('day').add(8, 'hour').toDate();
+    const start = dayjs(currentDay).toDate();
     const end = dayjs(currentDay).endOf('day').add(8, 'hour').toDate();
     // console.log('🚀 ~ file: showtimes.service.ts  ~ start', start);
     // console.log('🚀 ~ file: showtimes.service.ts  ~ end', end);

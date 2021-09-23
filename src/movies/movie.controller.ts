@@ -62,7 +62,7 @@ export class MovieController {
     return this.movieService.searchForMovies(searchTerm);
   }
 
-  @Get('/now_playing')
+  @Get('/now-playing')
   @ApiOkResponse()
   @ApiNotFoundResponse()
   getMoviesNowPlaying() {

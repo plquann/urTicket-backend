@@ -23,6 +23,7 @@ export class GenresController {
   constructor(private readonly genresService: GenresService) {}
 
   @Post()
+  @ForAdmin()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   create(@Body() genre: Genre) {
@@ -35,8 +36,8 @@ export class GenresController {
     return this.genresService.getAllGenres();
   }
 
-  @ForAdmin()
   @Put(':id')
+  @ForAdmin()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   updateGenre(@Param('id') id: string, @Body() payload: any) {

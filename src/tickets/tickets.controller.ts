@@ -5,6 +5,7 @@ import { Roles } from 'src/auth/decorators/roles.decorators';
 import { UserRole } from 'src/constants';
 import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { ForAdmin } from 'src/common/swagger.decorator';
 @ApiTags('Tickets')
 @Controller('tickets')
 export class TicketsController {
@@ -16,6 +17,7 @@ export class TicketsController {
   }
 
   @Delete('/remove-tickets')
+  @ForAdmin()
   @Roles(UserRole.ADMIN)
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   destroyTicketsWithoutReservation() {
