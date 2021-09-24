@@ -14,7 +14,7 @@ RUN npm ci --only=production
 
 # Bundle app source
 COPY . .
-COPY .env .
+COPY .env ./
 
 RUN npm run build
 
