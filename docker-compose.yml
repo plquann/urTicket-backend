@@ -9,8 +9,8 @@ services:
       - 5000:5000
     depends_on:
       - postgres
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     links:
       - postgres
     networks:
