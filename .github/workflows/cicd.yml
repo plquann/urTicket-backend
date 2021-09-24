@@ -4,8 +4,6 @@ on:
   push:
     branches: [master]
 
-env:
-
 jobs:
   build-docker:
     runs-on: ubuntu-latest
