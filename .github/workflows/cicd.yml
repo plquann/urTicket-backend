@@ -37,23 +37,6 @@ jobs:
       - name: Verify
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-  deploy:
-    name: 'Deploy Server'
-    needs: [build-docker]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v2
-
-      - name: SSH and deploy in Digital Ocean
-        uses: appleboy/ssh-action@master
-        with:
-          HOST: ${{ secrets.SSH_HOST }}
-          KEY: ${{ secrets.SSH_KEY }}
-          USERNAME: ${{ secrets.SSH_USERNAME }}
-          script: |
-            cd ${{ env.PROJECT_PATH }}
-            git clone git@github.com:QuanKhs/urTicket-backend.git
+  
             
             
