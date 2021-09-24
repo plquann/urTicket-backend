@@ -5,6 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
+RUN ls
 
 FROM node:14 
 WORKDIR /usr/src/app
@@ -16,6 +17,8 @@ RUN npm ci --only=production
 # Bundle app source
 COPY --from=builder /usr/src/app/dist ./dist
 COPY .env* ./
+
+RUN ls
 
 EXPOSE 5000
 CMD [ "node", "dist/main" ]

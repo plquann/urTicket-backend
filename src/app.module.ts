@@ -31,9 +31,6 @@ import { NewsModule } from './news/news.module';
         POSTGRES_PASSWORD: Joi.string().required(),
         POSTGRES_DB: Joi.string().required(),
 
-        REDIS_HOST: Joi.string().required(),
-        REDIS_PORT: Joi.number().required(),
-
         PORT: Joi.number(),
 
         JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
