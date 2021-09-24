@@ -5,6 +5,7 @@ on:
     branches: [master]
 env:
   IMAGE_NAME: urticket-backend-dev
+  PROJECT_PATH:  /opt/quankhs/urticket-backend
 
 jobs:
   build-docker:
@@ -35,3 +36,28 @@ jobs:
 
       - name: Verify
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+  deploy:
+    name: 'Deploy Server'
+    needs: [build-docker]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Out Repo
+        uses: actions/checkout@v2
+
+      - name: Get commit revision
+        id: vars
+        shell: bash
+        run: echo ::set-output name=tag::$(echo $(git describe --long --tags --always)| sed 's/v//')
+
+      - name: SSH and deploy in server
+        uses: appleboy/ssh-action@master
+        with:
+          HOST: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          KEY: ${{ secrets.SSH_KEY }}
+          PORT: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ${{ env.PROJECT_PATH }}
+            docker-compose up -d

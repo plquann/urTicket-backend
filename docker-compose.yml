@@ -3,11 +3,8 @@ version: '3.8'
 services:
   api:
     container_name: urticket-backend-dev
-    image: urticket-backend-dev:1.0.0
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: npm run start
+    image: quankhs/urticket-backend-dev:latest
+    command: npm run start:prod
     ports:
       - 5000:5000
     depends_on:
