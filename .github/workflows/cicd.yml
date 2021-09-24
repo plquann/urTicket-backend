@@ -5,7 +5,7 @@ on:
     branches: [master]
 env:
   IMAGE_NAME: urticket-backend-dev
-  PROJECT_PATH:  /opt/quankhs/urticket-backend
+  PROJECT_PATH: /opt/quankhs/urticket-backend
 
 jobs:
   build-docker:
@@ -56,6 +56,7 @@ jobs:
         with:
           HOST: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
+          PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           KEY: ${{ secrets.SSH_KEY }}
           PORT: ${{ secrets.SSH_PORT }}
           script: |
