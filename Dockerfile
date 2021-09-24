@@ -16,8 +16,6 @@ RUN npm ci --only=production
 COPY . .
 COPY .env* ./
 
-RUN npm run build
-
 EXPOSE 5000
 CMD [ "node", "dist/main" ]
 
