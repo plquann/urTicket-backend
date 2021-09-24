@@ -1,27 +1,27 @@
 version: '3.8'
 
 services:
-  # api:
-  #   container_name: urticket-backend-dev
-  #   image: urticket-backend-dev:1.0.0
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   command: npm run start
-  #   ports:
-  #     - 5000:5000
-  #   depends_on:
-  #     - postgres
-  #   env_file:
-  #     - .env
-  #   links:
-  #     - postgres
-  #   networks:
-  #     - postgres
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   restart: always
+  api:
+    container_name: urticket-backend-dev
+    image: urticket-backend-dev:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run start
+    ports:
+      - 5000:5000
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    links:
+      - postgres
+    networks:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
 
   postgres:
     container_name: postgres
@@ -31,21 +31,6 @@ services:
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
       - ./initialize-postgres/:/docker-entrypoint-initdb.d/
-    env_file:
-      - docker.env
-    networks:
-      - postgres
-    restart: always
-
-  pgadmin:
-    links:
-      - postgres:postgres
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    ports:
-      - '8080:80'
-    volumes:
-      - /data/pgadmin:/root/.pgadmin
     env_file:
       - docker.env
     networks:
