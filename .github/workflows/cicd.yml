@@ -5,7 +5,7 @@ on:
     branches: [master]
 env:
   IMAGE_NAME: urticket-backend-dev
-  PROJECT_PATH: /opt/quankhs/urticket-backend
+  PROJECT_PATH: /urticket-backend
 
 jobs:
   build-docker:
