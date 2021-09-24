@@ -19,8 +19,6 @@ COPY .env.prod ./.env
 
 RUN ls
 
-ENV NODE_ENV production
-
 EXPOSE 5000
 CMD [ "node", "dist/main" ]
 
