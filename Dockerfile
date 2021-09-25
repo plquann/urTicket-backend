@@ -17,7 +17,8 @@ RUN npm ci --only=production
 COPY --from=builder /usr/src/app/dist ./dist
 # COPY .env* ./.env
 
-RUN ls
+RUN ls -a
+RUN cat .env
 
 EXPOSE 5000
 CMD [ "node", "dist/main" ]
