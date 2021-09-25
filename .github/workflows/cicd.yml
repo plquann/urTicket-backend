@@ -13,9 +13,7 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      
-      - name: Decode base64 env secrets
-        script: sudo bash -c "echo ${{ secrets.ENV_SECRET }} | base64 --decode > /test.txt" 
+        run: echo ${{ secrets.ENV_SECRET }} | base64 --decode > /.env       
 
       - name: Login Docker Hub
         uses: docker/login-action@v1
