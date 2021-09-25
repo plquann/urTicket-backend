@@ -16,6 +16,7 @@ jobs:
       
       - name: Decode base64 env secrets
         run: |
+           ls -a
            echo "UE9SVD01MDAwDQoNClBPU1RHUkVTX0hPU1Q9cG9zdGdyZXMNClBPU1RHUkVTX1BPUlQ9NTQzMg0K" | base64 -d > .env
            ls -a
 
