@@ -16,7 +16,6 @@ jobs:
       
       - name: Decode base64 env secrets
         run: |
-           ls -a
            echo "${{ secrets.ENV_SECRET }}" | base64 -d > .env
            cat .env
            ls -a
