@@ -16,7 +16,7 @@ jobs:
       
       - name: Decode base64 env secrets
         run: |
-           echo "${{ secrets.ENV_SECRET }}" | base64 -d > .env
+           echo "UE9SVD01MDAwDQoNClBPU1RHUkVTX0hPU1Q9cG9zdGdyZXMNClBPU1RHUkVTX1BPUlQ9NTQzMg0K" | base64 -d > env.txt
            ls
 
       # - name: Login Docker Hub
