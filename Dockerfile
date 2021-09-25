@@ -15,7 +15,7 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 COPY --from=builder /usr/src/app/dist ./dist
-# COPY .env* ./.env
+COPY .env ./.env
 
 RUN ls -a
 RUN cat .env
