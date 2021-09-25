@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Decode base64 env secrets
-        run: sudo bash -c "echo ${{ secrets.ENV_SECRET }} | base64 -d > .env" 
+        run: sudo bash -c "echo "${{ secrets.ENV_SECRET }}" | base64 -d > .env" 
 
       - name: Check directory
         run: ls
