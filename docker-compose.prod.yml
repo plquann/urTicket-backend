@@ -1,25 +1,17 @@
 version: '3.8'
-
 services:
   api:
-    container_name: urticket-backend-dev
-    image: urticket-backend-dev
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: ['node', 'dist/main.js']
+    image: quankhs/urticket-backend-dev:latest
     ports:
-      - 5000:5000
-    depends_on:
-      - postgres
-    env_file:
-      - .env
-    links:
+      - '5000:5000'
+    command: ['node', 'dist/main.js']
+    depends_on: 
       - postgres
     networks:
-      - postgres
+      - urticket
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     restart: always
 
   postgres:
@@ -30,12 +22,14 @@ services:
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
       - ./initialize-postgres/:/docker-entrypoint-initdb.d/
-    env_file:
-      - docker.env
+    environment:
+      POSTGRES_USER: quankhs
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: urticket
     networks:
-      - postgres
+      - urticket
     restart: always
 
 networks:
-  postgres:
+  urticket:
     driver: bridge
