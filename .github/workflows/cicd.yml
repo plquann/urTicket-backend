@@ -18,6 +18,7 @@ jobs:
         run: |
            ls -a
            echo "UE9SVD01MDAwDQoNClBPU1RHUkVTX0hPU1Q9cG9zdGdyZXMNClBPU1RHUkVTX1BPUlQ9NTQzMg0K" | base64 -d > .env
+           cat .env
            ls -a
 
       # - name: Login Docker Hub
