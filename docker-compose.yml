@@ -4,7 +4,6 @@ services:
   api:
     container_name: urticket-backend-dev
     image: quankhs/urticket-backend-dev:latest
-    command: npm run start:prod 
     ports:
       - 5000:5000
     depends_on:

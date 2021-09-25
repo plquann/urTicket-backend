@@ -24,7 +24,7 @@ COPY --from=builder /usr/src/app/.env /usr/src/app/
 
 RUN ls -a
 
-CMD [ "node", "dist/main" ]
+CMD [ "node", "dist/main.js" ]
 
 # FROM node:14-alpine
 
