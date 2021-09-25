@@ -13,14 +13,14 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      
+
       - name: Decode base64 env secrets
         run: |
-           echo $ENV_SECRET | base64 -d > .env
-           cat .env
-           ls -a
-        env: 
-          ENV_SECRET: "${{ secrets.ENV_SECRET }}"
+          echo ${{ ENV_SECRET }} | base64 -d > .env
+          cat .env
+          ls -a
+        env:
+          ENV_SECRET: '${{ secrets.ENV_SECRET }}'
 
       # - name: Login Docker Hub
       #   uses: docker/login-action@v1
@@ -44,7 +44,3 @@ jobs:
 
       # - name: Verify
       #   run: echo ${{ steps.docker_build.outputs.digest }}
-
-  
-            
-            
