@@ -32,7 +32,7 @@
 - Implementing in-memory cache to increase the performance with Redis
 - The OpenAPI specification with Swagger which supports by Swagger plugin in NestJS
 - How to build and deploy a Docker image with Dockerfile, optimization of Dockerfile, and how to use Docker Compose to deploy multiple Docker images
-- Deployment to Digital Ocean droplets manually
+- Deployment to Digital Ocean droplets using Nginx - reverse proxy and SSL
 - Implement a modern CI/CD pipeline with GitHub Actions and Docker
 
 ## 🚒 Check out my Frontend side:
@@ -149,7 +149,7 @@ https://github.com/QuanKhs/urTicket-frontend
 ## 🏳‍🌈 Release
 
 1. ### Docker hub: [Docker image](https://hub.docker.com/r/quankhs/urticket-backend-dev)
-2. ### Server: [Server](178.128.49.30:5000/api/v1/docs/#/)
+2. ### Server: [Server](https://quankhs-urticket.online/api/v1/docs/#/)
 
 ## 🥇Contributors
 
