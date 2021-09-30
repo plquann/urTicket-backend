@@ -36,6 +36,7 @@ export class ReviewsController {
   }
 
   @Delete('/:reviewId')
+  @UseGuards(JwtAuthenticationGuard)
   deleteReview(@Param('reviewId') reviewId: string) {
     return this.reviewsService.deleteReview(reviewId);
   }
