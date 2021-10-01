@@ -15,6 +15,7 @@ import { Showtime } from './entities/showtime.entity';
 import * as dayjs from 'dayjs';
 import { showtimesSeed } from 'src/database/seeds/showtime.seed';
 import { DateDto } from './dto/date.dto';
+import { getSkipLimit } from 'src/common/utils';
 
 @Injectable()
 export class ShowtimesService {
@@ -172,8 +173,15 @@ export class ShowtimesService {
     return newShowtime;
   }
 
-  async getAllShowtimes(): Promise<Showtime[]> {
-    const showtimes = await this.showtimeRepository.find();
+  async getAllShowtimes(page: number, limit: number): Promise<any> {
+    const pagination = getSkipLimit({ page, limit });
+
+    const [showtimes, count] = await this.showtimeRepository.findAndCount({
+      order: { startTime: 'DESC' },
+      skip: pagination.skip,
+      take: pagination.limit,
+    });
+
     return showtimes;
   }
 }

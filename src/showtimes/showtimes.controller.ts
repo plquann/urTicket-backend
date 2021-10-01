@@ -17,6 +17,7 @@ import JwtAuthenticationGuard from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { DateDto } from './dto/date.dto';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @ApiTags('Showtimes')
 @Controller('showtime')
@@ -28,6 +29,13 @@ export class ShowtimesController {
   @UseGuards(JwtAuthenticationGuard, RolesGuard)
   createShowtime(@Body() createShowtimeDto: CreateShowtimeDto) {
     return this.showtimesService.createShowtime(createShowtimeDto);
+  }
+
+  @Get()
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthenticationGuard, RolesGuard)
+  getAllShowtimes(@Query() { page, limit }: PaginationDto) {
+    return this.showtimesService.getAllShowtimes(page, limit);
   }
 
   @Post('/seeders')
@@ -55,4 +63,6 @@ export class ShowtimesController {
   getShowtimeById(@Param('id') id: string) {
     return this.showtimesService.getShowtimeById(id);
   }
+
+  
 }
