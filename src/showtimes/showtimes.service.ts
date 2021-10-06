@@ -180,8 +180,12 @@ export class ShowtimesService {
       order: { startTime: 'DESC' },
       skip: pagination.skip,
       take: pagination.limit,
+      relations: ['movie', 'theater']
     });
 
-    return showtimes;
+    return {
+      showtimes,
+      totalRow: count,
+    };
   }
 }
