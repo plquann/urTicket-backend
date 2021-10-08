@@ -6,6 +6,7 @@
 ![Code Climate](https://img.shields.io/github/commit-activity/w/quankhs/urticket-backend?color=orange)
 [![CodeFactor](https://www.codefactor.io/repository/github/quankhs/urticket-backend/badge/master)](https://www.codefactor.io/repository/github/quankhs/urticket-backend/overview/master)
 [![License](https://img.shields.io/github/license/quankhs/urticket-backend?color=blue)](https://img.shields.io/github/license/quankhs/urticket-backend?color=blue)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FQuanKhs%2FurTicket-backend&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
