@@ -4,7 +4,7 @@
 ![Docker-image](https://img.shields.io/docker/image-size/quankhs/urticket-backend-dev?color=important&label=docker%20image)
 ![CI](https://img.shields.io/github/workflow/status/quankhs/urTicket-backend/Build%20and%20Deploy/master)
 ![Code Climate](https://img.shields.io/github/commit-activity/w/quankhs/urticket-backend?color=orange)
-[![CodeFactor](https://www.codefactor.io/repository/github/thuongtruong1009/snake-game-oop/badge)](https://www.codefactor.io/repository/github/thuongtruong1009/snake-game-oop)
+[![CodeFactor](https://www.codefactor.io/repository/github/quankhs/urticket-backend/badge/master)](https://www.codefactor.io/repository/github/quankhs/urticket-backend/overview/master)
 [![License](https://img.shields.io/github/license/quankhs/urticket-backend?color=blue)](https://img.shields.io/github/license/quankhs/urticket-backend?color=blue)
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
