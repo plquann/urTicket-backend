@@ -194,7 +194,16 @@ export class MovieService {
 
   async searchForMovies(searchTerm: string): Promise<any> {
     const [movies, count] = await this.movieRepository.findAndCount({
-      select: ['id', 'title', 'releaseDate', 'voteAverage'],
+      select: [
+        'id',
+        'title',
+        'releaseDate',
+        'voteAverage',
+        'posterUrl',
+        'classify',
+        'duration',
+        'voteAverage',
+      ],
       where: { title: ILike(`%${searchTerm}%`) },
       order: {
         id: 'ASC',

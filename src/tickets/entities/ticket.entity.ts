@@ -22,7 +22,9 @@ export class Ticket extends BaseEntity {
   @JoinColumn({ name: 'showtimeId' })
   showtime: Showtime;
 
-  @ManyToOne(() => Seat, (seat: Seat) => seat.id)
+  @ManyToOne(() => Seat, (seat: Seat) => seat.id, {
+    eager: true,
+  })
   seat: Seat;
 
   @ManyToOne(() => Reservation, (reservation: Reservation) => reservation.id)

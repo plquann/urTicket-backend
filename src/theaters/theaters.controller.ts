@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { TheatersService } from './theaters.service';
 
 import { ApiTags } from '@nestjs/swagger';
@@ -11,4 +11,10 @@ export class TheatersController {
   getAllTheaters() {
     return this.theatersService.getAllTheaters();
   }
+
+  @Get(':id')
+  getTheaterById(@Param('id') id: string) {
+    return this.theatersService.getTheaterById(id);
+  }
+
 }
