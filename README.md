@@ -44,6 +44,10 @@ https://github.com/QuanKhs/urTicket-frontend
 
 ## 🌋 Folder structure
 
+<details>
+  <summary>Click to expand</summary>
+    <br>
+  
 - 📂 **\urTicket\-backend**
   - 📂 **initialize\-postgres**
   - 📂 **src**
@@ -88,6 +92,7 @@ https://github.com/QuanKhs/urTicket-frontend
   - 📄 [tsconfig.build.json](tsconfig.build.json)
   - 📄 [tsconfig.json](tsconfig.json)
 
+</details>
 ## ✨ Installations
 
 - ### With Docker
