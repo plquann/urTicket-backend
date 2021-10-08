@@ -10,7 +10,7 @@ export class TheatersController {
   @Get()
   getAllTheaters() {
     return this.theatersService.getAllTheaters();
-  } 
+  }
 
   @Get(':id')
   getTheaterById(@Param('id') id: string) {
