@@ -108,7 +108,7 @@ https://github.com/QuanKhs/urTicket-frontend
 3. From the src folder run:
 
    ```bash
-   docker-compose up
+   docker-compose -f docker-compose.prod.yml
    ```
 
 4. Open a browser to see the application running
